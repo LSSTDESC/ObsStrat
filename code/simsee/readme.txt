@@ -1,5 +1,5 @@
-simsee seeing data
-==================
+simsee
+======
 
 Introduction
 ------------
