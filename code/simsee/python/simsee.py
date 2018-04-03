@@ -413,7 +413,7 @@ def interpolate_night_seeing(dimm, start_mjd, end_mjd,
         a pandas.Series with seeing values for every night
         from start_mjd to end_mjd
 
-    >>> dimm = load_dimm('../../../data/pachon_dimm.h5')
+    >>> dimm = load_dimm('pachon_dimm.h5')
     >>> interpolate_night_seeing(dimm, 53080, 53090, 0,
     ...                          -0.9424, 0.058, 296.5, 0.3, 0.09,
     ...                          6563)
@@ -472,7 +472,7 @@ def load_dimm(fname, obs_lon=-70.8062, outer_scale=20):
     Return:
         a pandas.DataFrame with the data
 
-    >>> df = load_dimm('../../../data/pachon_dimm.h5')
+    >>> df = load_dimm('pachon_dimm.h5')
     >>> df[['seeing', 'r0', 'log_r0', 'vk_seeing']].head()
                          seeing        r0    log_r0  vk_seeing
     time                                                      
