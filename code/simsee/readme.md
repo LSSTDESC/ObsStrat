@@ -104,6 +104,9 @@ columns:
 <dt>dimm_time</td> <dd>If the data is directly copied from a DIMM measurement, the time of the DIMM measurement of the input data set is reported here. If it was generated using the model, the keyword "artificial" is present instead.</dd>
 </dl>
 
+Export for `opsim4`
+-------------------
+
 There is a shell script that loads this data file into an sqlite
 database that can be read by LSST's opsim4:
 
