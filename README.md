@@ -41,7 +41,6 @@ Describe any data processing requirements beyond the standard LSST Data Manageme
 The template itself is fairly constrictive about wanting final results rather than the process of these results were come to. Since we have to go through the process, here is what we feel we need to add and what we ask of each WG:
 
 
-Each white paper will have the following:
 Add:  A section on the strategies considered, including detailed information about all the information we needed to add to the white paper call (e.g., locations for different fields) that would be assessed by each group.
 
 Add from each group 2-3 page description:
