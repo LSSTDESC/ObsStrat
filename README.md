@@ -2,12 +2,13 @@
 Charter
 ———
 To respond to the white paper call (https://www.lsst.org/call-whitepaper-2018) on behalf of DESC.
-
+****************************************************************
 Deliverables
 ——
 
 Two white papers, one focused on WFD and one focused on DDF and other mini-Surveys, to be led by Michelle Lochner and Dan Scolnic.
 
+****************************************************************
 
 Contents
 ——
@@ -66,6 +67,7 @@ Add: Summary of how external (non-LSST) can be used, and what changes in terms o
 
 
 
+****************************************************************
 
 
 Calendar
@@ -105,6 +107,7 @@ Sep 17-19, LSST Cadence Hackathon at Flatiron (https://www.lsstcorporation.org/n
 
 The key takeaways are a first take due August 10 before the community workshop so we can present to the Project any issues we might have, and a full assessment by September 15.  Than iterations over the next two months with white papers sent out to all of DESC on Oct 25.
 
+****************************************************************
 
 Additional Information
 ———
@@ -125,7 +128,8 @@ In the above, we mention additional information.  By that we mean that there are
 1-4 will likely go in section C above.  5 and 6 may have their own dedicated place within the DDF and mini-surveys response. 
 
 For 1-4, we are asking these people to come up with a contained menu of options that each group can consider as part of their response.  We would like to have this settled by the CMU meeting, with presentation on July 19.
------------------
+
+****************************************************************
 
 
 Working with other surveys
