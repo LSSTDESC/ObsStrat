@@ -42,15 +42,25 @@ The template itself is fairly constrictive about wanting final results rather th
 
 Each white paper will have the following:
 Add:  A section on the strategies considered, including detailed information about all the information we needed to add to the white paper call (e.g., locations for different fields) that would be assessed by each group.
+
 Add from each group 2-3 page description:
+
   i.  Brief introduction of motivation of each probe and what is unique to LSST
+  
   ii. How analysis was done/ code was used [Please link to Jupyter notebook]
+  
   iii.  Justification of the metric
-  iv.  Explanation of preferences of working group with qualifiers about how good/bad strategies are
-  v.  What is needed to know if people outside group use the metric as is without consultation
+ 
+ iv.  Explanation of preferences of working group with qualifiers about how good/bad strategies are
+
+v.  What is needed to know if people outside group use the metric as is without consultation
+
   vi.  How would external data change rankings/metric?
-  vi. What is further work / slight modifications to survey strategy thought about?
+  
+  vii. What is further work / slight modifications to survey strategy thought about?
+  
 Add: Summarized rankings of different strategies/choices considered ranging from ‘Ideal’ to ‘Science Disabling’.  Associated Figure-of-merits with each choice given if possible.
+
 Add: Summary of how external (non-LSST) can be used, and what changes in terms of final rankings/preferences assuming external data
 
 
@@ -101,10 +111,15 @@ Additional Information
 In the above, we mention additional information.  By that we mean that there are a number of pieces of information we as a group need to fill in about the call.  We are asking the following people to prepare this for our next meeting:
 
 1.  Location of WFD - Humna Awan.
+
 2.  Location of DDFs - David Rubin.
+
 3.  List of WFD strategies not in white paper call - Michelle Lochner
+
 4.  Cadence of DDF - Philippe Gris
+
 5.  Special calibration observations - Nicolas Regnault
+
 6.  ToO Capability - Marcelle Soares-Santos
 
 1-4 will likely go in section C above.  5 and 6 may have their own dedicated place within the DDF and mini-surveys response. 
