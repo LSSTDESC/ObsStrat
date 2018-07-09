@@ -1,2 +1,2 @@
 # obs_strat
-A repository to host code and documents for the Observing Strategy Task Force
+The Plan for Response to white paper call will go here.
