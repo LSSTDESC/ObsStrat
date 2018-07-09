@@ -31,8 +31,9 @@ Describe your survey strategy modifications or proposed observations. Please com
 e. Performance Evaluation -
 Please describe how to evaluate the performance of a given survey in achieving your desired science goals, ideally as a heuristic tied directly to the observing strategy (e.g. number of visits obtained within a window of time with a specified set of filters) with a clear link to the resulting effect on science.
 
-f.  Special Data Processing --
+f. Special Data Processing --
 Describe any data processing requirements beyond the standard LSST Data Management pipelines and how these will be achieved.
+
 ]
 -----
 
@@ -61,20 +62,35 @@ Calendar
 ———
 
 July 19, Task Force Meeting.  Presentation of additional information needed for call response.
+
 July 24, CMU ObsStrat XWG Session at 11:00.  July 26, CMU ObsStrat XWG Session at 09:00.
+
 ->July 25, Settled list of additional information needed for appropriate response to call
+
 Aug 2, Task Force Meeting
+
 ->August 10, First assessment of subset of WFD and mini-survey strategies, with metrics.  Slides from each WG.
+
 Aug 13-16 - LSST Community Workshop including multiple ObsStrat sessions
+
 Aug 16, Task Force Meeting
+
 Aug 30, Task Force Meeting
+
 [By September may change frequency/dates of meetings as semester starts]
+
 ->Sep 15, Full assessment of strategies and metrics due for task force
+
 Sep 17-19, LSST Cadence Hackathon at Flatiron (https://www.lsstcorporation.org/node/193).  Need to apply.
+
 ->Oct 1, Full white papers sent back to task force for response
+
 ->Oct 15, Responses from task force due.
+
 ->Oct 25, Revised white papers sent out to DESC.
+
 ->Nov 5, Responses from DESC due.
+
 ->Nov 30, !!!!White Papers due!!!
 
 The key takeaways are a first take due August 10 before the community workshop so we can present to the Project any issues we might have, and a full assessment by September 15.  Than iterations over the next two months with white papers sent out to all of DESC on Oct 25.
