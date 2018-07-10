@@ -38,7 +38,7 @@ Describe any data processing requirements beyond the standard LSST Data Manageme
 ]
 -----
 
-The template itself is fairly constrictive about wanting final results rather than the process of these results were come to. Since we have to go through the process, here is what we feel we need to add and what we ask of each WG:
+[Updated after talking to Lynne Jones] Here is what we feel we need to add and what we ask of each WG:
 
 
 Add:  A section on the strategies considered, including detailed information about all the information we needed to add to the white paper call (e.g., locations for different fields) that would be assessed by each group.
@@ -59,7 +59,6 @@ v.  What is needed to know if people outside group use the metric as is without 
   
   vii. What is further work / slight modifications to survey strategy thought about?
   
-Add: Summarized rankings of different strategies/choices considered ranging from ‘Ideal’ to ‘Science Disabling’.  Associated Figure-of-merits with each choice given if possible.
 
 Add: Summary of how external (non-LSST) can be used, and what changes in terms of final rankings/preferences assuming external data
 
