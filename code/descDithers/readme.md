@@ -19,7 +19,7 @@ For the rotational dithers, since the updated Stacker isn't a part of the pipeli
 ## Non-MAF Users
 For each of the databases, there's a csv file, named `descDithers_<database name>.csv`, that contains four columns: `observationId`, `descDitheredRA`, `descDitheredDec`, `descDitheredRotTelPos`. These were produced by `WPCallCadences_DescDithers.ipyb`; see the notebook for details, plots, etc.
 
-All the .csv files are at NERSC: `/global/homes/a/awan/desc/wp_descDithers`; they should be readable by anyone with lsst group affiliation.
+All the .csv files are at NERSC: `/global/homes/a/awan/desc/wp_descDithers_csvs`; they should be readable by anyone with lsst group affiliation.
 
 ### Details
 `save_csv_dithers.py` does the work of calculating the translational and rotational dithers for various cadences and saves the output as a csv file. `Test_CSV_Output.ipynb` tests the code on `minion_1016_sqlite_new_dithers.db` which contains the afterburner-added dither columns to compare things with.
