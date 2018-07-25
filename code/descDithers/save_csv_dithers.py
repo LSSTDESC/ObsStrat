@@ -4,7 +4,10 @@
 # Humna Awan: humna.awan@rutgers.edu
 #
 ##########################################################################################
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import lsst.sims.maf
 import lsst.sims.maf.db as db
 import lsst.sims.maf.utils as mafUtils
 import lsst.sims.maf.slicers as slicers
@@ -15,12 +18,14 @@ import time
 import pandas as pd
 import os
 import numpy as np
+import datetime
 
 __all__= ['save_csv_dithers']
 
 def save_csv_dithers(dbs_path, outDir, db_files_only=None,
                      rot_rand_seed=42, trans_rand_seed=42,
-                     print_progress=True, show_diagnostic_plots=False):
+                     print_progress=True,
+                     show_diagnostic_plots=False, save_plots=False):
     """
     
     The goal here is to calculate the translational and rotational dithers for
@@ -56,6 +61,8 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
                             Default: True
     * show_diagnostic_plots: bool: set to True to show histogram of added dithers.
                                    Default: False
+    * save_plots: bool: set to True to save the histogram for descDithers in outDir.
+                        Default: False
                                    
     Saved file format
     -----------------
@@ -67,16 +74,30 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
     Saved filename = descDithers_<database name>.csv
     
     """
+    startTime_0 = time.time()
+    readme = '##############################\n%s'%(datetime.date.isoformat(datetime.date.today()))
+    readme += '\nRunning with lsst.sims.maf.__version__: %s'%lsst.sims.maf.__version__
+    readme += '\n\nsave_csv_dithers run:\ndbs_path= %s\n'%dbs_path
+    readme += 'outDir: %s'%outDir
+    readme += 'db_files_only: %s'%db_files_only
+    readme += 'rot_rand_seed=%s\ntrans_rand_seed=%s'%(rot_rand_seed, trans_rand_seed)
+    readme += 'print_progress=%s\show_diagnostic_plots=%s\n'%(print_progress, show_diagnostic_plots)
+
     dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]  # select db files
     if print_progress: print('Found files: %s\n'%dbfiles)
 
     if db_files_only is not None:
         dbfiles = [f for f in dbfiles if f in db_files_only]  # select db files
+
+    readme += '\nReading for files: %s\n\n'%dbfiles
+    if print_progress and db_files_only is not None: print('Running over: %s\n'%dbfiles)
     
-    for dbfile in dbfiles: # loop over all the db files
-        if print_progress:
-            startTime = time.time()
-            print('Starting: %s\n'%dbfile)
+    for i, dbfile in enumerate(dbfiles): # loop over all the db files
+        startTime = time.time()
+        if (i!=0): readme = ''
+        readme += '%s'%dbfile
+
+        if print_progress: print('Starting: %s\n'%dbfile)
             
         opsdb = db.OpsimDatabase('%s/%s'%(dbs_path, dbfile)) # connect to the database
         
@@ -94,7 +115,7 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
 
         # set up to run the stackers that add columns for translational and rotational dithers.
         metric = metrics.PassMetric()  # want to access the database; no analysis needed
-        slicer = slicers.OneDSlicer(sliceColName='night', binsize=1)   # essentially accessing all nights
+        slicer = slicers.OneDSlicer(sliceColName='night', binsize=1, verbose=print_progress)   # essentially accessing all nights
         sqlconstraint = None
 
         resultsDb = db.ResultsDb(outDir=outDir)
@@ -110,7 +131,8 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
         bundle = metricBundles.MetricBundle(metric, slicer, sqlconstraint=sqlconstraint,
                                             stackerList=stackerList)
         bgroup['WFD'] = metricBundles.MetricBundleGroup({0: bundle}, opsdb, outDir=outDir,
-                                                        resultsDb=resultsDb, saveEarly=False)
+                                                        resultsDb=resultsDb, saveEarly=False,
+                                                        verbose=print_progress)
         # run the bundle
         bgroup['WFD'].runAll()
         
@@ -125,7 +147,8 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
                                              stackerList=stackerList)
         
         bgroup['DD'] = metricBundles.MetricBundleGroup({0: bundle}, opsdb, outDir=outDir,
-                                                        resultsDb=resultsDb, saveEarly=False)
+                                                       resultsDb=resultsDb, saveEarly=False,
+                                                       verbose=print_progress)
         # run the bundle
         bgroup['DD'].runAll()
 
@@ -172,7 +195,6 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
             
             plt.title(dbfile)
             fig.set_size_inches(20,5)
-            plt.show()
             
         ################################################################################################
         # initiate the final arrays as undithered fieldRA, fieldDec as nonWFD, nonDDF should remain unchanged
@@ -207,7 +229,7 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
         
         ###############################################################
         # diagnostic plots
-        if show_diagnostic_plots:
+        if show_diagnostic_plots or save_plots:
             # histograms of desc dithered positions
             fig, axes = plt.subplots(nrows=1, ncols=3)
             
@@ -230,7 +252,20 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
                 
             plt.suptitle(dbfile)
             fig.set_size_inches(20,5)
-            plt.show()
+
+            if save_plots:
+                filename='hist_descDithers_%s.png'%(dbfile.split('.db')[0])
+                plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
+                readme += '\nSaved hist for descDithers in %s.'%filename
+
+                if print_progress:
+                    print('\nSaved hist plot in %s'%filename)
+
+            if show_diagnostic_plots:
+                plt.show()
+            else:
+                plt.close('all')
+
         ###############################################################   
         # save the columns as a csv file.
         d= {obsIDcol: simdata[obsIDcol], 
@@ -240,6 +275,18 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
         filename= 'descDithers_%s.csv'%(dbfile.split('.db')[0])
         pd.DataFrame(d).to_csv('%s/%s'%(outDir, filename), index=False)
 
+        readme += '\nSaved the dithers in %s'%filename
+        readme += '\nTime taken: %.2f (min)\n\n'%((time.time()-startTime)/60.)
+
         if print_progress:
             print('\nSaved the dithers in %s'%filename)
             print('Time taken: %.2f (min)\n\n'%((time.time()-startTime)/60.))
+
+        readme_file= open('%s/readme.txt'%(outDir), 'a')
+        readme_file.write(readme)
+        readme_file.close()
+
+    # mark the end in the readme.
+    readme_file= open('%s/readme.txt'%(outDir), 'a')
+    readme_file.write('All done. Total time taken: %.2f (min)\n\n'%((time.time()-startTime_0)/60.))
+    readme_file.close()
