@@ -18,7 +18,7 @@ import numpy as np
 
 __all__= ['save_csv_dithers']
 
-def save_csv_dithers(dbs_path, outDir,
+def save_csv_dithers(dbs_path, outDir, db_files_only=None,
                      rot_rand_seed=42, trans_rand_seed=42,
                      print_progress=True, show_diagnostic_plots=False):
     """
@@ -46,6 +46,8 @@ def save_csv_dithers(dbs_path, outDir,
     
     Optional Inputs
     ---------------
+    * db_files_only: list of str: list of names of the db files to run.
+                                  Default: None. Runs over all the files in db_path.
     * rot_rand_seed: int: seed for random number generator for rotational dithers.
                           Default: 42
     * trans_rand_seed: int: seed for random number generator for translational dithers.
@@ -67,6 +69,9 @@ def save_csv_dithers(dbs_path, outDir,
     """
     dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]  # select db files
     if print_progress: print('Found files: %s\n'%dbfiles)
+
+    if db_files_only is not None:
+        dbfiles = [f for f in dbfiles if f in db_files_only]  # select db files
     
     for dbfile in dbfiles: # loop over all the db files
         if print_progress:
