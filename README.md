@@ -116,3 +116,6 @@ For 1-4, we are asking these people to come up with a contained menu of options 
 * For each of our white papers, we will have a dedicated section on the benefits of external datasets.  This will include ones from Euclid, WFIRST and other spectroscopic surveys.  
 * Our process will be totally transparent and our github page will be public - there is nothing that needs to be hidden about our deliberations.  However, we want to maintain a ‘unified front’ within DESC, so we ask for everyone to refrain from stating any conclusions of the task force until these conclusions have been reached.
 * Endorsement of strategies outside of DESC will be done within the DESC white papers.
+
+## DESC work:
+- documentation of the data products such as dither strategies and simlibs [created for DESC work](doc/README.md)
