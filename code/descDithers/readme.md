@@ -1,4 +1,4 @@
-The goal here is to provide the translational and rotational dithers for the various OpSim outputs that are included in the Cadence White Paper call. These include: `colossus_2665.db`, `pontus_2002.db`, `colossus_2664.db`,  `colossus_2667.db`, `pontus_2489.db`, `kraken_2035.db`,  `mothra_2045.db`, `pontus_2502.db`, `kraken_2036.db`. These databases are in `/global/cscratch1/sd/awan/dbs_wp_unzipped` at NERSC and should be readable by anyone with lsst group affiliation.
+The goal here is to provide the translational and rotational dithers for the various OpSim outputs that are included in the Cadence White Paper call. These include: `colossus_2665.db`, `pontus_2002.db`, `colossus_2664.db`,  `colossus_2667.db`, `pontus_2489.db`, `kraken_2035.db`,  `mothra_2045.db`, `pontus_2502.db`, `kraken_2036.db`, and `kraken_2026.db`. Also, we consider the project-official baseline, `baseline2018a.db`. These databases are in `/global/cscratch1/sd/awan/dbs_wp_unzipped` at NERSC and should be readable by anyone with lsst group affiliation.
 
 ## DescDithers: Description
 The translational and rotational dithers are largely the same as in DC1/DC2. We have:
