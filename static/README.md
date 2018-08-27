@@ -9,7 +9,6 @@ The "median depth" mentioned here is i-band.  Studies that involve varying the t
 ## Y1
 
 | Strategy | Depth cuts | Usable area | Median depth | Photo-z quality | Photo-z quality |
-| | | | | 0.3<zphot<1.5 | 1.5<zphot<3 |
 | --- | --- | --- | --- | --- | --- |
 | baseline2018a | | | | |
 | kraken_2026 | | | | | |
