@@ -6,66 +6,68 @@ The "Photo-z quality" statistic is the ratio of the standard deviation of the IQ
 
 The "median depth" mentioned here is i-band.  Studies that involve varying the time distributions between filters will require more sophisticated metrics, but just i-band is sufficient for these runs.
 
+Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that we may or may not end up varying for the different scenarios.
+
 ## Y1
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] |
-| --- | --- | --- | --- | --- | --- |
-| baseline2018a | | | | |
-| kraken_2026 | | | | | |
-| kraken_2035 | | | | | |
-| kraken_2036 | | | | | |
-| colossus_2665 | | | | | |
-| colossus_2664 | | | | | |
-| colossus_2667 | | | | | |
-| pontus_2002 | | | | | |
-| pontus_2489 | | | | | |
-| pontus_2502 | | | | | |
-| mothra_2045 | | | | | |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics | 
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| baseline2018a | | | | | | | | | | | |
+| kraken_2026 | | | | | | | | | | | |
+| kraken_2035 | | | | | | | | | | | |
+| kraken_2036 | | | | | | | | | | | |
+| colossus_2665 | | | | | | | | | | | |
+| colossus_2664 | | | | | | | | | | | |
+| colossus_2667 | | | | | | | | | | | |
+| pontus_2002 | | | | | | | | | | | |
+| pontus_2489 | | | | | | | | | | | |
+| pontus_2502 | | | | | | | | | | | |
+| mothra_2045 | | | | | | | | | | | |
 
 ## Y3
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] |
-| --- | --- | --- | --- | --- | --- |
-| baseline2018a | | | | |
-| kraken_2026 | | | | | |
-| kraken_2035 | | | | | |
-| kraken_2036 | | | | | |
-| colossus_2665 | | | | | |
-| colossus_2664 | | | | | |
-| colossus_2667 | | | | | |
-| pontus_2002 | | | | | |
-| pontus_2489 | | | | | |
-| pontus_2502 | | | | | |
-| mothra_2045 | | | | | |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics | 
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| baseline2018a | | | | | | | | | | | |
+| kraken_2026 | | | | | | | | | | | |
+| kraken_2035 | | | | | | | | | | | |
+| kraken_2036 | | | | | | | | | | | |
+| colossus_2665 | | | | | | | | | | | |
+| colossus_2664 | | | | | | | | | | | |
+| colossus_2667 | | | | | | | | | | | |
+| pontus_2002 | | | | | | | | | | | |
+| pontus_2489 | | | | | | | | | | | |
+| pontus_2502 | | | | | | | | | | | |
+| mothra_2045 | | | | | | | | | | | |
 
 ## Y6
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5, 3] |
-| --- | --- | --- | --- | --- | --- |
-| baseline2018a | | | | |
-| kraken_2026 | | | | | |
-| kraken_2035 | | | | | |
-| kraken_2036 | | | | | |
-| colossus_2665 | | | | | |
-| colossus_2664 | | | | | |
-| colossus_2667 | | | | | |
-| pontus_2002 | | | | | |
-| pontus_2489 | | | | | |
-| pontus_2502 | | | | | |
-| mothra_2045 | | | | | |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics | 
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| baseline2018a | | | | | | | | | | | |
+| kraken_2026 | | | | | | | | | | | |
+| kraken_2035 | | | | | | | | | | | |
+| kraken_2036 | | | | | | | | | | | |
+| colossus_2665 | | | | | | | | | | | |
+| colossus_2664 | | | | | | | | | | | |
+| colossus_2667 | | | | | | | | | | | |
+| pontus_2002 | | | | | | | | | | | |
+| pontus_2489 | | | | | | | | | | | |
+| pontus_2502 | | | | | | | | | | | |
+| mothra_2045 | | | | | | | | | | | |
 
 ## Y10
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5, 3] |
-| --- | --- | --- | --- | --- | --- |
-| baseline2018a | | | | |
-| kraken_2026 | | | | | |
-| kraken_2035 | | | | | |
-| kraken_2036 | | | | | |
-| colossus_2665 | | | | | |
-| colossus_2664 | | | | | |
-| colossus_2667 | | | | | |
-| pontus_2002 | | | | | |
-| pontus_2489 | | | | | |
-| pontus_2502 | | | | | |
-| mothra_2045 | | | | | |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics | 
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| baseline2018a | | | | | | | | | | | |
+| kraken_2026 | | | | | | | | | | | |
+| kraken_2035 | | | | | | | | | | | |
+| kraken_2036 | | | | | | | | | | | |
+| colossus_2665 | | | | | | | | | | | |
+| colossus_2664 | | | | | | | | | | | |
+| colossus_2667 | | | | | | | | | | | |
+| pontus_2002 | | | | | | | | | | | |
+| pontus_2489 | | | | | | | | | | | |
+| pontus_2502 | | | | | | | | | | | |
+| mothra_2045 | | | | | | | | | | | |
