@@ -8,7 +8,7 @@ The "median depth" mentioned here is i-band.  Studies that involve varying the t
 
 ## Y1
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality | Photo-z quality |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] |
 | --- | --- | --- | --- | --- | --- |
 | baseline2018a | | | | |
 | kraken_2026 | | | | | |
@@ -24,8 +24,7 @@ The "median depth" mentioned here is i-band.  Studies that involve varying the t
 
 ## Y3
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality | Photo-z quality |
-| | | | | 0.3<zphot<1.5 | 1.5<zphot<3 |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] |
 | --- | --- | --- | --- | --- | --- |
 | baseline2018a | | | | |
 | kraken_2026 | | | | | |
@@ -41,8 +40,7 @@ The "median depth" mentioned here is i-band.  Studies that involve varying the t
 
 ## Y6
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality | Photo-z quality |
-| | | | | 0.3<zphot<1.5 | 1.5<zphot<3 |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5, 3] |
 | --- | --- | --- | --- | --- | --- |
 | baseline2018a | | | | |
 | kraken_2026 | | | | | |
@@ -58,8 +56,7 @@ The "median depth" mentioned here is i-band.  Studies that involve varying the t
 
 ## Y10
 
-| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality | Photo-z quality |
-| | | | | 0.3<zphot<1.5 | 1.5<zphot<3 |
+| Strategy | Depth cuts | Usable area | Median depth | Photo-z quality [0.3,1.5] | Photo-z quality [1.5, 3] |
 | --- | --- | --- | --- | --- | --- |
 | baseline2018a | | | | |
 | kraken_2026 | | | | | |
