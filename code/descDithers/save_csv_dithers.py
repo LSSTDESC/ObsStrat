@@ -25,7 +25,8 @@ __all__= ['save_csv_dithers']
 def save_csv_dithers(dbs_path, outDir, db_files_only=None,
                      rot_rand_seed=42, trans_rand_seed=42,
                      print_progress=True,
-                     show_diagnostic_plots=False, save_plots=False):
+                     show_diagnostic_plots=False, save_plots=False,
+                     compression=True):
     """
     
     The goal here is to calculate the translational and rotational dithers for
@@ -273,8 +274,12 @@ def save_csv_dithers(dbs_path, outDir, db_files_only=None,
             'descDitheredRotTelPos': descDitheredRot}
         
         filename= 'descDithers_%s.csv'%(dbfile.split('.db')[0])
-        pd.DataFrame(d).to_csv('%s/%s'%(outDir, filename), index=False)
 
+        if compression:
+            pd.DataFrame(d).to_csv('%s/%s'%(outDir, filename + '.gz'), index=False,
+                                   compression='gzip')
+        else:
+            pd.DataFrame(d).to_csv('%s/%s'%(outDir, filename), index=False)
         readme += '\nSaved the dithers in %s'%filename
         readme += '\nTime taken: %.2f (min)\n\n'%((time.time()-startTime)/60.)
 
