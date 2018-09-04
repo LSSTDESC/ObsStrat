@@ -1,0 +1,621 @@
+# Goal here is to implement various depth (+ an extinction cut) to define the footprint for extragalactic science.
+#
+# Need the coadded depth data for 1yr, 10yr; calculated by running the bash_calc_coadd_all.sh script.
+#
+# Humna Awan: humna.awan@rutgers.edu
+#
+########################################################################################################################
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import healpy as hp
+import copy
+from collections import OrderedDict
+import lsst.sims.maf.metricBundles as metricBundles   # need MAF installed; for reading in coadd data
+# for galactic latitude histogram
+from astropy.coordinates import SkyCoord
+from astropy import units as u
+# for EBV map from MAF
+import lsst.sims.maf.db as db
+import lsst.sims.maf.slicers as slicers
+import lsst.sims.maf.stackers as mafStackers   # stackers in sims_maf
+import lsst.sims.maf.maps as maps
+########################################################################################################################
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option('--nside', dest='nside', type='int',
+			help='HEALPix resolution parameter.', default=256)
+parser.add_option('--db_path', dest='db_path',
+                  help='Path to OpSim db to consider.',
+                  default='/global/cscratch1/sd/awan/dbs_wp_unzipped/baseline2018a.db')
+parser.add_option('--coadd_data_dir', dest='coadd_data_dir',
+                  help='Path to the folder where coadd depth maps are.',
+                  default='/global/homes/a/awan/LSST/output/coadd_output_allwps_perNight/')
+parser.add_option('--mag_cuts', dest='mag_cuts',
+                  help='List of depth cuts to consider',
+                  default='22.0, 23.0, 24.0, 24.5, 25.0, 25.3, 25.5, 26.0, 26.5')
+parser.add_option('--chosen_cuts', dest='chosen_cuts',
+                  help='Finalized cuts: 1yr, 10yr.',
+                  default= '24.5, 26.0')
+parser.add_option('--ebv_cut',
+                  action='store_true', dest='ebv_cut', default=False,
+                  help= 'Set to True if want to implement a EBV cut (discard pixels with EBV>0.2)')
+parser.add_option('--save_stuff',
+                  action='store_true', dest='save_stuff', default=False,
+                  help= 'Set to True if want to save the plots and the readme etc.')
+parser.add_option('--outDir', dest='outDir',
+                  help='Path to the folder where all the output should be stored; directory should exist already.',
+                  default='/global/homes/a/awan/LSST/output/')
+parser.add_option('--debug',
+                  action='store_true', dest='debug', default=False,
+                  help= 'Set to True if want to debug: basically run the analysis as in DESC SRD v1.')
+
+########################################################################################################################
+(options, args) = parser.parse_args()
+print('\nOptions: %s'%options)
+
+nside = options.nside
+dbpath = options.db_path
+data_dir = options.coadd_data_dir
+mag_cuts = [float(f) for f in list(options.mag_cuts.split(','))]
+cuts = [float(f) for f in list(options.chosen_cuts.split(','))]
+print('Final depth cuts to be implemented: %s'%(cuts))
+chosen_cuts = {'1yr': cuts[0], '10yr': cuts[1]}
+ebv_cut = options.ebv_cut
+save_stuff = options.save_stuff
+outDir = options.outDir
+
+debug = options.debug
+if debug:
+    dbpath = '/global/cscratch1/sd/awan/dbs_old_unzipped/minion_1016_sqlite_new_dithers.db'
+    data_dir = '/global/homes/a/awan/LSST/output/coadd_output_minion1016/'
+
+########################################################################
+# set some things up
+orderBand = ['u', 'g', 'r', 'i', 'z', 'y']
+dbname = dbpath.split('/')[-1].split('.db')[0]
+
+print('\ndata_dir: %s'%data_dir)
+print('dbname: %s'%dbname)
+print('nside: %s\n'%nside)
+
+########################################################################################################################
+# get the files and put the data in a bundle
+print('## Reading in the data ... \n')
+data_bundle = OrderedDict()
+for yr_cut in ['1yr', '10yr']:
+    if yr_cut=='1yr': file_yearTag = '1yearCut'
+    else: file_yearTag = 'fullSurveyPeriod'
+        
+    for band in orderBand:
+        folder = 'coaddM5Analysis_nside%s_withDustExtinction_0pixelRadiusForMasking_%sBand_%s_%s_directory/'%(nside, band,
+                                                                                                              dbname,
+                                                                                                              file_yearTag)
+        path = '%s/%s/unmaskedCoaddData/'%(data_dir, folder)
+        filenames = [f for f in os.listdir(path) if f.endswith('.npz')]
+        print('Reading %s from\n%s/unmaskedCoaddData.\n'%(filenames, folder))
+        
+        if len(filenames)>1:
+            raise ValueError('Have more than one npz file for %s band for %s data: %s'%(band, yr_cut, filenames))
+        else:
+            dither = filenames[0].split('%s_'%band)[-1]
+            dither = dither.split('.npz')[0]
+            mB = metricBundles.createEmptyMetricBundle()
+            mB.read('%s/%s'%(path, filenames[0]))
+            data_bundle['%s_%s'%(yr_cut, band)]= mB
+
+print('\n%s dithers'%dither)
+########################################################################################################################
+# check the improvement factor between 1, 10yr data
+print('\n## Calculating improvement in fluxes between 1yr and 10yrs ... ')
+allImprovs = []
+for band in orderBand:
+    yr_cut = '1yr_%s'%band
+    in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
+                                 (data_bundle[yr_cut].metricValues.data > 0))[0]
+    one_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
+    
+    yr_cut = '10yr_%s'%band
+    in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
+                                 (data_bundle[yr_cut].metricValues.data > 0))[0]
+    ten_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
+    
+    one_yr_flux = 10**(-one_yr_med/2.5)
+    ten_yr_flux = 10**(-ten_yr_med/2.5)
+    print('%s-band: improvement factor in flux: %s'%(band, one_yr_flux/ten_yr_flux))
+    allImprovs.append(one_yr_flux/ten_yr_flux)
+                                
+print('Wanted improvement factor over ten years: %s'%np.sqrt(10.))
+print('Mean improvement factor across ugrizy: %s'%np.mean(allImprovs))
+
+##
+if debug:
+    # The improvement from 1-10yr is too good -- 1yr in minion1016 strongly prefers DDFs so 1yr defined by the number
+    # of the nights doesnt have 10% of total visits (has <7%). For now, renormalize the 1yr depth s.t. median matches
+    # that after 10% of 10-year WFD observations.
+    # As implemented in https://github.com/humnaawan/MAF-Related-Notebooks/blob/master/DESC-SRD/srd_depth_cuts.py
+    wanted1yr_medianDepth= {'g': 25.377165833786055, 'i': 24.910057884620223, 'r': 25.565945074516804,
+                            'u': 23.795160853950424, 'y': 23.315667199085482, 'z': 24.002597276614527}
+
+    print('\n## Renormalizing 1yr depth data ... ')
+    inSurveyIndex = {}
+    for key in data_bundle.keys():
+        inSurveyIndex[key] = np.where(data_bundle[key].metricValues.mask == False)[0]
+        if key.__contains__('1yr'):
+            band = key.split('1yr_')[1]
+            print(band)
+            medDepth = np.median(data_bundle[key].metricValues.data[inSurveyIndex[key]])
+            print('Median depth as read: %s'%np.median(data_bundle[key].metricValues.data[inSurveyIndex[key]]))
+            delm = wanted1yr_medianDepth[band]-medDepth
+            print('m_wanted-m_current = %s'%delm)
+            data_bundle[key].metricValues.data[:] += delm
+            print('Renormalized map. \nNew median: %s\n'%np.median(data_bundle[key].metricValues.data[inSurveyIndex[key]]))
+
+    # re-check the improvement factor between 1, 10yr data
+    print('## Re-calculating improvement in fluxes between 1yr and 10yrs after the renormalizing ... ')
+    allImprovs = []
+    for band in orderBand:
+        yr_cut = '1yr_%s'%band
+        in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
+                                      (data_bundle[yr_cut].metricValues.data > 0))[0]
+        one_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
+
+        yr_cut = '10yr_%s'%band
+        in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
+                                      (data_bundle[yr_cut].metricValues.data > 0))[0]
+        ten_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
+
+        one_yr_flux = 10**(-one_yr_med/2.5)
+        ten_yr_flux = 10**(-ten_yr_med/2.5)
+        print('%s-band: improvement factor in flux: %s'%(band, one_yr_flux/ten_yr_flux))
+        allImprovs.append(one_yr_flux/ten_yr_flux)
+
+    print('\nWanted improvement factor over ten years: %s'%np.sqrt(10.))
+    print('Mean improvement factor across ugrizy: %s'%np.mean(allImprovs))
+else:
+    inSurveyIndex = {}
+    for key in data_bundle.keys():
+        inSurveyIndex[key] = np.where(data_bundle[key].metricValues.mask == False)[0]
+
+########################################################################################################################
+########################################################################################################################
+# calculate some stats
+areaPerPixel= hp.pixelfunc.nside2pixarea(nside=nside, degrees=True)
+
+def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
+    # index must have the same keys as bundle
+    if (bundle.keys()!=index.keys()) and not allBandInds:
+        raise ValueError('index must have the same keys as bundle:\n%s\n%s'%(bundle.keys(), index.keys()))
+        
+    if return_stuff and allBandInds: 
+        stuff_to_return = {}
+        for key in ['5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std', 'Area (deg2)']:
+            stuff_to_return[key] = {}
+        
+    header, sep = '| - ', '| ---- ' 
+    med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg2) '
+    yr = None
+    for key in bundle:
+        if yr is None: yr = key.split('yr')[0]+'yr'
+        
+        current_yr = key.split('yr')[0]+'yr'
+        if current_yr!=yr:
+            print('%s\n%s\n%s\n%s\n%s\n'%(header, sep, med_depth, std_depth, area))
+            header, sep = '| - ', '| ---- ' 
+            med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg2) '
+            yr = current_yr
+        
+        if allBandInds: index_key = current_yr
+        else: index_key = key
+            
+        med = np.nanmedian(bundle[key].metricValues.data[index[index_key]])
+        std = np.nanstd(bundle[key].metricValues.data[index[index_key]])
+        sarea = (len(index[index_key])*areaPerPixel)
+        
+        if return_stuff and allBandInds:
+            stuff_to_return['5$\sigma$ Depth: Median'][key] = med
+            stuff_to_return['5$\sigma$ Depth: Std'][key] = std
+            stuff_to_return['Area (deg2)'][index_key] = sarea
+            
+        header += '| %s '%key
+        sep += '| ---- '
+        med_depth += '| %.2f '%med
+        std_depth += '| %.2f '%std
+        area += '| %.2f '%sarea
+        
+    print('%s\n%s\n%s\n%s\n%s\n'%(header, sep, med_depth, std_depth, area))
+    
+    if return_stuff: return stuff_to_return
+########################################################################################################################
+########################################################################################################################
+# Calculate stats in the survey region (unmasked; no constraints on depth, i.e., even have negative depths rn).
+print('\n#### Stats: no constraints on depth, i.e., even have negative depths')
+calc_stats(bundle=data_bundle, index=inSurveyIndex, allBandInds=False)
+
+########################################################################################################################
+# Find the area common to all-6 bands with depths>0 in all.
+allBandPixels = {}  # dictionary for pixels that are common in all six bands with depth>0.
+
+for key in data_bundle:
+    index = np.where((data_bundle[key].metricValues.mask == False) & \
+                     (data_bundle[key].metricValues.data > 0))[0]
+    # save the indices
+    yrTag = key.split('yr')[0]+'yr'
+    if yrTag not in allBandPixels.keys():
+        allBandPixels[yrTag]= index  
+    else:
+        allBandPixels[yrTag]= list(set(allBandPixels[yrTag]).intersection(index))
+
+for key in allBandPixels: allBandPixels[key] = np.array(allBandPixels[key])
+########################################################################################################################
+# Calculate the stats for the all-band footprint
+print('\n#### Stats: considering area common to all-6 bands with depths>0 in all')
+calc_stats(bundle=data_bundle, index=allBandPixels, allBandInds=True)
+
+########################################################################################################################
+# implement depth cuts in i-band and save the pixel numbers
+iCutPixels = {}
+# run over different cuts
+for mag_cut in mag_cuts:
+    if mag_cut not in iCutPixels.keys():
+        iCutPixels[mag_cut] = {}
+        
+    for yrTag in allBandPixels:
+        if yrTag not in iCutPixels[mag_cut].keys():
+            iCutPixels[mag_cut][yrTag] = {}
+        
+        # find the pixels satisfying the iBand cut.
+        iBandCutInd = np.where((data_bundle['%s_i'%yrTag].metricValues.data[allBandPixels[yrTag]]>=mag_cut))[0]
+        iCutPixels[mag_cut][yrTag] = np.array(allBandPixels[yrTag])[iBandCutInd] # store
+
+########################################################################################################################
+# Calculate the stats in the survey region (unmasked; no constraints on depth, i.e., even have negative depths rn).
+dat_keys = ['Area (deg2)', '5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std']
+
+########################################################################################################################
+# plots for area and depth variations as a funtion of mag cuts
+# need to create a list of all the stats for cleaner plots.
+stats_allmags = {}
+for mag_cut in mag_cuts:
+    print('\n#### Stats: i>%s in area common to all six bands with depths>0 in all'%mag_cut)
+    stats = calc_stats(bundle=data_bundle, index=iCutPixels[mag_cut],
+                       allBandInds=True, return_stuff=True) # area: 1yr, 10yr; depth stuff: 1yr_band, 10yr_band
+    for dat_key in dat_keys:
+        if dat_key not in stats_allmags: stats_allmags[dat_key] = {}
+        for key in stats[dat_key].keys():
+            if key.__contains__('_'):  # need to separate 1yr, 10yr from 1yr_<band>, 10yr_<band>
+                sp = key.split('_')
+                yr, band = sp[0], sp[1]
+            else:
+                yr, band = key, None
+                
+            if band is None: # all-band keys: 1yr, 10yr
+                if yr not in stats_allmags[dat_key]:
+                    stats_allmags[dat_key][yr] = []
+            else: # need to account for the band for each of 1yr, 10yr
+                if yr not in stats_allmags[dat_key]:
+                    stats_allmags[dat_key][yr] = {}
+                if band not in  stats_allmags[dat_key][yr]:
+                     stats_allmags[dat_key][yr][band] = []
+            
+            if band is not None:
+                stats_allmags[dat_key][yr][band].append(stats[dat_key][key])
+            else:
+                stats_allmags[dat_key][yr].append(stats[dat_key][yr])
+
+print('\n## Plotting area and depth variations for mag_cuts: %s ...'%mag_cuts)
+colors = ['m', 'g', 'b', 'r', 'k', 'c']
+fontsize = 14
+# plot
+plt.clf()
+fig, axes = plt.subplots(2,3)
+fig.subplots_adjust(wspace=.2, hspace=.3)
+
+for i, dat_key in enumerate(dat_keys):
+    if dat_key.__contains__('Depth'):  # band-specific statistic
+        for j, band in enumerate(stats_allmags[dat_key]['1yr'].keys()):
+            # plot 1yr data for this statistic
+            axes[0, i].plot(mag_cuts, stats_allmags[dat_key]['1yr'][band], 'o-',
+                            color=colors[j], label='%s-band'%band)
+            # plot 10yr data for this statistic
+            axes[1, i].plot(mag_cuts, stats_allmags[dat_key]['10yr'][band], 'o-',
+                            color=colors[j], label='%s-band'%band)
+    else:
+        # plot 1yr area
+        axes[0, i].plot(mag_cuts, stats_allmags[dat_key]['1yr'], 'o-')
+        # plot 10yr area
+        axes[1, i].plot(mag_cuts, stats_allmags[dat_key]['10yr'], 'o-')
+
+for row in [0, 1]:
+    axes[row, 0].ticklabel_format(style='sci',scilimits=(-3,4), axis='y')  # area
+    axes[row, 2].legend(loc='upper right', ncol=2, fontsize=fontsize-2)
+    for col in [0, 1, 2]:
+        axes[row, col].set_ylabel(dat_keys[col], fontsize=fontsize)    
+        axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
+        axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
+        
+axes[0,1].set_title('1yr', fontsize=fontsize)
+axes[1,1].set_title('10yr', fontsize=fontsize)
+axes[1, 1].set_xlabel('i-band cut (i>?) (in all-band footprint with all depth > 0)', fontsize=fontsize)
+
+fig.set_size_inches(20,10)
+plt.show()
+
+########################################################################################################################
+# plot galactic latitude and EBV histograms for different cuts
+print('\n## Plotting galactic latitude and EBV histograms for mag_cuts: %s'%mag_cuts)
+# import EBV map from MAF
+opsdb = db.OpsimDatabase(dbpath)
+if debug:  # for minion1016
+    cols = ['fieldID', 'fieldRA', 'fieldDec', 'night']
+else:
+    cols = ['fieldId', 'fieldRA', 'fieldDec', 'night']
+simdata = opsdb.fetchMetricData(cols, sqlconstraint=None)
+if dither.__contains__('FieldPerNight'):
+    s = mafStackers.RandomDitherFieldPerNightStacker(degrees=opsdb.raDecInDeg, randomSeed=1000)
+elif dither.__contains__('PerNight'):
+    s = mafStackers.RandomDitherPerNightStacker(degrees=opsdb.raDecInDeg, randomSeed=1000)
+elif dither.__contains__('FieldPerVisit'):
+    s = mafStackers.RandomDitherFieldPerVisitStacker(degrees=opsdb.raDecInDeg, randomSeed=1000)
+else:
+    raise ValueError('Unsure of what stacker to consdier for %s dithers.'%dither)
+simdata = s.run(simdata)
+
+dustmap = maps.DustMap(nside=nside)
+dither_timescale = dither.split('Dither')[-1]
+slicer = slicers.HealpixSlicer(lonCol='randomDither%sRa'%dither_timescale,
+                               latCol='randomDither%sDec'%dither_timescale,
+                               latLonDeg=opsdb.raDecInDeg, nside=nside)
+slicer.setupSlicer(simdata)
+result = dustmap.run(slicer.slicePoints)
+ebv_map = result['ebv']
+
+########################################################################################################################
+# histograms: latitude, extinction
+bins_b = np.arange(-90, 90, 0.5)
+bins_ebv = np.arange(-3.5, 0.5, 0.05)
+colors = ['m', 'g', 'b', 'r', 'c', 'y']
+
+# plot
+plt.clf()
+fig, axes = plt.subplots(2,2)
+fig.subplots_adjust(wspace=0.2, hspace=0.3)
+
+max_counts = 0  # for EBV histogram; needed for plotting constant EBV lines
+for i, yr in enumerate(['1yr', '10yr']):
+    linestyle = 'solid'
+    # plot the galactic latitude histogram for no-cut
+    lon, lat = hp.pix2ang(nside=nside, ipix=allBandPixels[yr], lonlat=True)
+    c = SkyCoord(ra= lon*u.degree, dec=lat*u.degree)
+    axes[i, 0].hist(c.galactic.b.degree, label='all-band; all depths>0',
+                    bins=bins_b, histtype='step', lw=2, color='k')
+    
+    # plot the EBV histogram for no cut
+    cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[allBandPixels[yr]]), label='all-band; all depths>0',
+                                bins=bins_ebv, histtype='step', lw=2, color='k')
+    max_counts = max(max_counts, max(cts))
+    
+    # now loop over mag cuts
+    for j, mag_cut in enumerate(iCutPixels):
+        if j>=len(colors): linestyle = 'dashed'  # out of colors so change linestyle
+            
+        # plot the galactic latitude histogram
+        lon, lat= hp.pix2ang(nside=nside, ipix=iCutPixels[mag_cut][yr], lonlat= True)
+        c = SkyCoord(ra= lon*u.degree, dec=lat*u.degree)
+        axes[i, 0].hist(c.galactic.b.degree, label= 'i>%s'%mag_cut,
+                        bins=bins_b, histtype='step', lw=2,
+                        color=colors[j%len(colors)], linestyle=linestyle)
+        
+        # plot the EBV histogram
+        cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[iCutPixels[mag_cut][yr]]), label= 'i>%s'%mag_cut,
+                                    bins=bins_ebv, histtype='step', lw=2,
+                                    color=colors[j%len(colors)], linestyle=linestyle)
+        max_counts = max(max_counts, max(cts))
+    
+for row in [0, 1]:
+    x = np.arange(0,max_counts,10)
+    for ebv in [0.2, 0.3]:
+        axes[row, 1].plot(np.log10([ebv]*len(x)), x, '-.', label='EBV: %s'%ebv)
+        
+    axes[row, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
+    axes[row, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize) 
+    axes[row, 1].set_ylim(0,max_counts)
+    
+    for col in [0, 1]:
+        axes[0, col].set_title('1yr', fontsize=fontsize)
+        axes[1, col].set_title('10yr', fontsize=fontsize)
+        axes[row, col].legend(loc='upper right', fontsize=fontsize-2)
+        axes[row, col].set_ylabel('Pixel Counts', fontsize=fontsize)
+        axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
+        axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
+
+fig.set_size_inches(20,10)
+plt.show()
+
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+# Finalized cuts
+########################################################################################################################
+print('#################################################################################################################')
+print('#################################################################################################################')
+print('#################################################################################################################')
+print('#################################################################################################################')
+ebv_limit = 0.2
+if ebv_cut:
+    print('Chosen cuts: %s and EBV>0.2'%chosen_cuts)
+    ebv_label = ' ; EBV<%s'%ebv_limit
+else:
+    print('Chosen cuts: %s'%chosen_cuts)
+    ebv_label = ''
+    
+final_pixels = {}
+for yr in ['1yr', '10yr']:
+    mag_cut = chosen_cuts[yr]
+    
+    if ebv_cut:
+        good_ebv = np.where(ebv_map[iCutPixels[mag_cut][yr]] <= ebv_limit)[0]
+        final_pixels[yr] = iCutPixels[mag_cut][yr][good_ebv]
+        print('%s: throwing away %s pixels further because of EBV cut'%(yr, len(iCutPixels[mag_cut][yr])-len(good_ebv)))
+    else:
+        final_pixels[yr] = iCutPixels[mag_cut][yr]
+        
+# print final stats
+print('\n#### %s stats: %s: final cuts: %s %s'%(dbname, dither, chosen_cuts, ebv_label))
+calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True)
+
+################################################################################################
+# histogram latitude, extinction
+colors = ['m', 'g', 'b', 'r', 'c', 'y']
+
+plt.clf()
+fig, axes = plt.subplots(2,2)
+fig.subplots_adjust(wspace=0.2, hspace=0.3)
+
+max_counts = 0
+for i, yr in enumerate(['1yr', '10yr']):
+    mag_cut = chosen_cuts[yr]
+    data_label = 'i>%s%s'%(mag_cut, ebv_label)
+    linestyle = 'solid'
+    # plot the galactic latitude histogram
+    # first plot for no-cut
+    lon, lat = hp.pix2ang(nside=nside, ipix=allBandPixels[yr], lonlat=True)
+    c = SkyCoord(ra= lon*u.degree, dec=lat*u.degree)
+    axes[i, 0].hist(c.galactic.b.degree, label='all-band; all depths>0',
+                    bins=bins_b, histtype='step', lw=2, color='k')
+    
+    # now with the cut
+    lon, lat= hp.pix2ang(nside=nside, ipix=final_pixels[yr], lonlat= True)
+    c = SkyCoord(ra= lon*u.degree, dec=lat*u.degree)
+    axes[i, 0].hist(c.galactic.b.degree, label=data_label,
+                    bins=bins_b, histtype='step', lw=2, color=colors[i%len(colors)])
+
+    # ----------
+    # print out area for which EBV>0.2, 0.3
+    tot = areaPerPixel*len(allBandPixels[yr])
+    print('\n%s: no cut\nTotal area (allBand footprint; all depths>0): %.2f deg2'%(yr, tot))
+    for lim in [0.2, 0.3]:
+        area_here = len(np.where(ebv_map[allBandPixels[yr]]>lim)[0])*areaPerPixel
+        print('EBV>%s: Area: %.2f deg2 (%.2f%% of total)'%(lim, area_here, 100.*area_here/tot))
+        
+    tot = areaPerPixel*len(final_pixels[yr])
+    
+    print('\n%s:\nTotal area: %s: allBand footprint; all depths>0: %.2f deg2'%(yr, data_label, tot))
+    for lim in [0.2, 0.3]:
+        area_here = len(np.where(ebv_map[final_pixels[yr]]>lim)[0])*areaPerPixel
+        print('EBV>%s: Area: %.2f deg2 (%.2f%% of total)'%(lim, area_here, 100.*area_here/tot))
+    # ----------
+    # plot the EBV histogram
+    # no cut
+    cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[allBandPixels[yr]]), label='all-band; all depths>0',
+                                bins=bins_ebv, histtype='step', lw=2, color='k')
+    max_counts = max(max_counts, max(cts))
+
+    # final cuts
+    cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[final_pixels[yr]]),
+                                label=data_label,
+                                bins=bins_ebv, histtype='step', lw=2,
+                                color=colors[i%len(colors)], linestyle=linestyle)
+    max_counts = max(max_counts, max(cts))
+    
+for row in [0, 1]:
+    x = np.arange(0,max_counts,10)
+    for ebv in [0.2, 0.3]: # add lines for constant EBV
+        axes[row, 1].plot(np.log10([ebv]*len(x)), x, '-.', label='EBV: %s'%ebv)
+    axes[row, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
+    axes[row, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize) 
+    axes[row, 1].set_ylim(0,max_counts)
+    
+    for col in [0, 1]:
+        axes[0, col].set_title('1yr', fontsize=fontsize)
+        axes[1, col].set_title('10yr', fontsize=fontsize)
+        axes[row, col].legend(loc='upper right', fontsize=fontsize-2)
+        axes[row, col].set_ylabel('Pixel Counts', fontsize=fontsize)    
+        axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
+        axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
+plt.suptitle('allBand footprint; all depths>0', fontsize=fontsize)
+fig.set_size_inches(20,10)
+plt.show()
+
+########################################################################################################################
+# plot skymaps for each band before and after the depth cut
+nTicks = 5
+for band in orderBand:
+    for yr in ['1yr', '10yr']:
+        mag_cut = chosen_cuts[yr]
+        data_label = 'i>%s%s'%(mag_cut, ebv_label)
+
+        plt.clf()
+        fig, axes= plt.subplots(1,2)
+        temp = copy.deepcopy(data_bundle['%s_%s'%(yr, band)])  # need to copy since will change the mask
+        
+        # retain the all-band footprint only
+        temp.metricValues.mask = True
+        temp.metricValues.mask[allBandPixels[yr]] = False
+        
+        # figure out the color range
+        inSurveyIndex = np.where(temp.metricValues.mask == False)[0]
+        median = np.median(temp.metricValues.data[inSurveyIndex])
+        stddev = np.std(temp.metricValues.data[inSurveyIndex])
+        colorMin = median-2.5*stddev
+        colorMax = median+2.5*stddev
+        increment = (colorMax-colorMin)/float(nTicks)
+        ticks = np.arange(colorMin+increment, colorMax, increment)
+        
+        # plot the no-cut skymap
+        plt.axes(axes[0])
+        hp.mollview(temp.metricValues.filled(temp.slicer.badval), 
+                    flip='astro', rot=(0,0,0) , hold= True,
+                    min=colorMin, max=colorMax,
+                    title= '%s: No Cut'%yr, cbar=False)
+        hp.graticule(dpar=20, dmer=20, verbose=False)
+        
+        # plot the mag-cut skymap
+        temp.metricValues.mask = True
+        temp.metricValues.mask[final_pixels[yr]] = False
+        
+        plt.axes(axes[1])
+        hp.mollview(temp.metricValues.filled(temp.slicer.badval), 
+                    flip='astro', rot=(0,0,0) , hold= True,
+                    min=colorMin, max=colorMax,
+                    title= '%s: %s'%(yr, data_label), cbar=False)
+        hp.graticule(dpar=20, dmer=20, verbose=False)
+            
+        # add a color bar
+        im = plt.gca().get_images()[0]
+        cbaxes = fig.add_axes([0.25, 0.38, 0.5, 0.01]) # [left, bottom, width, height]
+        cb = plt.colorbar(im,  orientation='horizontal',
+                          ticks=ticks, format='%.2f', cax=cbaxes) 
+        cb.set_label('%s-band depth\n(all-band footprint with all depth > 0)'%(band), fontsize=14)
+        cb.ax.tick_params(labelsize=14)
+        
+        fig.set_size_inches(18,18)
+        plt.show()
+        
+if save_stuff:
+    import pickle
+    for yr in ['1yr', '10yr']:
+        data_to_save = {}
+        data_to_save['pixNum'] = final_pixels[yr]
+    
+        # now find all the fieldIDs that have observations
+        fID_list = []
+        for pixel in data_to_save['pixNum']:
+            indObsInPixel = slicer._sliceSimData(pixel)
+            fID_list += list(simdata[indObsInPixel['idxs']]['fieldId']) # fieldIDs corresponding to pixel
+        
+        data_to_save['fieldIDs'] = np.unique(fID_list)
+        if ebv_cut:
+            filename = '%sFootprint_%s_nside%s_%s_i>%s_ebv<%s.pickle'%(yr, dbname, nside, 'RandomFieldPerNight', chosen_cuts[yr], ebv_limit)
+        else:
+            filename = '%sFootprint_%s_nside%s_%s_i>%s.pickle'%(yr, dbname, nside, 'RandomFieldPerNight', chosen_cuts[yr])
+            
+        with open('%s/%s'%(outDir, filename), 'wb') as handle:
+            pickle.dump(data_to_save, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            
+        print('Saved %s in %s.'%(filename, outDir))
+        
+        
