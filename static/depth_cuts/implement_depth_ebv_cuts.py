@@ -61,7 +61,12 @@ dbpath = options.db_path
 data_dir = options.coadd_data_dir
 mag_cuts = [float(f) for f in list(options.mag_cuts.split(','))]
 cuts = [float(f) for f in list(options.chosen_cuts.split(','))]
-print('Final depth cuts to be implemented: %s'%(cuts))
+print('\nFinal depth cuts to be implemented: %s'%(cuts))
+# ensure that the final cut is included in the mag_cut list. if not, add it.
+for cut in cuts:
+    if cut not in mag_cuts:
+        mag_cuts.append(cut)
+        print('Adding %s cut to the mag_cut list since it is one of the final cuts.'%cut)
 chosen_cuts = {'1yr': cuts[0], '10yr': cuts[1]}
 ebv_cut = options.ebv_cut
 save_stuff = options.save_stuff
@@ -194,7 +199,7 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         for key in ['5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std', 'Area (deg2)']:
             stuff_to_return[key] = {}
         
-    header, sep = '| - ', '| ---- ' 
+    header, sep = '| - ', '| ----:'
     med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg2) '
     yr = None
     for key in bundle:
@@ -203,7 +208,7 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         current_yr = key.split('yr')[0]+'yr'
         if current_yr!=yr:
             print('%s\n%s\n%s\n%s\n%s\n'%(header, sep, med_depth, std_depth, area))
-            header, sep = '| - ', '| ---- ' 
+            header, sep = '| - ', '| ----:'
             med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg2) '
             yr = current_yr
         
@@ -220,7 +225,7 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
             stuff_to_return['Area (deg2)'][index_key] = sarea
             
         header += '| %s '%key
-        sep += '| ---- '
+        sep += '|:----:'
         med_depth += '| %.2f '%med
         std_depth += '| %.2f '%std
         area += '| %.2f '%sarea
@@ -375,7 +380,7 @@ ebv_map = result['ebv']
 ########################################################################################################################
 # histograms: latitude, extinction
 bins_b = np.arange(-90, 90, 0.5)
-bins_ebv = np.arange(-3.5, 0.5, 0.05)
+bins_ebv = np.arange(-3.5, 1.0, 0.05)
 colors = ['m', 'g', 'b', 'r', 'c', 'y']
 
 # plot
@@ -445,13 +450,17 @@ print('#########################################################################
 print('#################################################################################################################')
 print('#################################################################################################################')
 ebv_limit = 0.2
+ebv_label = ''
 if ebv_cut:
-    print('Chosen cuts: %s and EBV>0.2'%chosen_cuts)
     ebv_label = ' ; EBV<%s'%ebv_limit
-else:
-    print('Chosen cuts: %s'%chosen_cuts)
-    ebv_label = ''
-    
+
+# dictionary for the label for the final cut
+final_label = {}
+for yr in ['1yr', '10yr']:
+    final_label[yr] = 'i>%s%s'%(chosen_cuts[yr], ebv_label)
+print('Chosen cuts: %s'%final_label)
+
+# dictionary for the final pixels
 final_pixels = {}
 for yr in ['1yr', '10yr']:
     mag_cut = chosen_cuts[yr]
@@ -464,8 +473,8 @@ for yr in ['1yr', '10yr']:
         final_pixels[yr] = iCutPixels[mag_cut][yr]
         
 # print final stats
-print('\n#### %s stats: %s: final cuts: %s %s'%(dbname, dither, chosen_cuts, ebv_label))
-calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True)
+print('\n#### %s stats: %s: final cuts: %s'%(dbname, dither, final_pixels))
+stats_dict = calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True, return_stuff=True)
 
 ################################################################################################
 # histogram latitude, extinction
@@ -594,28 +603,29 @@ for band in orderBand:
         
         fig.set_size_inches(18,18)
         plt.show()
-        
+
 if save_stuff:
-    import pickle
+    currentDir = os.getcwd()
     for yr in ['1yr', '10yr']:
-        data_to_save = {}
-        data_to_save['pixNum'] = final_pixels[yr]
-    
-        # now find all the fieldIDs that have observations
-        fID_list = []
-        for pixel in data_to_save['pixNum']:
-            indObsInPixel = slicer._sliceSimData(pixel)
-            fID_list += list(simdata[indObsInPixel['idxs']]['fieldId']) # fieldIDs corresponding to pixel
-        
-        data_to_save['fieldIDs'] = np.unique(fID_list)
-        if ebv_cut:
-            filename = '%sFootprint_%s_nside%s_%s_i>%s_ebv<%s.pickle'%(yr, dbname, nside, 'RandomFieldPerNight', chosen_cuts[yr], ebv_limit)
+        header = '| db | cut | Area (deg$^2@) | 5$\sigma$ $i$-band Depth: Median | 5$\sigma$ $i$-band Depth: Std |'
+        header += '\n|:--:|:---:|:--------------:|:-------------------------------:|:------------------------------:|'
+        db_entry = '\n| %s | %s | %.2f | %.2f | %.2f |'%(dbname, final_label[yr],
+                                                         stats_dict['Area (deg2)'][yr],
+                                                         stats_dict['5$\sigma$ Depth: Median']['%s_i'%yr],
+                                                         stats_dict['5$\sigma$ Depth: Std']['%s_i'%yr]
+                                                        )
+        # write to the markdown
+        os.chdir(outDir)
+        filename = 'footprint_data_%s_%s.md'%(yr, dither)
+        if not os.path.exists(filename):
+            to_write = header + db_entry
         else:
-            filename = '%sFootprint_%s_nside%s_%s_i>%s.pickle'%(yr, dbname, nside, 'RandomFieldPerNight', chosen_cuts[yr])
-            
-        with open('%s/%s'%(outDir, filename), 'wb') as handle:
-            pickle.dump(data_to_save, handle, protocol=pickle.HIGHEST_PROTOCOL)
-            
-        print('Saved %s in %s.'%(filename, outDir))
+            to_write = db_entry
+
+        md_file = open('%s'%(filename), 'a')
+        md_file.write(to_write)
+        md_file.close()
+
+    os.chdir(currentDir)
         
         
