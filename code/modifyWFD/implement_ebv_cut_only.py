@@ -195,11 +195,9 @@ calc_stats(bundle=data_bundle, index=allBandPixels, allBandInds=True)
 dat_keys = ['Area (deg2)', '5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std']
 
 ########################################################################################################################
-# plot galactic latitude and EBV histograms for different cuts
-print('\n## Plotting galactic latitude and EBV histograms')
 # import EBV map from MAF
 opsdb = db.OpsimDatabase(dbpath)
-simdata = opsdb.fetchMetricData(['fieldId', 'fieldRA', 'fieldDec', 'night'],
+simdata = opsdb.fetchMetricData(['fieldId', 'fieldRA', 'fieldDec', 'night'],  # assume v4 outputs: fieldID in v3
                                 sqlconstraint=None)
 
 if dither=='NoDither':
@@ -247,7 +245,7 @@ print('\n#### %s stats: %s: final cuts: %s'%(dbname, dither, ebv_label))
 calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True)
 
 ################################################################################################
-# histogram latitude, extinction
+# histogram: galactic latitude, extinction before and after the cut
 bins_b = np.arange(-90, 90, 0.5)
 bins_ebv = np.arange(-3.5, 0.5, 0.05)
 colors = ['m', 'g', 'b', 'r', 'c', 'y']
@@ -321,7 +319,7 @@ fig.set_size_inches(20,10)
 plt.show()
 
 ################################################################################################
-# depth histogram
+# histogram: coadded depth in different bands before and after the cut
 bins_depth_full = np.arange(0, 27, 0.1)
 bins_depth_cut = bins_depth_full[bins_depth_full>20]
 plt.clf()
@@ -360,7 +358,7 @@ fig.set_size_inches(20,10)
 plt.show()
 
 ########################################################################################################################
-# plot skymaps for each band before and after the depth cut
+# skymaps: for each band before and after the depth cut
 nTicks = 5
 for band in orderBand:
     for yr in ['1yr', '10yr']:
