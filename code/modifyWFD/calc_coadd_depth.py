@@ -31,6 +31,9 @@ parser.add_option('--dbs_path', dest='dbs_path',
 parser.add_option('--outDir', dest='outDir',
                   help='Path to the folder where all the output should be stored. The folder must already exist.',
                   default='/global/homes/a/awan/LSST/output/coadd_output_allwps/')
+parser.add_option('--specific_db', dest='specific_db',
+                  help='Specific db to run the analysis for.',
+                  default=None)
 
 (options, args) = parser.parse_args()
 nside = options.nside
@@ -40,6 +43,7 @@ dbs_path = options.dbs_path
 outDir = options.outDir
 includeDustExtinction = not options.noMWdust
 baseline_and_wide_only = options.baseline_and_wide_only
+specific_db = options.specific_db
 
 ########################################################################################################################
 # set some things up
@@ -49,6 +53,12 @@ dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
 if baseline_and_wide_only:
     dbfiles = [f for f in dbfiles if ((f=='baseline2018a.db') or (f=='pontus_2002.db'))]
     print('Running over %s'%dbfiles)
+
+if specific_db is not None:
+    if specific_db in dbfiles:
+        dbfiles = [specific_db]
+    else:
+        raise ValueError('%s is not in the dbs_path directory.'%specific_db)
 
 if no_dither: dith = 'NoDither'
 else: dith = 'RandomDitherPerNight'
