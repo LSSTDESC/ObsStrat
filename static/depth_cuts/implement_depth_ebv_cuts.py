@@ -22,6 +22,7 @@ import lsst.sims.maf.db as db
 import lsst.sims.maf.slicers as slicers
 import lsst.sims.maf.stackers as mafStackers   # stackers in sims_maf
 import lsst.sims.maf.maps as maps
+import time
 ########################################################################################################################
 from optparse import OptionParser
 parser = OptionParser()
@@ -62,6 +63,7 @@ parser.add_option('--debug',
                   help= 'Set to True if want to debug: basically run the analysis as in DESC SRD v1.')
 
 ########################################################################################################################
+startTime = time.time()
 (options, args) = parser.parse_args()
 print('\nOptions: %s'%options)
 
@@ -228,7 +230,8 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         stuff_to_return = {}
         for key in ['5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std', 'Area (deg$^2$)']:
             stuff_to_return[key] = {}
-        
+
+    md_print = ''
     header, sep = '| - ', '| ----:'
     med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg$^2$) '
     yr = None
@@ -237,7 +240,7 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         
         current_yr = key.split('yr')[0]+'yr'
         if current_yr!=yr:
-            print('%s\n%s\n%s\n%s\n%s\n'%(header, sep, med_depth, std_depth, area))
+            md_print += '%s\n%s\n%s\n%s\n%s\n\n'%(header, sep, med_depth, std_depth, area)
             header, sep = '| - ', '| ----:'
             med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg$^2$) '
             yr = current_yr
@@ -259,10 +262,11 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         med_depth += '| %.2f '%med
         std_depth += '| %.2f '%std
         area += '| %.2f '%sarea
-        
-    print('%s\n%s\n%s\n%s\n%s\n'%(header, sep, med_depth, std_depth, area))
     
-    if return_stuff: return stuff_to_return
+    md_print += '%s\n%s\n%s\n%s\n%s\n'%(header, sep, med_depth, std_depth, area)
+    print(md_print)
+
+    if return_stuff: return stuff_to_return, md_print
 ########################################################################################################################
 ########################################################################################################################
 # Calculate stats in the survey region (unmasked; no constraints on depth, i.e., even have negative depths rn).
@@ -315,7 +319,7 @@ dat_keys = ['Area (deg$^2$)', '5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std']
 stats_allmags = {}
 for mag_cut in mag_cuts:
     print('\n#### Stats: i>%s in area common to all six bands with depths>0 in all'%mag_cut)
-    stats = calc_stats(bundle=data_bundle, index=iCutPixels[mag_cut],
+    stats, _ = calc_stats(bundle=data_bundle, index=iCutPixels[mag_cut],
                        allBandInds=True, return_stuff=True) # area for yr_cut; depth stuff for yrcut_band
     for dat_key in dat_keys:
         if dat_key not in stats_allmags: stats_allmags[dat_key] = {}
@@ -500,7 +504,6 @@ if not dont_show_plots:
 else:
     plt.close('all')
 
-
 ########################################################################################################################
 ########################################################################################################################
 ########################################################################################################################
@@ -535,8 +538,9 @@ for yr in yr_cuts:
         
 # print final stats
 print('\n#### %s stats: %s: final cuts: %s'%(dbname, dither, final_label))
-stats_dict = calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True, return_stuff=True)
-
+stats_dict, md_print = calc_stats(bundle=data_bundle, index=final_pixels,
+                                  allBandInds=True, return_stuff=True)
+md_print = '#### %s stats: %s: final cuts: %s\n%s'%(dbname, dither, final_label, md_print)
 ################################################################################################
 # histogram latitude, extinction
 colors = ['m', 'g', 'b', 'r', 'c', 'y']
@@ -691,7 +695,14 @@ for band in orderBand:
             plt.close('all')
 
 if save_stuff:
-     # save the final markdown in current directory
+    # save the final footprint data: area, median/std depth in all bands
+    filename = 'footprintStats_%s_%s.txt'%(dbname, dither)
+    txt_file = open('%s/%s'%(outDir, filename), 'a')
+    txt_file.write(md_print)
+    txt_file.close()
+    print('## Saved %s in %s.'%(filename, outDir))
+
+    # save/add the final data for the area and the i-band depth for this cadence.
     for yr in yr_cuts:
         header = '| db | cut | Area (deg$^2$) | 5$\sigma$ $i$-band Depth: Median | 5$\sigma$ $i$-band Depth: Std |'
         header += '\n|:--:|:---:|:--------------:|:-------------------------------:|:------------------------------:|'
@@ -701,7 +712,7 @@ if save_stuff:
                                                          stats_dict['5$\sigma$ Depth: Std']['%s_i'%yr]
                                                         )
         # write to the markdown
-        filename = 'footprint_data_%s_%s.md'%(yr, dither)
+        filename = 'footprintStats_allcadences_%s_%s.md'%(yr, dither)
         if not os.path.exists('%s/%s'%(outDir_md, filename)):
             to_write = header + db_entry
             update_only = False
@@ -718,6 +729,7 @@ if save_stuff:
         else:
             print('## Saved %s in %s.'%(filename, outDir_md))
 
+print('\nTime taken: %.2f min'%((time.time()-startTime)/60.))
 print('\nAll done.\n')
         
         
