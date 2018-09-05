@@ -45,9 +45,15 @@ parser.add_option('--ebv_cut',
 parser.add_option('--save_stuff',
                   action='store_true', dest='save_stuff', default=False,
                   help= 'Set to True if want to save the plots and the readme etc.')
+parser.add_option('--dont_show_plots',
+                  action='store_true', dest='dont_show_plots', default=False,
+                  help= 'Set to True if dont want to show the plots.')
 parser.add_option('--outDir', dest='outDir',
                   help='Path to the folder where all the output should be stored; directory should exist already.',
                   default='/global/homes/a/awan/LSST/output/')
+parser.add_option('--outDir_md', dest='outDir_md',
+                  help='Path to the folder where md files should be stored; directory should exist already. If None, same as outDir.',
+                  default=None)
 parser.add_option('--debug',
                   action='store_true', dest='debug', default=False,
                   help= 'Set to True if want to debug: basically run the analysis as in DESC SRD v1.')
@@ -70,7 +76,10 @@ for cut in cuts:
 chosen_cuts = {'1yr': cuts[0], '10yr': cuts[1]}
 ebv_cut = options.ebv_cut
 save_stuff = options.save_stuff
+dont_show_plots = options.dont_show_plots
 outDir = options.outDir
+outDir_md = options.outDir_md
+if outDir_md is None: outDir_md = outDir
 
 debug = options.debug
 if debug:
@@ -196,11 +205,11 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         
     if return_stuff and allBandInds: 
         stuff_to_return = {}
-        for key in ['5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std', 'Area (deg2)']:
+        for key in ['5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std', 'Area (deg$^2$)']:
             stuff_to_return[key] = {}
         
     header, sep = '| - ', '| ----:'
-    med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg2) '
+    med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg$^2$) '
     yr = None
     for key in bundle:
         if yr is None: yr = key.split('yr')[0]+'yr'
@@ -209,7 +218,7 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         if current_yr!=yr:
             print('%s\n%s\n%s\n%s\n%s\n'%(header, sep, med_depth, std_depth, area))
             header, sep = '| - ', '| ----:'
-            med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg2) '
+            med_depth, std_depth, area = '| 5$\sigma$ Depth: Median ', '| 5$\sigma$ Depth: Std ', '| Area (deg$^2$) '
             yr = current_yr
         
         if allBandInds: index_key = current_yr
@@ -222,7 +231,7 @@ def calc_stats(bundle, index, allBandInds=False, return_stuff=False):
         if return_stuff and allBandInds:
             stuff_to_return['5$\sigma$ Depth: Median'][key] = med
             stuff_to_return['5$\sigma$ Depth: Std'][key] = std
-            stuff_to_return['Area (deg2)'][index_key] = sarea
+            stuff_to_return['Area (deg$^2$)'][index_key] = sarea
             
         header += '| %s '%key
         sep += '|:----:'
@@ -277,7 +286,7 @@ for mag_cut in mag_cuts:
 
 ########################################################################################################################
 # Calculate the stats in the survey region (unmasked; no constraints on depth, i.e., even have negative depths rn).
-dat_keys = ['Area (deg2)', '5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std']
+dat_keys = ['Area (deg$^2$)', '5$\sigma$ Depth: Median', '5$\sigma$ Depth: Std']
 
 ########################################################################################################################
 # plots for area and depth variations as a funtion of mag cuts
@@ -346,7 +355,14 @@ axes[1,1].set_title('10yr', fontsize=fontsize)
 axes[1, 1].set_xlabel('i-band cut (i>?) (in all-band footprint with all depth > 0)', fontsize=fontsize)
 
 fig.set_size_inches(20,10)
-plt.show()
+if save_stuff:
+    filename = 'stats_variation_%s_nside%s_%s.png'%(dbname, nside, dither)
+    plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
+    print('## Saved %s in %s.'%(filename, outDir))
+if not dont_show_plots:
+    plt.show()
+else:
+    plt.close('all')
 
 ########################################################################################################################
 # plot galactic latitude and EBV histograms for different cuts
@@ -437,7 +453,14 @@ for row in [0, 1]:
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
 
 fig.set_size_inches(20,10)
-plt.show()
+if save_stuff:
+    filename = 'histograms_galLat_ebv_%s_nside%s_%s.png'%(dbname, nside, dither)
+    plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
+    print('## Saved %s in %s.'%(filename, outDir))
+if not dont_show_plots:
+    plt.show()
+else:
+    plt.close('all')
 
 
 ########################################################################################################################
@@ -473,7 +496,7 @@ for yr in ['1yr', '10yr']:
         final_pixels[yr] = iCutPixels[mag_cut][yr]
         
 # print final stats
-print('\n#### %s stats: %s: final cuts: %s'%(dbname, dither, final_pixels))
+print('\n#### %s stats: %s: final cuts: %s'%(dbname, dither, final_label))
 stats_dict = calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True, return_stuff=True)
 
 ################################################################################################
@@ -545,9 +568,15 @@ for row in [0, 1]:
         axes[row, col].set_ylabel('Pixel Counts', fontsize=fontsize)    
         axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
-plt.suptitle('allBand footprint; all depths>0', fontsize=fontsize)
 fig.set_size_inches(20,10)
-plt.show()
+if save_stuff:
+    filename = 'final_footprint_histograms_galLat_ebv_%s_nside%s_%s.png'%(dbname, nside, dither)
+    plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
+    print('## Saved %s in %s.'%(filename, outDir))
+if not dont_show_plots:
+    plt.show()
+else:
+    plt.close('all')
 
 ########################################################################################################################
 # plot skymaps for each band before and after the depth cut
@@ -602,30 +631,38 @@ for band in orderBand:
         cb.ax.tick_params(labelsize=14)
         
         fig.set_size_inches(18,18)
-        plt.show()
+        if save_stuff:
+            filename = 'final_footprint_skymap_%s_nside%s_%s_%s_%sband.png'%(dbname, nside, dither, yr, band)
+            plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
+            print('## Saved %s in %s.'%(filename, outDir))
+        if not dont_show_plots:
+            plt.show()
+        else:
+            plt.close('all')
 
 if save_stuff:
-    currentDir = os.getcwd()
+     # save the final markdown in current directory
     for yr in ['1yr', '10yr']:
-        header = '| db | cut | Area (deg$^2@) | 5$\sigma$ $i$-band Depth: Median | 5$\sigma$ $i$-band Depth: Std |'
+        header = '| db | cut | Area (deg$^2$) | 5$\sigma$ $i$-band Depth: Median | 5$\sigma$ $i$-band Depth: Std |'
         header += '\n|:--:|:---:|:--------------:|:-------------------------------:|:------------------------------:|'
         db_entry = '\n| %s | %s | %.2f | %.2f | %.2f |'%(dbname, final_label[yr],
-                                                         stats_dict['Area (deg2)'][yr],
+                                                         stats_dict['Area (deg$^2$)'][yr],
                                                          stats_dict['5$\sigma$ Depth: Median']['%s_i'%yr],
                                                          stats_dict['5$\sigma$ Depth: Std']['%s_i'%yr]
                                                         )
         # write to the markdown
-        os.chdir(outDir)
         filename = 'footprint_data_%s_%s.md'%(yr, dither)
-        if not os.path.exists(filename):
+        if not os.path.exists('%s/%s'%(outDir_md, filename)):
             to_write = header + db_entry
         else:
             to_write = db_entry
 
-        md_file = open('%s'%(filename), 'a')
+        md_file = open('%s/%s'%(outDir_md, filename), 'a')
         md_file.write(to_write)
         md_file.close()
 
-    os.chdir(currentDir)
+        print('## Saved %s in %s.'%(filename, outDir_md))
+
+print('\nAll done.\n')
         
         
