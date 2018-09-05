@@ -345,7 +345,7 @@ colors = ['m', 'g', 'b', 'r', 'k', 'c']
 fontsize = 14
 # plot
 plt.clf()
-nrows, ncols = len(yr_cuts),3
+nrows, ncols = len(yr_cuts), 3
 fig, axes = plt.subplots(nrows, ncols)
 fig.subplots_adjust(wspace=.2, hspace=.3)
 
@@ -360,7 +360,6 @@ for i, dat_key in enumerate(dat_keys):
         for m, yr_cut in enumerate(yr_cuts):
             # plot yr_cut area
             axes[m, i].plot(mag_cuts, stats_allmags[dat_key][yr_cut], 'o-')
-
 for row in range(nrows):
     axes[row, 0].ticklabel_format(style='sci',scilimits=(-3,4), axis='y')  # area
     axes[row, 2].legend(loc='upper right', ncol=2, fontsize=fontsize-2)
@@ -368,6 +367,17 @@ for row in range(nrows):
         axes[row, col].set_ylabel(dat_keys[col], fontsize=fontsize)    
         axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
+# set all the ylims
+ymin_final, ymax_final = [10**9, 10**9, 10**9], [0, 0, 0]
+for i, col in enumerate(range(ncols)):
+    for row in range(nrows):
+        ymin, ymax = axes[row, col].get_ylim()
+        ymin_final[i] = min(ymin_final[i], ymin)
+        ymax_final[i] = max(ymax_final[i], ymax)
+for i, col in enumerate(range(ncols)):
+    for row in range(nrows):
+        axes[row, col].set_ylim(ymin_final[i], ymax_final[i])
+# set the title
 for m, yr_cut in enumerate(yr_cuts):
     axes[m,1].set_title(yr_cut, fontsize=fontsize)
 
@@ -419,8 +429,8 @@ colors = ['m', 'g', 'b', 'r', 'c', 'y']
 
 # plot
 plt.clf()
-nrow, ncol = len(yr_cuts),2
-fig, axes = plt.subplots(nrow, ncol)
+nrows, ncols = len(yr_cuts), 2
+fig, axes = plt.subplots(nrows, ncols)
 fig.subplots_adjust(wspace=0.2, hspace=0.3)
 
 max_counts = 0  # for EBV histogram; needed for plotting constant EBV lines
@@ -433,7 +443,7 @@ for i, yr in enumerate(yr_cuts):
                     bins=bins_b, histtype='step', lw=2, color='k')
     
     # plot the EBV histogram for no cut
-    cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[allBandPixels[yr]]), label='all-band; all depths>0',
+    cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[allBandPixels[yr]]), # label='all-band; all depths>0',
                                 bins=bins_ebv, histtype='step', lw=2, color='k')
     max_counts = max(max_counts, max(cts))
     
@@ -449,25 +459,37 @@ for i, yr in enumerate(yr_cuts):
                         color=colors[j%len(colors)], linestyle=linestyle)
         
         # plot the EBV histogram
-        cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[iCutPixels[mag_cut][yr]]), label= 'i>%s'%mag_cut,
+        cts, _, _ = axes[i, 1].hist(np.log10(ebv_map[iCutPixels[mag_cut][yr]]), #label= 'i>%s'%mag_cut,
                                     bins=bins_ebv, histtype='step', lw=2,
                                     color=colors[j%len(colors)], linestyle=linestyle)
         max_counts = max(max_counts, max(cts))
 
-for row in range(nrow):
-    x = np.arange(0,max_counts,10)
+for row in range(nrows):
+    x = np.arange(0, max_counts, 10)
     for ebv in [0.2, 0.3]:
         axes[row, 1].plot(np.log10([ebv]*len(x)), x, '-.', label='EBV: %s'%ebv)
-    axes[row, 1].set_ylim(0,max_counts)
-    for col in range(ncol):
+    axes[row, 0].legend(bbox_to_anchor=(2.65, 1.0), fontsize=fontsize-2)
+    axes[row, 1].legend(loc='upper right', fontsize=fontsize-2)
+    for col in range(ncols):
         for m, yr_cut in enumerate(yr_cuts):
             axes[m, col].set_title(yr_cut, fontsize=fontsize)
-        axes[row, col].legend(loc='upper right', fontsize=fontsize-2)
         axes[row, col].set_ylabel('Pixel Counts', fontsize=fontsize)
         axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
+# set all the ylims
+ymin_final, ymax_final = [10**9, 10**9, 10**9], [0, 0, 0]
+for i, col in enumerate(range(ncols)):
+    for row in range(nrows):
+        ymin, ymax = axes[row, col].get_ylim()
+        ymin_final[i] = min(ymin_final[i], ymin)
+        ymax_final[i] = max(ymax_final[i], ymax)
+for i, col in enumerate(range(ncols)):
+    for row in range(nrows):
+        axes[row, col].set_ylim(ymin_final[i], ymax_final[i])
+# set axis labels
 axes[m, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
 axes[m, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize)
+# finalize things
 fig.set_size_inches(20, nrows*5)
 if save_stuff:
     filename = 'histograms_galLat_ebv_%s_nside%s_%s.png'%(dbname, nside, dither)
@@ -520,8 +542,8 @@ stats_dict = calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True
 colors = ['m', 'g', 'b', 'r', 'c', 'y']
 
 plt.clf()
-nrow, ncol = len(yr_cuts),2
-fig, axes = plt.subplots(nrow, ncol)
+nrows, ncols = len(yr_cuts),2
+fig, axes = plt.subplots(nrows, ncols)
 fig.subplots_adjust(wspace=0.2, hspace=0.3)
 
 max_counts = 0
@@ -570,20 +592,32 @@ for i, yr in enumerate(yr_cuts):
                                 color=colors[i%len(colors)], linestyle=linestyle)
     max_counts = max(max_counts, max(cts))
     
-for row in range(nrow):
-    x = np.arange(0,max_counts,10)
+for row in range(nrows):
+    x = np.arange(0, max_counts,10)
     for ebv in [0.2, 0.3]: # add lines for constant EBV
         axes[row, 1].plot(np.log10([ebv]*len(x)), x, '-.', label='EBV: %s'%ebv)
-    axes[row, 1].set_ylim(0,max_counts)
-    for col in range(ncol):
+    axes[row, 0].legend(loc='upper right', fontsize=fontsize-2)
+    axes[row, 1].legend(loc='upper left', fontsize=fontsize-2)
+    for col in range(ncols):
         for m, yr_cut in enumerate(yr_cuts):
             axes[m, col].set_title(yr_cut, fontsize=fontsize)
-        axes[row, col].legend(loc='upper right', fontsize=fontsize-2)
         axes[row, col].set_ylabel('Pixel Counts', fontsize=fontsize)    
         axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
+# set all the ylims
+ymin_final, ymax_final = [10**9, 10**9, 10**9], [0, 0, 0]
+for i, col in enumerate(range(ncols)):
+    for row in range(nrows):
+        ymin, ymax = axes[row, col].get_ylim()
+        ymin_final[i] = min(ymin_final[i], ymin)
+        ymax_final[i] = max(ymax_final[i], ymax)
+for i, col in enumerate(range(ncols)):
+    for row in range(nrows):
+        axes[row, col].set_ylim(ymin_final[i], ymax_final[i])
+# set axis labels
 axes[m, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
 axes[m, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize)
+# finalize things
 fig.set_size_inches(20, nrows*5)
 if save_stuff:
     filename = 'final_footprint_histograms_galLat_ebv_%s_nside%s_%s.png'%(dbname, nside, dither)
@@ -670,14 +704,19 @@ if save_stuff:
         filename = 'footprint_data_%s_%s.md'%(yr, dither)
         if not os.path.exists('%s/%s'%(outDir_md, filename)):
             to_write = header + db_entry
+            update_only = False
         else:
             to_write = db_entry
+            update_only = True
 
         md_file = open('%s/%s'%(outDir_md, filename), 'a')
         md_file.write(to_write)
         md_file.close()
 
-        print('## Saved %s in %s.'%(filename, outDir_md))
+        if update_only:
+            print('## Updated %s in %s.'%(filename, outDir_md))
+        else:
+            print('## Saved %s in %s.'%(filename, outDir_md))
 
 print('\nAll done.\n')
         
