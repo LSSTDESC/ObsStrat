@@ -1,6 +1,6 @@
 # Goal here is to implement various depth (+ an extinction cut) to define the footprint for extragalactic science.
 #
-# Need the coadded depth data for 1yr, 10yr; calculated by running the bash_calc_coadd_all.sh script.
+# Need the coadded depth data for various year cuts (e.g., 1yr, 3yr, 10yr); calculated by bash_calc_coadd_all.sh
 #
 # Humna Awan: humna.awan@rutgers.edu
 #
@@ -36,8 +36,11 @@ parser.add_option('--coadd_data_dir', dest='coadd_data_dir',
 parser.add_option('--mag_cuts', dest='mag_cuts',
                   help='List of depth cuts to consider',
                   default='22.0, 23.0, 24.0, 24.5, 25.0, 25.3, 25.5, 26.0, 26.5')
+parser.add_option('--yr_cuts', dest='yr_cuts',
+                  help='Years cuts to consider, e.g. 1yr, 10yr.',
+                  default= '1yr, 10yr')
 parser.add_option('--chosen_cuts', dest='chosen_cuts',
-                  help='Finalized cuts: 1yr, 10yr.',
+                  help='Finalized cuts for the yr_cuts, in the same as order as yr_cuts input.',
                   default= '24.5, 26.0')
 parser.add_option('--ebv_cut',
                   action='store_true', dest='ebv_cut', default=False,
@@ -62,25 +65,40 @@ parser.add_option('--debug',
 (options, args) = parser.parse_args()
 print('\nOptions: %s'%options)
 
+# read in the inputs
 nside = options.nside
 dbpath = options.db_path
 data_dir = options.coadd_data_dir
-mag_cuts = [float(f) for f in list(options.mag_cuts.split(','))]
-cuts = [float(f) for f in list(options.chosen_cuts.split(','))]
-print('\nFinal depth cuts to be implemented: %s'%(cuts))
-# ensure that the final cut is included in the mag_cut list. if not, add it.
-for cut in cuts:
-    if cut not in mag_cuts:
-        mag_cuts.append(cut)
-        print('Adding %s cut to the mag_cut list since it is one of the final cuts.'%cut)
-chosen_cuts = {'1yr': cuts[0], '10yr': cuts[1]}
+mag_cuts = options.mag_cuts
+yr_cuts = options.yr_cuts
+final_mag_cuts = options.chosen_cuts
 ebv_cut = options.ebv_cut
 save_stuff = options.save_stuff
 dont_show_plots = options.dont_show_plots
 outDir = options.outDir
 outDir_md = options.outDir_md
-if outDir_md is None: outDir_md = outDir
 
+# format the mag cuts
+mag_cuts = [float(f) for f in list(mag_cuts.split(','))]
+# format the yr cuts
+yr_cuts = [f.strip() for f in list(yr_cuts.split(','))]
+print('\nYear cuts to be implemented: %s'%(yr_cuts))
+# format the final mag cuts
+cuts = [float(f) for f in list(final_mag_cuts.split(','))]
+if len(cuts)!= len(yr_cuts):
+    raise ValueError('Need a final cut for each of yr_cuts. Currently have %s for %s.'%(cuts, yr_cuts))
+# ensure that the final cut is included in the mag_cut list. if not, add it.
+for cut in cuts:
+    if cut not in mag_cuts:
+        mag_cuts.append(cut)
+        print('Adding %s cut to the mag_cut list since it is one of the final cuts.'%cut)
+chosen_cuts = {}
+for i, yr_cut in enumerate(yr_cuts):
+    chosen_cuts[yr_cut] = cuts[i]
+print('\nFinal depth cuts to be implemented: %s'%(chosen_cuts))
+# figure out the outDir for md files.
+if outDir_md is None: outDir_md = outDir
+# set up for debuggin
 debug = options.debug
 if debug:
     dbpath = '/global/cscratch1/sd/awan/dbs_old_unzipped/minion_1016_sqlite_new_dithers.db'
@@ -99,9 +117,9 @@ print('nside: %s\n'%nside)
 # get the files and put the data in a bundle
 print('## Reading in the data ... \n')
 data_bundle = OrderedDict()
-for yr_cut in ['1yr', '10yr']:
-    if yr_cut=='1yr': file_yearTag = '1yearCut'
-    else: file_yearTag = 'fullSurveyPeriod'
+for yr_cut in yr_cuts:
+    if yr_cut=='10yr': file_yearTag = 'fullSurveyPeriod'
+    else: file_yearTag = '%syearCut'%(yr_cut.split('yr')[0])
         
     for band in orderBand:
         folder = 'coaddM5Analysis_nside%s_withDustExtinction_0pixelRadiusForMasking_%sBand_%s_%s_directory/'%(nside, band,
@@ -123,29 +141,32 @@ for yr_cut in ['1yr', '10yr']:
 print('\n%s dithers'%dither)
 ########################################################################################################################
 # check the improvement factor between 1, 10yr data
-print('\n## Calculating improvement in fluxes between 1yr and 10yrs ... ')
-allImprovs = []
-for band in orderBand:
-    yr_cut = '1yr_%s'%band
-    in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
-                                 (data_bundle[yr_cut].metricValues.data > 0))[0]
-    one_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
-    
-    yr_cut = '10yr_%s'%band
-    in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
-                                 (data_bundle[yr_cut].metricValues.data > 0))[0]
-    ten_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
-    
-    one_yr_flux = 10**(-one_yr_med/2.5)
-    ten_yr_flux = 10**(-ten_yr_med/2.5)
-    print('%s-band: improvement factor in flux: %s'%(band, one_yr_flux/ten_yr_flux))
-    allImprovs.append(one_yr_flux/ten_yr_flux)
-                                
-print('Wanted improvement factor over ten years: %s'%np.sqrt(10.))
-print('Mean improvement factor across ugrizy: %s'%np.mean(allImprovs))
+if yr_cuts.__contains__('1yr') and yr_cuts.__contains__('10yr'):
+    print('\n## Calculating improvement in fluxes between 1yr and 10yrs ... ')
+    allImprovs = []
+    for band in orderBand:
+        yr_cut = '1yr_%s'%band
+        in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
+                                     (data_bundle[yr_cut].metricValues.data > 0))[0]
+        one_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
+
+        yr_cut = '10yr_%s'%band
+        in_survey_positive = np.where((data_bundle[yr_cut].metricValues.mask == False) & \
+                                     (data_bundle[yr_cut].metricValues.data > 0))[0]
+        ten_yr_med = np.median(data_bundle[yr_cut].metricValues.data[in_survey_positive])
+
+        one_yr_flux = 10**(-one_yr_med/2.5)
+        ten_yr_flux = 10**(-ten_yr_med/2.5)
+        print('%s-band: improvement factor in flux: %s'%(band, one_yr_flux/ten_yr_flux))
+        allImprovs.append(one_yr_flux/ten_yr_flux)
+
+    print('Wanted improvement factor over ten years: %s'%np.sqrt(10.))
+    print('Mean improvement factor across ugrizy: %s'%np.mean(allImprovs))
 
 ##
 if debug:
+    if not (yr_cuts.__cotains__('1yr') and yr_cuts.__contains__('10yr')):
+        raise ValueError('Need 1yr, 10yr data to run the debug analysis.')
     # The improvement from 1-10yr is too good -- 1yr in minion1016 strongly prefers DDFs so 1yr defined by the number
     # of the nights doesnt have 10% of total visits (has <7%). For now, renormalize the 1yr depth s.t. median matches
     # that after 10% of 10-year WFD observations.
@@ -295,20 +316,20 @@ stats_allmags = {}
 for mag_cut in mag_cuts:
     print('\n#### Stats: i>%s in area common to all six bands with depths>0 in all'%mag_cut)
     stats = calc_stats(bundle=data_bundle, index=iCutPixels[mag_cut],
-                       allBandInds=True, return_stuff=True) # area: 1yr, 10yr; depth stuff: 1yr_band, 10yr_band
+                       allBandInds=True, return_stuff=True) # area for yr_cut; depth stuff for yrcut_band
     for dat_key in dat_keys:
         if dat_key not in stats_allmags: stats_allmags[dat_key] = {}
         for key in stats[dat_key].keys():
-            if key.__contains__('_'):  # need to separate 1yr, 10yr from 1yr_<band>, 10yr_<band>
+            if key.__contains__('_'):  # need to separate yrcut from yrcut_<band>
                 sp = key.split('_')
                 yr, band = sp[0], sp[1]
             else:
                 yr, band = key, None
                 
-            if band is None: # all-band keys: 1yr, 10yr
+            if band is None: # all-band keys: yrcut
                 if yr not in stats_allmags[dat_key]:
                     stats_allmags[dat_key][yr] = []
-            else: # need to account for the band for each of 1yr, 10yr
+            else: # need to account for the band for each of the yr_cut
                 if yr not in stats_allmags[dat_key]:
                     stats_allmags[dat_key][yr] = {}
                 if band not in  stats_allmags[dat_key][yr]:
@@ -324,37 +345,34 @@ colors = ['m', 'g', 'b', 'r', 'k', 'c']
 fontsize = 14
 # plot
 plt.clf()
-fig, axes = plt.subplots(2,3)
+nrows, ncols = len(yr_cuts),3
+fig, axes = plt.subplots(nrows, ncols)
 fig.subplots_adjust(wspace=.2, hspace=.3)
 
 for i, dat_key in enumerate(dat_keys):
     if dat_key.__contains__('Depth'):  # band-specific statistic
-        for j, band in enumerate(stats_allmags[dat_key]['1yr'].keys()):
-            # plot 1yr data for this statistic
-            axes[0, i].plot(mag_cuts, stats_allmags[dat_key]['1yr'][band], 'o-',
-                            color=colors[j], label='%s-band'%band)
-            # plot 10yr data for this statistic
-            axes[1, i].plot(mag_cuts, stats_allmags[dat_key]['10yr'][band], 'o-',
-                            color=colors[j], label='%s-band'%band)
+        for j, band in enumerate(stats_allmags[dat_key][yr_cuts[0]].keys()):
+            for m, yr_cut in enumerate(yr_cuts):
+                # plot yr_cut data for this statistic
+                axes[m, i].plot(mag_cuts, stats_allmags[dat_key][yr_cut][band], 'o-',
+                                color=colors[j], label='%s-band'%band)
     else:
-        # plot 1yr area
-        axes[0, i].plot(mag_cuts, stats_allmags[dat_key]['1yr'], 'o-')
-        # plot 10yr area
-        axes[1, i].plot(mag_cuts, stats_allmags[dat_key]['10yr'], 'o-')
+        for m, yr_cut in enumerate(yr_cuts):
+            # plot yr_cut area
+            axes[m, i].plot(mag_cuts, stats_allmags[dat_key][yr_cut], 'o-')
 
-for row in [0, 1]:
+for row in range(nrows):
     axes[row, 0].ticklabel_format(style='sci',scilimits=(-3,4), axis='y')  # area
     axes[row, 2].legend(loc='upper right', ncol=2, fontsize=fontsize-2)
-    for col in [0, 1, 2]:
+    for col in range(ncols):
         axes[row, col].set_ylabel(dat_keys[col], fontsize=fontsize)    
         axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
-        
-axes[0,1].set_title('1yr', fontsize=fontsize)
-axes[1,1].set_title('10yr', fontsize=fontsize)
-axes[1, 1].set_xlabel('i-band cut (i>?) (in all-band footprint with all depth > 0)', fontsize=fontsize)
+for m, yr_cut in enumerate(yr_cuts):
+    axes[m,1].set_title(yr_cut, fontsize=fontsize)
 
-fig.set_size_inches(20,10)
+axes[m, 1].set_xlabel('i-band cut (i>?) (in all-band footprint with all depth > 0)', fontsize=fontsize)
+fig.set_size_inches(20, nrows*5)
 if save_stuff:
     filename = 'stats_variation_%s_nside%s_%s.png'%(dbname, nside, dither)
     plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
@@ -401,11 +419,12 @@ colors = ['m', 'g', 'b', 'r', 'c', 'y']
 
 # plot
 plt.clf()
-fig, axes = plt.subplots(2,2)
+nrow, ncol = len(yr_cuts),2
+fig, axes = plt.subplots(nrow, ncol)
 fig.subplots_adjust(wspace=0.2, hspace=0.3)
 
 max_counts = 0  # for EBV histogram; needed for plotting constant EBV lines
-for i, yr in enumerate(['1yr', '10yr']):
+for i, yr in enumerate(yr_cuts):
     linestyle = 'solid'
     # plot the galactic latitude histogram for no-cut
     lon, lat = hp.pix2ang(nside=nside, ipix=allBandPixels[yr], lonlat=True)
@@ -434,25 +453,22 @@ for i, yr in enumerate(['1yr', '10yr']):
                                     bins=bins_ebv, histtype='step', lw=2,
                                     color=colors[j%len(colors)], linestyle=linestyle)
         max_counts = max(max_counts, max(cts))
-    
-for row in [0, 1]:
+
+for row in range(nrow):
     x = np.arange(0,max_counts,10)
     for ebv in [0.2, 0.3]:
         axes[row, 1].plot(np.log10([ebv]*len(x)), x, '-.', label='EBV: %s'%ebv)
-        
-    axes[row, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
-    axes[row, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize) 
     axes[row, 1].set_ylim(0,max_counts)
-    
-    for col in [0, 1]:
-        axes[0, col].set_title('1yr', fontsize=fontsize)
-        axes[1, col].set_title('10yr', fontsize=fontsize)
+    for col in range(ncol):
+        for m, yr_cut in enumerate(yr_cuts):
+            axes[m, col].set_title(yr_cut, fontsize=fontsize)
         axes[row, col].legend(loc='upper right', fontsize=fontsize-2)
         axes[row, col].set_ylabel('Pixel Counts', fontsize=fontsize)
         axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
-
-fig.set_size_inches(20,10)
+axes[m, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
+axes[m, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize)
+fig.set_size_inches(20, nrows*5)
 if save_stuff:
     filename = 'histograms_galLat_ebv_%s_nside%s_%s.png'%(dbname, nside, dither)
     plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
@@ -479,13 +495,13 @@ if ebv_cut:
 
 # dictionary for the label for the final cut
 final_label = {}
-for yr in ['1yr', '10yr']:
+for yr in yr_cuts:
     final_label[yr] = 'i>%s%s'%(chosen_cuts[yr], ebv_label)
 print('Chosen cuts: %s'%final_label)
 
 # dictionary for the final pixels
 final_pixels = {}
-for yr in ['1yr', '10yr']:
+for yr in yr_cuts:
     mag_cut = chosen_cuts[yr]
     
     if ebv_cut:
@@ -504,11 +520,12 @@ stats_dict = calc_stats(bundle=data_bundle, index=final_pixels, allBandInds=True
 colors = ['m', 'g', 'b', 'r', 'c', 'y']
 
 plt.clf()
-fig, axes = plt.subplots(2,2)
+nrow, ncol = len(yr_cuts),2
+fig, axes = plt.subplots(nrow, ncol)
 fig.subplots_adjust(wspace=0.2, hspace=0.3)
 
 max_counts = 0
-for i, yr in enumerate(['1yr', '10yr']):
+for i, yr in enumerate(yr_cuts):
     mag_cut = chosen_cuts[yr]
     data_label = 'i>%s%s'%(mag_cut, ebv_label)
     linestyle = 'solid'
@@ -553,22 +570,21 @@ for i, yr in enumerate(['1yr', '10yr']):
                                 color=colors[i%len(colors)], linestyle=linestyle)
     max_counts = max(max_counts, max(cts))
     
-for row in [0, 1]:
+for row in range(nrow):
     x = np.arange(0,max_counts,10)
     for ebv in [0.2, 0.3]: # add lines for constant EBV
         axes[row, 1].plot(np.log10([ebv]*len(x)), x, '-.', label='EBV: %s'%ebv)
-    axes[row, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
-    axes[row, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize) 
     axes[row, 1].set_ylim(0,max_counts)
-    
-    for col in [0, 1]:
-        axes[0, col].set_title('1yr', fontsize=fontsize)
-        axes[1, col].set_title('10yr', fontsize=fontsize)
+    for col in range(ncol):
+        for m, yr_cut in enumerate(yr_cuts):
+            axes[m, col].set_title(yr_cut, fontsize=fontsize)
         axes[row, col].legend(loc='upper right', fontsize=fontsize-2)
         axes[row, col].set_ylabel('Pixel Counts', fontsize=fontsize)    
         axes[row, col].tick_params(axis='x', labelsize=fontsize-2)
         axes[row, col].tick_params(axis='y', labelsize=fontsize-2)
-fig.set_size_inches(20,10)
+axes[m, 0].set_xlabel('Galactic Latitude (deg)', fontsize=fontsize)
+axes[m, 1].set_xlabel(r'log$_{10}$ E(B-V)', fontsize=fontsize)
+fig.set_size_inches(20, nrows*5)
 if save_stuff:
     filename = 'final_footprint_histograms_galLat_ebv_%s_nside%s_%s.png'%(dbname, nside, dither)
     plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
@@ -582,7 +598,7 @@ else:
 # plot skymaps for each band before and after the depth cut
 nTicks = 5
 for band in orderBand:
-    for yr in ['1yr', '10yr']:
+    for yr in yr_cuts:
         mag_cut = chosen_cuts[yr]
         data_label = 'i>%s%s'%(mag_cut, ebv_label)
 
@@ -642,7 +658,7 @@ for band in orderBand:
 
 if save_stuff:
      # save the final markdown in current directory
-    for yr in ['1yr', '10yr']:
+    for yr in yr_cuts:
         header = '| db | cut | Area (deg$^2$) | 5$\sigma$ $i$-band Depth: Median | 5$\sigma$ $i$-band Depth: Std |'
         header += '\n|:--:|:---:|:--------------:|:-------------------------------:|:------------------------------:|'
         db_entry = '\n| %s | %s | %.2f | %.2f | %.2f |'%(dbname, final_label[yr],
