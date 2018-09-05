@@ -306,7 +306,7 @@ for mag_cut in mag_cuts:
             iCutPixels[mag_cut][yrTag] = {}
         
         # find the pixels satisfying the iBand cut.
-        iBandCutInd = np.where((data_bundle['%s_i'%yrTag].metricValues.data[allBandPixels[yrTag]]>=mag_cut))[0]
+        iBandCutInd = np.where((data_bundle['%s_i'%yrTag].metricValues.data[allBandPixels[yrTag]]>mag_cut))[0]
         iCutPixels[mag_cut][yrTag] = np.array(allBandPixels[yrTag])[iBandCutInd] # store
 
 ########################################################################################################################
@@ -530,7 +530,7 @@ for yr in yr_cuts:
     mag_cut = chosen_cuts[yr]
     
     if ebv_cut:
-        good_ebv = np.where(ebv_map[iCutPixels[mag_cut][yr]] <= ebv_limit)[0]
+        good_ebv = np.where(ebv_map[iCutPixels[mag_cut][yr]] < ebv_limit)[0]
         final_pixels[yr] = iCutPixels[mag_cut][yr][good_ebv]
         print('%s: throwing away %s pixels further because of EBV cut'%(yr, len(iCutPixels[mag_cut][yr])-len(good_ebv)))
     else:
