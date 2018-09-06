@@ -49,6 +49,8 @@ specific_db = options.specific_db
 # set some things up
 bands = ['u', 'g', 'r', 'i', 'z', 'y']
 
+if yr_cut==10: yr_cut=None
+
 dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
 if baseline_and_wide_only:
     dbfiles = [f for f in dbfiles if ((f=='baseline2018a.db') or (f=='pontus_2002.db'))]
