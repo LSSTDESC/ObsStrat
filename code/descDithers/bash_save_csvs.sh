@@ -11,3 +11,8 @@ python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/descDithers/save_csv_di
                             --outDir='/global/homes/a/awan/desc/wp_descDithers_csvs' \
                             --rot_rand_seed=42 --trans_rand_seed=42 --save_plots --compress_csvs
                             #--db_files_only='baseline2018a.db'
+
+# change permissions on the outputs
+cd /global/homes/a/awan/desc/
+chgrp -R lsst wp_descDithers_csvs
+chmod -R g-w wp_descDithers_csvs
