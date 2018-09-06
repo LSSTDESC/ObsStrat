@@ -1,16 +1,18 @@
 # Goal here is to automate saving out dithered positions (RA, Dec, rotTelPos) for non-MAF users.
 #
-# We calculate the translational and rotational dithers for various cadences and
-# save the output as a csv file.  These dithers are largely the same as in DC1/DC2:
+# We calculate the translational and rotational dithers for various cadences and save them as a csv file.
 #   - Translational dithers:
-#       - WFD: large random offsets (as large as 1.75 deg) applied after every visit.
-#       - DD: small random offsets (as large as 7 arcmin) applied after every visit.
+#       - WFD: large random offsets (as large as 1.75 deg) applied after every night.
+#       - DD: small random offsets (as large as 7 arcmin) applied after every night.
 #       - Else: no dithers, so `fieldRA`, `fieldDec` are returned.
 #   - Rotational dithers:
 #       - All surveys (WFD, DD, else): random between -90, 90 degrees applied after every filter change.
-#                                      (Break from DC2: Some visits dont get dithered since they are
-#                                                        forced outside the rotator range.
-#                                                        See RotStacker info for details.)
+#
+# These dithers are largely the same in geomtery as in DC1/DC2.
+#   - Translational dithers are now implemented less frequently (per night, not field per visit).
+#   - For rotational dithers, some visits dont get dithered since they are forced outside the rotator range.
+#     See RotStacker info for details.
+#
 # Supports OpSim V3/V4 outputs.
 #
 # Saved file format:
@@ -87,7 +89,7 @@ if db_files_only is not None:
 ########################################################################################################################
 startTime_0 = time.time()
 readme = '#########################################################################################\n'
-readme = '%s\n'%(datetime.date.isoformat(datetime.date.today()))
+readme += '%s\n'%(datetime.date.isoformat(datetime.date.today()))
 readme += 'Running with lsst.sims.maf.__version__: %s\n\n'%lsst.sims.maf.__version__
 readme += '## save_csv_dithers run:\n\ndbs_path= %s\n'%dbs_path
 readme += 'outDir: %s\n'%outDir
@@ -136,8 +138,8 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
     # set up metric bundle to run stackers for large translational dithers + rotational dithers
     if print_progress: print('Setting up for WFD translational dithers + rot dithers.')
     bgroup= {}
-    stackerList = [stackers.RandomDitherFieldPerVisitStacker(degrees=opsdb.raDecInDeg,
-                                                            randomSeed=trans_rand_seed),
+    stackerList = [stackers.RandomDitherPerNightStacker(degrees=opsdb.raDecInDeg,
+                                                        randomSeed=trans_rand_seed),
                    stackers.RandomRotDitherPerFilterChangeStacker(degrees=opsdb.raDecInDeg,
                                                                   randomSeed=rot_rand_seed)]
 
@@ -153,9 +155,9 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
     if print_progress: print('\nSetting up for DD translational dithers.')
     chipSize= 1.75*2/15
     chipMaxDither= chipSize/2.
-    stackerList = [stackers.RandomDitherFieldPerVisitStacker(maxDither= chipMaxDither,
-                                                             degrees=opsdb.raDecInDeg,
-                                                             randomSeed=trans_rand_seed)]
+    stackerList = [stackers.RandomDitherPerNightStacker(maxDither= chipMaxDither,
+                                                        degrees=opsdb.raDecInDeg,
+                                                        randomSeed=trans_rand_seed)]
     bundle = metricBundles.MetricBundle(metric, slicer, sqlconstraint=sqlconstraint,
                                          stackerList=stackerList)
 
@@ -169,8 +171,8 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
     # access the relevant columns
     dithered_RA, dithered_Dec = {}, {}
     for key in bgroup:
-        dithered_RA[key] = bgroup[key].simData['randomDitherFieldPerVisitRa']
-        dithered_Dec[key] = bgroup[key].simData['randomDitherFieldPerVisitDec']
+        dithered_RA[key] = bgroup[key].simData['randomDitherPerNightRa']
+        dithered_Dec[key] = bgroup[key].simData['randomDitherPerNightDec']
 
     dithered_rotTelPos = bgroup['WFD'].simData['randomDitherPerFilterChangeRotTelPos']
 
