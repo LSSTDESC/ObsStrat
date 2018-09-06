@@ -82,16 +82,19 @@ save_plots = options.save_plots
 show_diagnostic_plots = options.show_diagnostic_plots
 compress_csvs = options.compress_csvs
 
-db_files_only = [f.strip() for f in list(db_files_only.split(','))]
+if db_files_only is not None:
+    db_files_only = [f.strip() for f in list(db_files_only.split(','))]
 ########################################################################################################################
 startTime_0 = time.time()
-readme = '##############################\n%s'%(datetime.date.isoformat(datetime.date.today()))
-readme += '\nRunning with lsst.sims.maf.__version__: %s'%lsst.sims.maf.__version__
-readme += '\n\nsave_csv_dithers run:\ndbs_path= %s\n'%dbs_path
+readme = '#########################################################################################\n'
+readme = '%s\n'%(datetime.date.isoformat(datetime.date.today()))
+readme += 'Running with lsst.sims.maf.__version__: %s\n\n'%lsst.sims.maf.__version__
+readme += '## save_csv_dithers run:\n\ndbs_path= %s\n'%dbs_path
 readme += 'outDir: %s\n'%outDir
 readme += 'db_files_only: %s\n'%db_files_only
-readme += 'rot_rand_seed=%s\ntrans_rand_seed=%s\n'%(rot_rand_seed, trans_rand_seed)
-readme += 'print_progress=%s\nshow_diagnostic_plots=%s\n'%(print_progress, show_diagnostic_plots)
+readme += 'rot_rand_seed: %s\ntrans_rand_seed: %s\n'%(rot_rand_seed, trans_rand_seed)
+readme += 'print_progress: %s\nshow_diagnostic_plots: %s\n'%(print_progress, show_diagnostic_plots)
+readme += 'compress_csvs: %s\n'%compress_csvs
 
 dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]  # select db files
 if print_progress: print('Found files: %s\n'%dbfiles)
@@ -129,7 +132,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
     sqlconstraint = None
 
     resultsDb = db.ResultsDb(outDir=outDir)
-    ################################################################################################
+    ########################################################################################################################
     # set up metric bundle to run stackers for large translational dithers + rotational dithers
     if print_progress: print('Setting up for WFD translational dithers + rot dithers.')
     bgroup= {}
@@ -162,7 +165,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
     # run the bundle
     bgroup['DD'].runAll()
 
-    ################################################################################################
+    ########################################################################################################################
     # access the relevant columns
     dithered_RA, dithered_Dec = {}, {}
     for key in bgroup:
@@ -171,7 +174,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
 
     dithered_rotTelPos = bgroup['WFD'].simData['randomDitherPerFilterChangeRotTelPos']
 
-    ################################################################################################
+    ########################################################################################################################
     # diagnostic plots
     if show_diagnostic_plots:
         # histograms of dithers
@@ -206,7 +209,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
         plt.title(dbfile)
         fig.set_size_inches(20,5)
 
-    ################################################################################################
+    ########################################################################################################################
     # initiate the final arrays as undithered fieldRA, fieldDec as nonWFD, nonDDF should remain unchanged
     descDitheredRA = simdata['fieldRA'].copy()
     descDitheredDec = simdata['fieldDec'].copy()
@@ -237,7 +240,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
     # add rotational dithers to everything
     descDitheredRot = dithered_rotTelPos
 
-    ###############################################################
+    ########################################################################################################################
     # diagnostic plots
     if show_diagnostic_plots or save_plots:
         # histograms of desc dithered positions
@@ -264,8 +267,8 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
         fig.set_size_inches(20,5)
 
         if save_plots:
-            filename='hist_descDithers_%s.png'%(dbfile.split('.db')[0])
-            plt.savefig('%s/%s'%(outDir, filename), format= 'png', bbox_inches='tight')
+            filename = 'hist_descDithers_%s.png'%(dbfile.split('.db')[0])
+            plt.savefig('%s/%s'%(outDir, filename), format='png', bbox_inches='tight')
             readme += '\nSaved hist for descDithers in %s.'%filename
 
             if print_progress:
@@ -276,7 +279,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
         else:
             plt.close('all')
 
-    ###############################################################
+    ########################################################################################################################
     # save the columns as a csv file.
     d= {obsIDcol: simdata[obsIDcol],
         'descDitheredRA': descDitheredRA, 'descDitheredDec': descDitheredDec,
@@ -296,7 +299,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
         print('\nSaved the dithers in %s'%filename)
         print('Time taken: %.2f (min)\n\n'%((time.time()-startTime)/60.))
 
-    readme_file= open('%s/readme.txt'%(outDir), 'a')
+    readme_file = open('%s/readme.txt'%(outDir), 'a')
     readme_file.write(readme)
     readme_file.close()
 
