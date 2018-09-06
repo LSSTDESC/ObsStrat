@@ -62,6 +62,9 @@ parser.add_option('--save_plots',
 parser.add_option('--show_diagnostic_plots',
                   action='store_true', dest='show_diagnostic_plots', default=False,
                   help= 'Use to show histogram of added dithers.')
+parser.add_option('--compress_csvs',
+                  action='store_true', dest='compress_csvs', default=False,
+                  help= 'Use to compress the csv file outputs.')
 
 ########################################################################################################################
 startTime = time.time()
@@ -77,6 +80,7 @@ rot_rand_seed = options.rot_rand_seed
 trans_rand_seed = options.trans_rand_seed
 save_plots = options.save_plots
 show_diagnostic_plots = options.show_diagnostic_plots
+compress_csvs = options.compress_csvs
 
 db_files_only = [f.strip() for f in list(db_files_only.split(','))]
 ########################################################################################################################
@@ -278,8 +282,12 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
         'descDitheredRA': descDitheredRA, 'descDitheredDec': descDitheredDec,
         'descDitheredRotTelPos': descDitheredRot}
 
-    filename= 'descDithers_%s.csv'%(dbfile.split('.db')[0])
-    pd.DataFrame(d).to_csv('%s/%s'%(outDir, filename), index=False)
+    filename = 'descDithers_%s.csv'%(dbfile.split('.db')[0])
+    if compress_csvs:
+        filename = '%s.gz'%(filename)
+        pd.DataFrame(d).to_csv('%s/%s'%(outDir, filename), index=False, compression='gzip')
+    else:
+        pd.DataFrame(d).to_csv('%s/%s'%(outDir, filename), index=False)
 
     readme += '\nSaved the dithers in %s'%filename
     readme += '\nTime taken: %.2f (min)\n\n'%((time.time()-startTime)/60.)
