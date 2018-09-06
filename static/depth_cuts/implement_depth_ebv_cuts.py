@@ -23,6 +23,7 @@ import lsst.sims.maf.slicers as slicers
 import lsst.sims.maf.stackers as mafStackers   # stackers in sims_maf
 import lsst.sims.maf.maps as maps
 import time
+import pickle
 ########################################################################################################################
 from optparse import OptionParser
 parser = OptionParser()
@@ -695,11 +696,17 @@ for band in orderBand:
             plt.close('all')
 
 if save_stuff:
-    # save the final footprint data: area, median/std depth in all bands
+    # save the final footprint data: area, median/std depth in all bands; 
+    # first as a txt file (md table) and then a pickle (dictionary).
     filename = 'footprintStats_%s_%s.txt'%(dbname, dither)
     txt_file = open('%s/%s'%(outDir, filename), 'a')
     txt_file.write(md_print)
     txt_file.close()
+    print('## Saved %s in %s.'%(filename, outDir))
+    # save pickle too
+    filename = 'footprintStats_%s_%s.pickle'%(dbname, dither)
+    with open('%s/%s'%(outDir, filename), 'wb') as handle:
+        pickle.dump(stats_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print('## Saved %s in %s.'%(filename, outDir))
 
     # save/add the final data for the area and the i-band depth for this cadence.
