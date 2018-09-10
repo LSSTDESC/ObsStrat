@@ -73,9 +73,9 @@ August 30, Task Force Meeting
 
 [By September may change frequency/dates of meetings as semester starts]
 
-* [ ] **September 15**, Full assessment of strategies and metrics due for task force
-
 September 17-19, LSST Cadence Hackathon at Flatiron (https://www.lsstcorporation.org/node/193).  Need to apply.
+
+* [ ] **September 21**, Full assessment of strategies and metrics due for task force
 
 * [ ] **October 1**, Full white papers sent back to task force for response
 
