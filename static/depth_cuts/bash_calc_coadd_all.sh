@@ -26,27 +26,64 @@ setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 #done
 
 ##############################################################################
+outdir=/global/cscratch1/sd/awan/lsst_output/coadd_output_allwps_slair_altsched/
 # run the script for the slair and altsced cadences. different db_paths and outdirs.
+mkdir -p ${outdir}sl_scripts    # create a directory for the slurm script if it doesnt exist already.
+cd ${outdir}sl_scripts
+
 for yr_cut in 1 3 6 10
 do
+    # ------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
+    # run analysis on slair outputs
     for db in cadence_roll_75_mix_rolling_mix_10yrs \
                 roll_mix_100_rolling_mix_10yrs \
                 roll_mix_rolling_mix_10yrs \
                 rolling_10yrs  tms_roll_10yrs
     do
-        echo ${db}_${yr_cut}yr
-        python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/modifyWFD/calc_coadd_depth.py --nside=256 --yr_cut=$yr_cut \
+        # ------------------------------------------------------------------------------------
+        # write a slurm script for this coadd run.
+        cat > ${db}_${yr_cut}yrs.sl << EOF
+#!/bin/bash -l
+#SBATCH --nodes=1               # Use 1 node; has multiple cores
+#SBATCH --qos=regular
+#SBATCH -t 00:30:00             # Set 20 min time limit
+#SBATCH --constraint=haswell    # Use Haswell nodes
+#SBATCH --output=${outdir}/sbatch_output/calc_coadd_${db}_${yr_cut}yrs.%j.out
+#SBATCH --job-name=calc_coadd
+srun python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/modifyWFD/calc_coadd_depth.py --nside=256 --yr_cut=$yr_cut \
                                                 --specific_db=${db}.db --no_dither --slair \
                                                 --dbs_path='/global/cscratch1/sd/awan/dbs_wp_unzipped/slair_altsched' \
-                                                --outDir='/global/homes/a/awan/LSST/output/coadd_output_allwps_slair_altsched/' &
+                                                --outDir=${outdir}
+EOF
+        # ------------------------------------------------------------------------------------
+        # run the slurm script
+        sbatch ${db}_${yr_cut}yrs.sl
+        echo Job submitted for ${db}_${yr_cut}yrs
     done
+
+    # ------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # need to separate alt_sched outputs since slair set up is markedly different.
     for db in alt_sched  alt_sched_rolling
     do
-        echo ${db}_${yr_cut}yr
-        python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/modifyWFD/calc_coadd_depth.py --nside=256 --yr_cut=$yr_cut \
+        # ------------------------------------------------------------------------------------
+        # write a slurm script for this coadd run.
+        cat > ${db}_${yr_cut}yrs.sl << EOF
+#!/bin/bash -l
+#SBATCH --nodes=1               # Use 1 node; has multiple cores
+#SBATCH --qos=regular
+#SBATCH -t 00:30:00             # Set 20 min time limit
+#SBATCH --constraint=haswell    # Use Haswell nodes
+#SBATCH --output=${outdir}/sbatch_output/calc_coadd_${db}_${yr_cut}yrs.%j.out
+#SBATCH --job-name=calc_coadd
+srun python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/modifyWFD/calc_coadd_depth.py --nside=256 --yr_cut=$yr_cut \
                                                 --specific_db=${db}.db --no_dither \
                                                 --dbs_path='/global/cscratch1/sd/awan/dbs_wp_unzipped/slair_altsched' \
-                                                --outDir='/global/homes/a/awan/LSST/output/coadd_output_allwps_slair_altsched/' &
+                                                --outDir=${outdir}
+EOF
+        # run the slurm script
+        sbatch ${db}_${yr_cut}yrs.sl
+        echo Job submitted for ${db}_${yr_cut}yrs
     done
 done
