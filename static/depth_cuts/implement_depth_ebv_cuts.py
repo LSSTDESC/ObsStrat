@@ -62,6 +62,9 @@ parser.add_option('--outDir_md', dest='outDir_md',
 parser.add_option('--debug',
                   action='store_true', dest='debug', default=False,
                   help= 'Set to True if want to debug: basically run the analysis as in DESC SRD v1.')
+parser.add_option('--slair',
+                  action='store_true', dest='slair', default=False,
+                  help= 'Use the tag to specify a slair run.')
 
 ########################################################################################################################
 startTime = time.time()
@@ -80,6 +83,7 @@ save_stuff = options.save_stuff
 dont_show_plots = options.dont_show_plots
 outDir = options.outDir
 outDir_md = options.outDir_md
+slair = options.slair
 
 # format the mag cuts
 mag_cuts = [float(f) for f in list(mag_cuts.split(','))]
@@ -401,27 +405,49 @@ else:
 # plot galactic latitude and EBV histograms for different cuts
 print('\n## Plotting galactic latitude and EBV histograms for mag_cuts: %s'%mag_cuts)
 # import EBV map from MAF
-opsdb = db.OpsimDatabase(dbpath)
-if debug:  # for minion1016
-    cols = ['fieldID', 'fieldRA', 'fieldDec', 'night']
+# read in the database
+if slair:
+    # slair database
+    opsdb = db.Database(dbpath, defaultTable='observations')
+    cols = ['RA', 'dec', 'night']
+    raDecInDeg = True
 else:
-    cols = ['fieldId', 'fieldRA', 'fieldDec', 'night']
-simdata = opsdb.fetchMetricData(cols, sqlconstraint=None)
-if dither.__contains__('FieldPerNight'):
-    s = mafStackers.RandomDitherFieldPerNightStacker(degrees=opsdb.raDecInDeg, randomSeed=1000)
-elif dither.__contains__('PerNight'):
-    s = mafStackers.RandomDitherPerNightStacker(degrees=opsdb.raDecInDeg, randomSeed=1000)
-elif dither.__contains__('FieldPerVisit'):
-    s = mafStackers.RandomDitherFieldPerVisitStacker(degrees=opsdb.raDecInDeg, randomSeed=1000)
-else:
-    raise ValueError('Unsure of what stacker to consdier for %s dithers.'%dither)
-simdata = s.run(simdata)
+    # OpSim database
+    opsdb = db.OpsimDatabase(dbpath)
+    cols = ['fieldRA', 'fieldDec', 'night']
+    raDecInDeg = opsdb.raDecInDeg
+# decide on the columns to get.
+#if debug:  # for minion1016
+#    cols = ['fieldID', 'fieldRA', 'fieldDec', 'night']
+#else:
+#    cols = ['fieldId', 'fieldRA', 'fieldDec', 'night']
 
+simdata = opsdb.fetchMetricData(cols, sqlconstraint=None)
+
+# decide on the pointing RA, Dec
+if slair:
+    lonCol, latCol = 'RA', 'dec'
+else:
+    if dither.__contains__('NoDither'):  # for slair, altsched
+        lonCol, latCol = 'fieldRA', 'fieldDec'
+    else:
+        dither_timescale = dither.split('Dither')[-1]
+        lonCol, latCol = 'randomDither%sRa'%dither_timescale, 'randomDither%sDec'%dither_timescale
+        # set up stacker
+        if dither.__contains__('FieldPerNight'):
+            s = mafStackers.RandomDitherFieldPerNightStacker(degrees=raDecInDeg, randomSeed=1000)
+        elif dither.__contains__('PerNight'):
+            s = mafStackers.RandomDitherPerNightStacker(degrees=raDecInDeg, randomSeed=1000)
+        elif dither.__contains__('FieldPerVisit'):
+            s = mafStackers.RandomDitherFieldPerVisitStacker(degrees=raDecInDeg, randomSeed=1000)
+        else:
+            raise ValueError('Unsure of what stacker to consdier for %s dithers.'%dither)
+        simdata = s.run(simdata)
+
+# slice the data
 dustmap = maps.DustMap(nside=nside)
-dither_timescale = dither.split('Dither')[-1]
-slicer = slicers.HealpixSlicer(lonCol='randomDither%sRa'%dither_timescale,
-                               latCol='randomDither%sDec'%dither_timescale,
-                               latLonDeg=opsdb.raDecInDeg, nside=nside)
+slicer = slicers.HealpixSlicer(lonCol=lonCol, latCol=latCol,
+                               latLonDeg=raDecInDeg, nside=nside)
 slicer.setupSlicer(simdata)
 result = dustmap.run(slicer.slicePoints)
 ebv_map = result['ebv']
