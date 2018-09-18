@@ -103,3 +103,42 @@ For photo-z quality:
 * The results are essentially determined by how the median depth in all bands evolves over time.
 
 * Photo-z calculations were done for `kraken_2026`, `pontus_2002`, `pontus_2489`, and `mothra_2045`.  The rest of the strategies were filled in based on how the median depth evolves with time (i.e., identifying a strong similarity with one of the ones for which calculations were done: everything else looks very similar to `kraken_2026`).
+
+## Some notes on depth etc.
+
+Humna made some plots that currently live on slack:
+
+* Depth variation (standard deviation) for each strategy at Y1, Y3, Y6, Y10:
+https://lsstc.slack.com/files/U2W4A5V2S/FCNT91FDK/screen_shot_2018-09-06_at_5.10.29_pm.png
+
+* Usable area for each strategy at Y1, Y3, Y6, Y10:
+https://lsstc.slack.com/files/U2W4A5V2S/FCMUQHZV1/screen_shot_2018-09-05_at_11.25.09_pm.png
+
+* Median depth for each strategy at Y1, Y3, Y6, Y10:
+https://lsstc.slack.com/files/U2W4A5V2S/FCP43S43Z/screen_shot_2018-09-05_at_11.25.16_pm.png
+
+## Forecasting approach
+
+* Our ansatz that we’re going to have a fixed depth cut for YN (N=1,3,6,10) for all cadences doesn’t seem to work for `mothra_2045`, which simply is shallower and hence has substantial area reduction due to cuts that otherwise work similarly for the other strategies.
+
+* The Y10 area coverages given the fixed depth cut basically fall into 3 categories: `mothra_2045` (very bad); lots of strategies that fall within +/-500 deg^2 of 14.5k, including the new baseline; `pontus_2002`, which is 19.2k deg^2.  Y10 photo-z categories were: `mothra_2045` (worst); then `pontus_2002` (closer to baseline but still noticably different); then everything else.  So `pontus_2002` and “lots of other strategies including baseline” swapped positions compared to the area coverage categories, which makes sense: the large-area strategy is larger area but a bit shallower and hence slightly worse photo-z quality compared to baseline.  For Y10 we can have just three categories for forecasting, with an approach as follows:
+  * The DESC SRD Y10 baseline is a median depth of 26.35 in i-band, 14.3k deg^2.
+  * This is very similar area to baseline2018a, but baseline2018a is 0.2 mag deeper. Based on the cumulative number counts in HSC, if we assume that a survey that is deeper by 0.2 mags can have a "gold sample" that goes 0.2 mags deeper, then its number density for clustering would go up by ~20% and lensing a bit more than that (~30-40%).  The evolution in the mean redshift would be relatively modest (even Y1 to Y10 does not result in a huge change in mean redshift).  So the main changes to make for the DESC SRD Y10 analysis versus the baseline2018a and other similar scenarios are increased number density for baseline2018a with similar area and redshift distribution.
+  * In contrast, `mothra_2045` and `pontus_2002` are more similar in depth to the DESC SRD scenario, but with quite different areas: 11.7 and 19.3 deg^2 (19% lower and 35% higher, respectively).  Hence these can be forecast using the DESC SRD parameters but with the area modified.
+
+* For Y1, there are four categories of strategy rather than 3, with `pontus_2502` living in its own strategy.  To summarize how these differ from the DESC SRD Y1 analysis:
+  * The DESC SRD Y1 forecasts had a median depth of 25.13 in i-band and a usable area of 12.3k deg^2.
+  * Here, the many scenarios that look similar to the new baseline2018a have similar depths as in the DESC SRD analysis, but a usable area that is more like 14k deg^2 (14% higher).  Hence the sample number density, redshift, etc. can be fixed, but the area should increase compared to the DESC SRD Y1.
+  * `mothra_2045` actually gives an increased depth by 0.4 (!) magnitudes, which will result in substantial changes in usable number densities, but only 7.5k deg^2 (45% decrease from baseline).
+  * `pontus_2502` has a similar depth as baseline2018a, and decreased area (12k deg^2, 15% smaller than baseline).  So it can use the forecasts for baseline2018a but with the area modified.
+  * `pontus_2002` is about 0.2 magnitudes shallower than the DESC SRD analysis but has the largest area, 15.5k deg^2.  Following the rule of thumb from Y10, we could probably use a similar redshift distribution but modify the lens and source number densities to be 20% and 30% lower than in the DESC SRD analysis.
+
+* For Y3, Y6: we do not have a DESC SRD starting point.  Do we need Y3 and Y6 forecasts or could we try to make do without?
+
+* Husni and Melissa should recalculate using Humna's depth cuts consistently.
+
+* The forecasts should be like those in the DESC SRD except for one thing: we should marginalize over the uncertainty in mean redshift and photo-z scatter and allow for different priors for the different strategies.  (In the DESC SRD we did not marginalize over those things, but rather forecast without that uncertainty and then set requirements based on what that uncertainty does to the constraining power.)
+
+* We need a way to say whether the priors on photo-z bias and scatter should differ for each strategy.  One obvious way to do so would be to assume some fiducial uncertainty based on what we should get for 4MOST and DESI cross-correlations within some area, and then change the size of the prior based on the overlap areas.
+
+* Currently Tim's code does not easily allow for a change in scatter with redshift.  He could change this to a photo-z bias *and* a photo-z scatter per tomographic  bin, which would increase the number of nuisance parameters, if it's important to do so.
