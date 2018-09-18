@@ -27,7 +27,13 @@ Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that 
 |  kraken_2044  | i>24.5 ; EBV<0.2 | 16210.07 | 24.85 | | | | | | | | |
 |  mothra_2049  | i>24.5 ; EBV<0.2 | 10129.80 | 25.25 | | | | | | | | |
 |   nexus_2097  | i>24.5 ; EBV<0.2 | 13376.87 | 24.89 | | | | | | | | |
-
+| cadence_roll_75_mix | i>24.5 ; EBV<0.2 | 9243.40 | 25.20 | | | | | | | | |
+| roll_mix_100 | i>24.5 ; EBV<0.2 | 8262.11 | 25.27 | | | | | | | | |
+| roll_mix | i>24.5 ; EBV<0.2 | 8800.47 | 25.25 | | | | | | | | |
+| rolling_10yrs | i>24.5 ; EBV<0.2 | 9793.56 | 25.25 | | | | | | | | |
+| tms_roll_10yrs | i>24.5 ; EBV<0.2 | 9136.29 | 25.19 | | | | | | | | |
+| alt_sched | i>24.5 ; EBV<0.2 | 15133.88 | 25.02 | | | | | | | | |
+| alt_sched_rolling | i>24.5 ; EBV<0.2 | 7921.83 | 25.38 | | | | | | | | |
 
 ## Y3
 
@@ -48,7 +54,13 @@ Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that 
 |  kraken_2044  | i>25.0 ; EBV<0.2 | 19952.37 | 25.64 | | | | | | | |
 |  mothra_2049  | i>25.0 ; EBV<0.2 | 18262.14 | 25.53 | | | | | | | |
 |   nexus_2097  | i>25.0 ; EBV<0.2 | 18764.25 | 25.49 | | | | | | | |
-
+| cadence_roll_75_mix | i>25.0 ; EBV<0.2 | 15535.69 | 25.63 | | | | | | | |
+| roll_mix_100 | i>25.0 ; EBV<0.2 | 15548.60 | 25.60 | | | | | | | |
+| roll_mix | i>25.0 ; EBV<0.2 | 15620.30 | 25.69 | | | | | | | |
+| rolling_10yrs | i>25.0 ; EBV<0.2 | 15612.96 | 25.69 | | | | | | | |
+| tms_roll_10yrs | i>25.0 ; EBV<0.2 | 15376.44 | 25.59 | | | | | | | |
+| alt_sched | i>25.0 ; EBV<0.2 | 15675.33 | 25.61 | | | | | | | |
+| alt_sched_rolling | i>25.0 ; EBV<0.2 | 15260.98 | 25.50 | | | | | | | |
 
 ## Y6
 
@@ -69,7 +81,13 @@ Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that 
 |  kraken_2044  | i>25.5 ; EBV<0.2 | 19920.01 | 26.08 | | | | | | | |
 |  mothra_2049  | i>25.5 ; EBV<0.2 | 19898.55 | 26.03 | | | | | | | |
 |   nexus_2097  | i>25.5 ; EBV<0.2 | 19883.13 | 25.98 | | | | | | | |
-
+| cadence_roll_75_mix | i>25.5 ; EBV<0.2 | 15458.32 | 26.05 | | | | | | | |
+| roll_mix_100 | i>25.5 ; EBV<0.2 | 15446.52 | 26.05 | | | | | | | |
+| roll_mix | i>25.5 ; EBV<0.2 | 15558.04 | 26.10 | | | | | | | |
+| rolling_10yrs | i>25.5 ; EBV<0.2 | 15543.93 | 26.12 | | | | | | | |
+| tms_roll_10yrs | i>25.5 ; EBV<0.2 | 15362.22 | 26.02 | | | | | | | |
+| alt_sched | i>25.5 ; EBV<0.2 | 15189.12 | 25.99 | | | | | | | |
+| alt_sched_rolling | i>25.5 ; EBV<0.2 | 15064.38 | 25.97 | | | | | | | |
 
 ## Y10
 
@@ -90,7 +108,13 @@ Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that 
 |  kraken_2044  | i>26.0 ; EBV<0.2 | 19303.18 | 26.40 | | | | | | | |
 |  mothra_2049  | i>26.0 ; EBV<0.2 | 19155.46 | 26.38 | | | | | | | |
 |   nexus_2097  | i>26.0 ; EBV<0.2 | 19143.92 | 26.37 | | | | | | | |
-
+| cadence_roll_75_mix | i>26.0 ; EBV<0.2 | 14954.59 | 26.33 | | | | | | | |
+| roll_mix_100 | i>26.0 ; EBV<0.2 | 14984.85 | 26.33 | | | | | | | |
+| roll_mix | i>26.0 ; EBV<0.2 | 15159.79 | 26.38 | | | | | | | |
+| rolling_10yrs | i>26.0 ; EBV<0.2 | 15131.83 | 26.39 | | | | | | | |
+| tms_roll_10yrs | i>26.0 ; EBV<0.2 | 14868.03 | 26.30 | | | | | | | |
+| alt_sched | i>26.0 ; EBV<0.2 | 13589.95 | 26.28 | | | | | | | |
+| alt_sched_rolling | i>26.0 ; EBV<0.2 | 13008.42 | 26.27 | | | | | | | |
 
 ## Some notes on photo-z results
 
