@@ -41,9 +41,8 @@ class Photo_z_quality(metrics.BaseMetric):
             else:
                 coadd_depths.append(self.badval)
                 
-        if nfilters <= 3:
-            ### If we only had three filters, return a single badval 
-            ### this will mask the datapoint in the bundle.metricValues.
+        if nfilters !=6: # want coverage in all 6 filters
+            # return a single badval which will mask the datapoint in the bundle.metricValues.
             coadd_depths = self.badval
             
         return coadd_depths
