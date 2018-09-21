@@ -1,13 +1,62 @@
 \section{Static probes}
 
-\newcommand{\todorm}[1]{\textbf{#1}}
+\newcommand{\todorm}[1]{\textbf{TO DO: #1}}
 
 Here we present results for joint cosmological forecasts of the ``static'' probes: WL, LSS, and CL.
 Unlike Section~\ref{sec:wl}, which focuses specifically on systematics mitigation for weak lensing,
 this section focuses on dark energy constraining power.  The forecasting methodology follows
 that in the DESC Science Requirements Document v1 \cite{DESCSRD2018}, though with modified
 assumptions about the baseline LSST analysis for Y1 and Y10 based on the new strategies, and filling
-in Y3 and Y6 forecasts as well.
+in Y3 and Y6 forecasts as well. 
+\todorm{Say more about the analysis, i.e., what is 3x2-point and how does CL fit in?}
 
-\todorm{Say why Y3 and Y6.  Tie results to LSS, WL section results.}
+We carried out forecasts for Y1, Y3, Y6, and Y10.  The reason for these choices is as follows: the
+Y1 WL, CL, and LSS analysis will already be more powerful than all previous imaging surveys
+combined, so first individual and joint-probe results will be produced at that time.  After that
+point, there will likely be some regrouping to address whatever systematic uncertainties are
+identified as the tallest poles in the Y1 analysis, so the next substantive analysis updates will
+likely occur at Y3.  After this point Y6 and Y10 are somewhat arbitrary but suitably-spaced
+benchmarks.  We use the Dark Energy Task Force (DETF \todorm{cite this!}) Figure of Merit
+(FoM). \todorm{Define this if it hasn't been defined elsewhere in the writeup already.}
+
+Given our adopted analyses, the following factors affect constraining power in the forecasts:
+\begin{itemize}
+\item Survey area $f_\text{sky}$: roughly speaking, with all other factors fixed, the FoM for WL,
+  CL, and LSS scales like $f_\text{sky}^2$.  This assumes that noise terms that have a covariance
+  that scales like $f_\text{sky}^{-1}$ dominate.  \todorm{Check scalings.}  A secondary impact of
+  $f_\text{sky}$ is to modify the area overlap with spectroscopic surveys such as TiDES/4MOST and
+  DESI, which will be used to place priors on photometric redshift biases and scatters
+  \todorm{citations!}. The size of those priors therefore depends on $f_\text{sky}$ in some complex
+  way related to the modifications in overlap with those two surveys.  However, this is a higher
+  order effect that we will neglect in our initial analysis.
+\item Survey median depth: Survey homogeneity is an important factor in precision measurements of
+  galaxy densities, shears, and photometric redshifts.  We define a survey area after some depth
+  cuts that are intended to roughly homogenize the area and eliminate regions with significant
+  uncertainties due to dust reddening within the Milky Way.  These cuts are somewhat arbitrarily
+  defined and could in principle be tuned for different strategies to maximize constraining power
+  given the combination of depth and area factors.  The median survey depths after this cut, and
+  their standard deviation, was discussed in the LSS section.  \todorm{Once Humna's text is visible,
+    make this connection more clear/direct.}  The impact of the median survey depth is as follows:
+  \begin{itemize}
+    \item To modify the LSS tracer sample number density, assuming that we allow it to float in some
+      way that is tied to the median depth.  The redshift distribution may also change.
+    \item To modify the WL source sample number density; this sample is generally defined using a
+      SNR cut rather than a strict magnitude cut.  The redshift distribution may also change.
+    \item As shown in \cite{DESCSRD2018}, even going from Y1 to Y10, the number density changes are
+      substantial while the redshift distribution changes are relatively modest.  Hence within a
+      given year (e.g., all Y1 forecasts in this paper when considering all the strategies) we will
+      focus on the changes in number density and neglect the differences in LSS and WL sample number
+      redshift distribution between the strategies.  This simplifies the forecasting process.
+  \end{itemize}
+\item Photometric redshift quantity: this is tabulated in \todorm{refer to static tables or photo-z
+  section once Humna and Melissa's work is included in the writeup}.  For a given size of prior on
+  photo-z scatter and bias, modest changes (10s of percent) in photo-z quality do not have a
+  significant impact on the forecasts, so we neglect this in the initial forecasts.
+\end{itemize}
+
+\todorm{Tie results to LSS, WL section results.  Boil it down to simple statements about the
+  features of the strategy that matter, rather than about these particular strategies.
+  Consider iterative survey depth definition
+  depending on the strategy.  Impact of high airmass, unusual seeing distributions, etc.  Impact of
+  changes in DESI, 4MOST overlap.  Better quantification of photo-z impact.}
 
