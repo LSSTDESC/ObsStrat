@@ -3,8 +3,9 @@
 %\newcommand{\comment}[1]{\textcolor{blue}{\textbf{#1}}}
 
 
+
 \section{Strong Lensing}
-\textit{ Authors: Simon Huber\footnote{shuber@mpa-garching.mpg.de}, Sherry H.~Suyu\footnote{suyu@mpa-garching.mpg.de} }
+\textit{ Authors: Simon Huber\footnote{shuber@mpa-garching.mpg.de}, Sherry H.~Suyu\footnote{suyu@mpa-garching.mpg.de}, Tanja Petrusevska\footnote{tanja.petrushevska@ung.si} }
 
 The Hubble constant $H_0$ is one of the key parameters to describe the
 universe. Current observations of the CMB (cosmic microwave
@@ -37,7 +38,7 @@ for time-delay cosmography. Here we investigate the prospects of using
 LSST for measuring time delays of both lensed supernovae and lensed
 quasars.
 
-\subsection{Lensed Supernovae}
+\subsection{Galaxy Lensed Supernovae}
 \textit{Contributors: Simon Huber, Sherry H.~Suyu}
 
 Even though the number of LSNe is significantly lower than the number of
@@ -93,7 +94,7 @@ where we have quantified 14 cadences for LSNe Ia.
 
 \subsubsection{Simulating and evaluating mock data}
 \label{sec:simulation of mock data}
-To simulate mock data for the 14 different cadences we have picked 10
+To simulate mock data for the different cadences we have picked 10
 fields in the WFD (wide fast deep survey) which are listed in Table
 \ref{tab: 10 wfd fields}. For a given cadence for each of these
 fields, we store the following for each visit of the field: date
@@ -128,8 +129,6 @@ that the detection criterion applied in OM 10 is fulfilled. The
 criterion is that the peak of the i-band magnitude of the fainter image
 for a double or the 3rd brightest image for a quad, falls in the
 observing season.
-
-
 By combining this with the observing sequence, we get simulated
 observations as illustrated in figure \ref{fig: simulated observation}
 for a quad system. The error is calculated according to \cite[sec 3.5,
@@ -236,38 +235,38 @@ uncertainties of $\sim 5\%$ \citep[e.g.,][]{Suyu2018}.  A quad system is counted
 %
 \begin{table}
 \centering
-\begin{tabular}{c|c|c}
-& doubles & quads \\
+\begin{tabular}{c|c|c|c}
+&total& doubles & quads \\
 \hline
-alt\_sched\_rolling & 10.4 \% &3.5 \% \\
+alt\_sched\_rolling & 13.9 \% & 10.4 \% &3.5 \% \\
 \hline
-alt\_sched & 8.4 \% & 2.0 \% \\
+alt\_sched & 10.4 \% & 8.4 \% & 2.0 \% \\
 \hline
-pontus\_2506 & 5.4 \% &1.5 \% \\
+pontus\_2506 & 6.9 \% & 5.4 \% &1.5 \% \\
 \hline
-colossus\_2667 & 5.4 \% &1.5 \% \\
+colossus\_2667 & 6.9 \% & 5.4 \% &1.5 \% \\
 \hline
-pontus\_2489 & 5.0 \% &1.0 \% \\
+pontus\_2489 & 6.0 \% & 5.0 \% &1.0 \% \\
 \hline
-mothra\_2045 & 4.0 \% &1.0 \% \\
+mothra\_2045 & 5.0 \% & 4.0 \% &1.0 \% \\
 \hline
-kraken\_2036 & 3.0 \% &1.0 \% \\
+kraken\_2036 & 4.0 \% & 3.0 \% &1.0 \% \\
 \hline
-kraken\_2026 & 3.5 \% &0.0 \% \\
+kraken\_2026 & 3.5 \% & 3.5 \% &0.0 \% \\
 \hline
-colossus\_2664 & 3.0 \% &0.0 \% \\
+colossus\_2664 & 3.0 \% & 3.0 \% &0.0 \% \\
 \hline
-colossus\_2665 & 2.5 \% &0.5 \% \\
+colossus\_2665 & 3.0 \% & 2.5 \% &0.5 \% \\
 \hline
-baseline2018a & 2.5 \% &0.5 \% \\
+baseline2018a & 3.0 \% & 2.5 \% &0.5 \% \\
 \hline
-kraken\_2035 & 2.0 \% &0.0 \% \\
+kraken\_2035 & 2.0 \% & 2.0 \% &0.0 \% \\
 \hline
-pontus\_2502 & 1.0 \% &0.0 \% \\
+pontus\_2502 & 1.0 \% & 1.0 \% &0.0 \% \\
 \hline
-pontus\_2002 & 1.0 \% &0.0 \% \\
+pontus\_2002 & 1.0 \% & 1.0 \% &0.0 \% \\
 \end{tabular}
-\caption{This table shows the fraction of systems of the 202 investigated mock systems where the time delay has been measured with accuracy smaller than 1 percent and precision smaller than 5 percent. These are not the final results as the total number of detected LSNe Ia is not taken into account. \todo{Simon}{include 4 new cadence strategies*}}
+\caption{This table shows the fraction of systems of the 202 investigated mock systems (101 doubles and 101 quads) where the time delay has been measured with accuracy smaller than 1 percent and precision smaller than 5 percent. These are not the final results as the total number of detected LSNe Ia is not taken into account. \todo{Simon}{include 4 new cadence strategies*}}
 \label{tab: fraction of systems}
 \end{table}
 Table \ref{tab: fraction of systems} has to be combined with the total number of LSNe Ia we expect to detect for different strategies. We approximate the total number of LSNe Ia as
@@ -277,22 +276,7 @@ Table \ref{tab: fraction of systems} has to be combined with the total number of
 N_\mathrm{LSNe Ia, cad} = N_\mathrm{LSNe Ia, OM 10} \frac{\Omega_\mathrm{cad}}{\Omega_\mathrm{OM 10}} \frac{\bar{t}_\mathrm{eff,cad}}{t_\mathrm{eff, OM 10}}
 \end{align}
 %
-where $N_\mathrm{LSNe Ia, OM 10} = 45.7$, $\Omega_\mathrm{OM 10} =
-\SI{20000}{\square\deg}$ and $t_\mathrm{eff, OM 10}=\SI{2.5}{\year}$
-from \cite{Oguri:2010}. $\Omega_\mathrm{cad}$ is the survey area for a
-given cadence. We assume
-$\Omega_\mathrm{pontus\_2002}=\SI{24700}{\square\deg}$ and for the
-other strategies
-$\Omega_\mathrm{cad}=\SI{18000}{\square\deg}$. $\bar{t}_\mathrm{eff,cad}$
-is the summed up season length for a given cadence, where we have
-averaged over all LSST fields where observations are taken. The
-results for the 14 cadences are shown in Table \ref{tab: total number
-  of LSNe Ia from OM 10}. Interestingly, the order has changed
-substantially in comparison to Table \ref{tab: fraction of
-  systems}. The key message from this is that for a rolling cadence
-many LSNe Ia will not be detected, because of the alternating
-observation scheme.  
-
+where $N_\mathrm{LSNe Ia, OM 10} = 45.7$, $\Omega_\mathrm{OM 10} = \SI{20000}{\square\deg}$ and $t_\mathrm{eff, OM 10}=\SI{2.5}{\year}$ from \cite{Oguri:2010}. $\Omega_\mathrm{cad}$ is the survey area for a given cadence. We assume $\Omega_\mathrm{pontus\_2002}=\SI{24700}{\square\deg}$ and for the other strategies $\Omega_\mathrm{cad}=\SI{18000}{\square\deg}$. $\bar{t}_\mathrm{eff,cad}$ is the cumulative seasonal length for a given cadence, where we have averaged over all LSST fields where observations are taken. The results for the 14 cadences are shown in Table \ref{tab: total number of LSNe Ia from OM 10}. Interestingly, the order has changed substantially in comparison to Table \ref{tab: fraction of systems}. The key message from this is that for a rolling cadence many LSNe Ia will not be detected, because of the alternating observation scheme.
 %
 \begin{table}
 \centering
@@ -333,11 +317,10 @@ mothra\_2045 & 40.4  \\
 \hline
 alt\_sched\_rolling & 35.3  \\
 \end{tabular}
-\caption{This table show the total amount of LSNe Ia calculated via \eqref{eq: total number of LSNe Ia from modified OM 10} where 69 \% are doubles and 31 \% are quads. The total number depends on the selection criteria assumed in \cite{Oguri:2010}. If we relax on the criteria like the image separation these numbers will be higher, but the order will be unchanged.}
+\caption{This table shows the total amount of LSNe Ia calculated via \eqref{eq: total number of LSNe Ia from modified OM 10} where 69 \% are doubles and 31 \% are quads. The total number depends on the selection criteria assumed in \cite{Oguri:2010}. If we relax on the criteria like the image separation these numbers will be higher, but the order will be unchanged.}
 \label{tab: total number of LSNe Ia from OM 10}
 \end{table}
 %
-
 Combining Tables \ref{tab: fraction of systems} and \ref{tab: total
   number of LSNe Ia from OM 10}, we get the total number of LSNe Ia
 with accuracy < 1 \% and precision < 5 \%, which is summarized in
@@ -351,17 +334,24 @@ Our optimal cadence would deliver a high number of LSNe Ia (Table
 \ref{tab: total number of LSNe Ia from OM 10}) and additionally
 deliver as many precise/accurate delay measurements as possible just
 with LSST data (Table \ref{tab: total number accuracy less 1 precision
-  less 5 percent}). From this we define 3 categories. The first is our
+  less 5 percent}). From this we define 3 categories. The first are our
 favoured cadences to measure time delays just with LSST data. Our
 second category are cadences which are potentially good with
 observational follow-up in addition to LSST because they give a high
 number of LSNe Ia, and we expect the additional follow-up observations
 would yield delay measurements. An investigation of all cadences
-assuming follow up is ongoing. Preliminary results show that the
+assuming follow up is ongoing. Preliminary results in table \ref{tab: follow up and number of LSNe Ia} show that the
 numbers in Table \ref{tab: total number of LSNe Ia from OM 10}
 dominate the follow up case, which means that rolling cadences are
 disfavoured. These cadences and other cadences which yield low number
 of discovered SNe systems are summarized in the third category.
+
+To summarize, for our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as
+ a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore cadences with long cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$ and big survey areas
+ $\Omega_\mathrm{cad}$ are favoured. Of the cadence strategies that we have investigated, the median inter-night gap 
+ between observations (all filters) fluctuates between
+ 1 and 2 days \footnote{\url{https://cadence-hackathon.readthedocs.io/en/latest/current_runs.html}} and
+ therefore only plays a minor role. Disfavoured cadence strategies are mostly "rolling" ones because of their shorter cumulative seasonal lengths.
 %
 \begin{table}
 \centering
@@ -402,8 +392,24 @@ pontus\_2502 & 0.9 &0.0 \\
   year survey. \todo{Simon}{include 4 new cadence strategies*}}
 \label{tab: total number accuracy less 1 precision less 5 percent}
 \end{table}
-
-
+%
+\begin{table}
+\centering
+\begin{tabular}{c|c|c|c}
+& doubles & quads & total fraction of systems \\
+\hline
+pontus\_2002 & 24.9 & 3.7 & 24.0 \% \\
+\hline
+colossus\_2667 & 23.8 &4.3 & 28.0 \%  \\
+\hline
+baseline2018a & 19.3 & 2.9 & 24.0 \%  \\
+\hline
+kraken\_2036 & 10.5 & 1.9 & 24.0 \% \\
+\end{tabular}
+\caption{This table shows the total number of LSNe Ia using LSST as a discovering machine in combination with follow-up observations in 3 filters (g,r,i) every second night. We assume follow-up observation would start 2 days after the second LSST data point in any filter exceeding the 5-$\sigma$ depth. The table on the right hand side shows the fraction of the 100 investigated systems where the time delay could be measured with accuracy better than 1 percent and precision better than 5 percent. Since the total fraction depends only slightly on the LSST cadence strategy, the numbers in columns 2 and 3 are approximately proportional to the numbers in table \ref{tab: total number of LSNe Ia from OM 10}. \todo{Simon}{include other cadence strategies*}}
+\label{tab: follow up and number of LSNe Ia}
+\end{table}
+%
 \begin{table}
 \centering
 \begin{tabular}{c|c|c|c}
@@ -446,7 +452,7 @@ mothra\_2045 & & & x  \\
 \hline
 alt\_sched\_rolling & x & & x  \\
 \end{tabular}
-\caption{This table ranks 14 different cadences. The separation in
+\caption{This table ranks 18 different cadences. The separation in
   this 3 categories (columns on the right) is done by taking results
   from Tables \ref{tab: total number of LSNe Ia from OM 10} and
   \ref{tab: total number accuracy less 1 precision less 5
@@ -459,9 +465,47 @@ alt\_sched\_rolling & x & & x  \\
   observation because the total number LSNe Ia is expected to be below 70. \todo{Simon}{include 4 new cadence strategies*}}
 \label{tab: favoured strategies}
 \end{table}
+%
+\FloatBarrier
+\subsection{Galaxy Cluster Lensed Supernovae}
+\textit{Contributors: Tanja Petrusevska}
 
+Here, we focus on prospects of observing supernovae which are
+lensed by known galaxy clusters. High-z galaxies that appear as
+multiple images in the cluster field can host supernova
+explosions. Strongly lensed supernovae by galaxy clusters not only
+can be used as tools to examine both global cosmology, but also
+the local environment of the cluster lenses. Cluster lensing time
+scales are typically much longer and the microlensing effects are
+almost negligible, which makes their measurement potentially more
+feasible, especially if the lens potential is well studied and the
+predicted time delays have small uncertainties. We calculate the
+expected number of supernovae Ia in the multiply lensed background
+galaxies by using the Hubble Frontier Fields cluster and Abell
+1689. These clusters have been extensively studied, and given the
+good quality data, well constrained magnification maps and time
+delays can be obtained from the lensing models. We only considered
+those that have a spectroscopic redshift. To obtain better image
+depth, we combine the images that are taken closer than 5 days in
+time. We note that these are a lower limits, since we have only
+considered few clusters and the galaxies with spectroscopic
+redshift. For this science case, the most important bands are i, z
+and y. Since most of the light of nearby SNe is in the optical
+bands, these filters are optimal for finding high-z SNe, as their
+light is redshifted to the longer wavelengths. When we consider
+the different observing strategies, we find that the rolling
+cadences (mothra\_2045 and pontus\_2502) are disfavoured given that
+they do not return to the clusters as the other observing
+strategies. The strategy pontus\_2489 provides slightly better
+prospects compared to the others because it provides the most
+number of visits to the same cluster fields.
 
-\pagebreak
+\begin{figure}
+\centering
+\includegraphics[scale=0.65]{figures/galaxy_lensing.pdf}\caption{The expected total number of strongly lensed SNe Ia arising from the multiply imaged galaxies in the Hubble Frontier Fields and Abell 1689 in function of the observing strategy. \todo{Tanja}{include new cadences and do same estimates for CC SNe*}}
+\end{figure}
 
+\FloatBarrier
 \subsection{Lensed Quasars}
 \textit{Contributors: TBD}
+
