@@ -54,9 +54,40 @@ Given our adopted analyses, the following factors affect constraining power in t
   significant impact on the forecasts, so we neglect this in the initial forecasts.
 \end{itemize}
 
+The above considerations have informed our approach to forecasting.  In particular, we group the
+strategies based on those with similar usable areas and depths after the depth cuts described
+above.  We only carry out forecasts for those groups of strategies, defined as follows
+(\todorm{Consider turning this into a table.}):
+\begin{enumerate}
+\item Y1: There are four groups of strategies: (1a) `mothra\_2045`, (1b) `pontus\_2002`, (1c)
+  `pontus\_2502`, and (1d) everything else.  The DESC SRD Y1 baseline had a median depth of 25.13 in
+  $i$-band and an area of 12.3k~deg$^2$.  Group (1d) is quite similar to this in median depth and
+  hence in number densities and redshift distributions, but with an area that is 14\% higher.  Group
+  (1a) gives an increased depth by 0.4 magnitudes, which will substantially increase the WL and LSS
+  number counts and modify their redshift distribution, but has a usable area 45\% below group (1d).
+  Group (1b) is 0.2 magnitudes shallower than the DESC SRD Y1 baseline, but has the largest area,
+  15.5k~deg$^2$; hence we have to make the LSS and WL sample number densities 20\% and 30\% lower
+  than in the DESC SRD Y1 baseline, while keeping the redshift distribution fixed and accounting for
+  the larger area.   Group (1c) has a similar depth as (1d) but 15\% smaller area than (1d), so can
+  use the same forecasting parameters except for the area.
+\item Y3: \todorm{}
+\item Y6: \todorm{}
+\item Y10: There are three groups of strategies: (10a) `mothra\_2045`, (10b) `pontus\_2002` (largest
+  area at 19.2k~deg$^2$, but shallowest and hence somewhat worse in terms of photo-z quality), and (10c)
+  everything else (typically falling within $\pm 500$~deg$^2$ of 14.5k~deg$^2$).  The DESC SRD Y10
+  baseline had a median depth of 26.35 in $i$-band and 14.3k~deg$^2$.  This is similar area to
+  (10c), but roughly 0.2 mag shallower in median depth.  Roughly speaking, as mentioned above, we
+  expect a modest change in the redshift distribution and no change in area for (10c) compared to
+  the DESC SRD Y10 baseline, but the number density could increase by $\sim$20\% for LSS and $30$\%
+  for WL.  In contrast, (10a) and (10b) are more similar in depth to the DESC SRD baseline, and
+  hence we use the same number densities and redshift distributions, but with 19\% lower and 35\%
+  higher areas than the DESC SRD baseline, respectively.
+\end{enumerate}
+
 \todorm{Tie results to LSS, WL section results.  Boil it down to simple statements about the
   features of the strategy that matter, rather than about these particular strategies.
   Consider iterative survey depth definition
   depending on the strategy.  Impact of high airmass, unusual seeing distributions, etc.  Impact of
-  changes in DESI, 4MOST overlap.  Better quantification of photo-z impact.}
+  changes in DESI, 4MOST overlap.  Better quantification of photo-z impact.  Consistency of
+  systematics and photo-z calculations with area/depth calculations.  Fitting formula for area/depth.}
 
