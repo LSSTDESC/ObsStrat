@@ -5,16 +5,17 @@
 
 
 \section{Strong Lensing}
-\textit{ Authors: Simon Huber\footnote{shuber@mpa-garching.mpg.de}, Sherry H.~Suyu\footnote{suyu@mpa-garching.mpg.de}, Tanja Petrusevska\footnote{tanja.petrushevska@ung.si} }
+\textit{Authors: Simon Huber\footnote{shuber@mpa-garching.mpg.de}, Sherry H.~Suyu\footnote{suyu@mpa-garching.mpg.de}, Tanja Petrusevska\footnote{tanja.petrushevska@ung.si} }
+
+\
 
 The Hubble constant $H_0$ is one of the key parameters to describe the
 universe. Current observations of the CMB (cosmic microwave
 background) assuming a flat $\Lambda$CDM cosmology and the standard
-model of particle physics yield $H_0 = \SI[separate-uncertainty =
-true]{67.36 \pm 0.54}{\kilo\meter\per\s\per\mega\parsec}$
+model of particle physics yield $H_0 = 67.36 \pm 0.54 \, {\rm km\,s^{-1}\,Mpc^{-1}}$
 \citep{Planck:2018vks} which is in tension with $H_0 =
-\SI[separate-uncertainty = true]{73.52 \pm
-  1.62}{\kilo\meter\per\s\per\mega\parsec}$ from the local distance ladder
+73.52 \pm
+  1.62 \, {\rm km\,s^{-1}\,Mpc^{-1}}$ from the local distance ladder
 \citep{Riess:2016jrr,Riess:2018byc}. In order to verify or refute this
 $3.6 \sigma$ tension, further independent methods are needed. 
 
@@ -29,7 +30,7 @@ H_0^{-1}$). Applying this method to four lensed quasar systems, the
 H0LiCOW collaboration \citep{Suyu:2016qxx} together with the
 COSMOGRAIL collaboration
 \citep[e.g.]{Eigenbrod:2005ie,2013Tewes,2017Courbin} measured $H_0 =
-72.5^{+2.1}_{-2.3} \, \si{\kilo\meter\per\s\per\mega\parsec}$ in flat
+72.5^{+2.1}_{-2.3} \,{\rm km\,s^{-1}\,Mpc^{-1}}$ in flat
 $\Lambda$CDM \citep{Birrer:2018vtm}, which is in agreement with the
 local distance ladder and higher than CMB measurements.  Another
 promising approach goes back to the initial idea of
@@ -40,6 +41,8 @@ quasars.
 
 \subsection{Supernovae Lensed by Galaxies}
 \textit{Contributors: Simon Huber, Sherry H.~Suyu}
+
+\
 
 Even though the number of LSNe is significantly lower than the number of
 lensed quasars, LSNe have some important advantages. First 
@@ -106,12 +109,12 @@ survey are shown.
 %
 \begin{figure}
 \centering
-\includegraphics[scale=0.7]{figures/field_number3_baseline2018a_Daniel.jpg}
+\includegraphics[scale=0.7]{figures/sl_field_number3_baseline2018a_Daniel.eps}
 \caption{This illustrates for the observing strategy "baseline2018a" the mjd and filter when observations are taken over the 10 year survey for field number 4 in table \ref{tab: 10 wfd fields} in the wide fast deep survey}
 \label{fig:observation patter LSST 10 year survey}
 \end{figure}
 %
-\FloatBarrier 
+%\FloatBarrier 
 To simulate observational data of a LSN system, we place randomly in
 one of the 10 choosen fields from Table \ref{tab: 10 wfd fields} a
 mock LSNe Ia from the OM 10 catalog, which is a mock catalog for
@@ -135,7 +138,7 @@ for a quad system. The error is calculated according to \cite[sec 3.5,
 p. 67]{2009:LSSTscience}.
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.7]{figures/Obsevation_number399_baseline2018a_filter_i_oversampling_00.jpg}
+\includegraphics[scale=0.7]{figures/sl_Obsevation_number399_baseline2018a_filter_i_oversampling_00.eps}
 \caption[]{In this figure the i-band light curves of a mock quad LSNe Ia are shown. The observation sequence is for a random field in WFD survey for the cadence "baseline2018a".}
 \label{fig: simulated observation}
 \end{figure}
@@ -153,7 +156,7 @@ DEC& -7.4 & -44.2 & -7.2 & -30.0 & -50.9& -11.4 & -25.6 & -45.3 & -55.2 & -35.9 
 \label{tab: 10 wfd fields}
 \end{table}
 %
-\FloatBarrier
+%\FloatBarrier
 
 To evaluate the mock data and get a measured time delay we use the
 free knot spline optimizer from PyCS (Python Curve Shifting)
@@ -470,6 +473,8 @@ alt\_sched\_rolling & x & & x  \\
 \subsection{Supernovae Lensed by Galaxy Clusters}
 \textit{Contributors: Tanja Petrusevska}
 
+\
+
 Here, we focus on prospects of observing supernovae which are
 lensed by known galaxy clusters. High-z galaxies that appear as
 multiple images in the cluster field can host supernova
@@ -502,9 +507,9 @@ number of visits to the same cluster fields.
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.65]{figures/galaxy_lensing.pdf}\caption{The expected total number of strongly lensed SNe Ia arising from the multiply imaged galaxies in the Hubble Frontier Fields and Abell 1689 in function of the observing strategy. \todo{Tanja}{include new cadences and do same estimates for CC SNe*}}
+\includegraphics[scale=0.65]{figures/sl_galaxy_lensing.eps}\caption{The expected total number of strongly lensed SNe Ia arising from the multiply imaged galaxies in the Hubble Frontier Fields and Abell 1689 in function of the observing strategy. \todo{Tanja}{include new cadences and do same estimates for CC SNe*}}
 \end{figure}
 
-\FloatBarrier
+
 \subsection{Lensed Quasars}
 \textit{Contributors: TBD}
