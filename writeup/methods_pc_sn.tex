@@ -4,6 +4,23 @@ The uncertainty of the estimate of the pair-wise radial velocity is given by
 \begin{equation}
 v_{\rm{est}} \approx 2 \times \sigma_{v_{\rm{los}}} / N^{1/2}(r, z_{\rm{cosmo}})
 \end{equation}
+where $N(r, z_\rm{cosmo})$ is the number of pairs of SNIa separated by a comoving distance of $r \rm{Mpc}$
+at a cosmological redshift of $z_{\rm{cosmo}}.$
 
-We estimate the size of $\sigma_{v_{\rm{los}}}$  from 
-\begin{equation}
+We estimate the size of $\sigma_{v_{\rm{los}}}$  from blah blah 
+
+Here we describe the scaling approximation.
+
+We estimate the number of pairs of detected SNIa at a given comoving separation in redshift bins.
+
+First, we place SNIa in galaxies in a simulated extragalactic catalog of galaxies with different galaxy properties. The presecription we use to do this is simple, and can be varied later. However, the important factors to note are 
+\begin{enumerate}
+    \item these SNIa are meant to be all of the SNIa exploding during the survey and in the right range of redshift, but not all of them will be detected by LSST.
+    \item As the extra galactic catalog is only over a small area of the sky rather than the areas scanned by the Observing Strategies, we need to scale the numbers to find the appropriate $N(r,a).$
+\end{enumerate}
+
+If we assume that a fraction $\epsilon$ of the SN will be detected, since the number of pairs scales like $\mathcal{O}(N^2),$ the number of detected pairs in the fiducial area covered by the extra-galactic catalog scales as $\sim f^2.$ The efficiency $f$ can be estimated from the SNANA simulations by comparing the number of SNIa detected according to the simulations and the numbers simulated. Obviously this simple prescription misses some parameter dependence of the efficiency which we can return to for a more detailed calculation. Since the area scanned by the observing strategies are much larger than the separation in comoving distances at which we are considering pairs of SNIa, the increase in the number of pairs does not scale $\sim N^2 \sim \rm{Area}^2.$ Instead, if we can assume that the fiducial area is large enough that the edge effects are small for the largest separatation considered, and the shape of the larger area scanned by the observing strategy is not too irregular, we expect the number of pairs to scale $\sim \rm{Area}.$ Combining these considerations, we estimate that the number of pairs of detected SNIa at comoving distances of $r \rm{Mpc}$ at a cosmological redshift $z_{\rm{cosmo}}$ is given by 
+\begin{eqnarray}
+N = f^2 \frac{\rm{Cadence~Area}}{\rm{fiducial~area~of~extragalactic~Catalog}} N_\rm{pairs}\\
+f  = \frac{\rm{Number~of~detected~SNIa~in~SNANA}}{\rm{Numbe~of~simulated~SNIa~in~SNANA}}
+\end{eqnarray}
