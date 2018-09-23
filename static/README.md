@@ -190,7 +190,10 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 * For the weak lensing sample, we use the default mean site seeing and exposure time for Y1, Y3, Y6, and Y10 to get neff and (z0, alpha) parameters for four simulated scenarios, assuming use of r- and i-band data for WL with the same cuts as in the DESC SRD.  We then find a fitting formula for neff and (z0, alpha) as a function of depth based on those four simulated scenarios.  We are interpolating from just a few scenarios here because it requires making image simulations which can be kind of expensive.  For reference, the values in the DESC SRD were:
     * Y1: neff = 10/arcmin^2, z0=0.13, alpha=0.78 (mean redshift: 0.85), median i-band depth 25.1
     * Y10: neff = 27/arcmin^2, z0=0.11, alpha=0.68 (mean redshift: 1.05), median i-band depth 26.35
-When we simulate new scenarios for Y3 and Y6, we use the usual sqrt(t) scaling to assume they correspond to median i-band depths of 25.7 and 26.1, respectively.  (The Y10 vs. Y1 depths above conform to this sqrt(t) scaling as well.)  Those are being simulated right now.  Until they are complete and we can get neff, z0, and alpha at those intermediate values, we assume that neff scales with idepth in a similar way that the LSS density scales with ilim, and that z0 and alpha are linear in depth, forcing the results to match the Y1 and Y10 results.
+
+* When we simulate new scenarios for Y3 and Y6, we use the usual sqrt(t) scaling to assume they correspond to median i-band depths of 25.7 and 26.1, respectively.  (The Y10 vs. Y1 depths above conform to this sqrt(t) scaling as well.)  Those are being simulated right now.
+
+* Until they are complete and we can get neff, z0, and alpha at those intermediate values, we assume that neff scales with idepth in a similar way that the LSS density scales with ilim, and that z0 and alpha are linear in depth, forcing the results to match the Y1 and Y10 results.
     * neff = 9.2 * 10^(0.345*(idepth-25))
     * alpha = 0.788 - 0.08*(idepth-25)
     * z0 = 0.132 - 0.016*(idepth-25)
