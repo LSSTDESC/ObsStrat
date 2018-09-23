@@ -206,3 +206,4 @@ The values in the table below are based on these formula from interpolation of Y
 | 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 | 0.270, 0.274, 0.278 | 0.912, 0.907, 0.903 | 18.8, 22.0, 25.8 | 0.118, 0.114, 0.111 | 0.716, 0.7, 0.684 |
 | 10 | 10, 15, 20 | 26.3, 26.5, 26.7  | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 | 25.8, 30.3, 35.5 | 0.111, 0.108, 0.105 | 0.684, 0.668, 0.652 |
 
+* Effects not included: variations in typical seeing, variations in photo-z uncertainty (their  values and the priors on them).
