@@ -185,7 +185,8 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 
 * Given that depth, we use the cumulative counts derived based on the HSC Deep survey to estimate the LSS sample number densities, just as in the DESC SRD v1.  The formula is N(<ilim) = 37.8 * 10^(0.359 * (ilim - 25)) arcmin^-2.
 
-| Year | Areas (1000 deg^2) | Median i-band depths | LSS sample limits | LSS number density |
+| Year | Areas  | Median i-band  | LSS sample | LSS number  |
+|  | (1000 deg^2) | depths | limits | density (arcmin^-2) |
 | --- | --- | --- | --- | --- |
 | 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 | 23.9, 24.2, 24.5 | 15, 20, 25 |
 | 3 | 10, 15, 20 | 25.5, 25.8, 26.1 | 24.5, 24.8, 25.1 | 25, 32, 41 |
