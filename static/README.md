@@ -157,12 +157,26 @@ https://lsstc.slack.com/files/U2W4A5V2S/FCP43S43Z/screen_shot_2018-09-05_at_11.2
   * `pontus_2502` has a similar depth as baseline2018a, and decreased area (12k deg^2, 15% smaller than baseline).  So it can use the forecasts for baseline2018a but with the area modified.
   * `pontus_2002` is about 0.2 magnitudes shallower than the DESC SRD analysis but has the largest area, 15.5k deg^2.  Following the rule of thumb from Y10, we could probably use a similar redshift distribution but modify the lens and source number densities to be 20% and 30% lower than in the DESC SRD analysis.
 
-* For Y3, Y6: we do not have a DESC SRD starting point.  Do we need Y3 and Y6 forecasts or could we try to make do without?
-
-* Husni and Melissa should recalculate using Humna's depth cuts consistently.
+* Husni and Melissa should recalculate using Humna's depth cuts consistently.  Husni's writeup includes this recalculation.
 
 * The forecasts should be like those in the DESC SRD except for one thing: we should marginalize over the uncertainty in mean redshift and photo-z scatter and allow for different priors for the different strategies.  (In the DESC SRD we did not marginalize over those things, but rather forecast without that uncertainty and then set requirements based on what that uncertainty does to the constraining power.)
 
 * We need a way to say whether the priors on photo-z bias and scatter should differ for each strategy.  One obvious way to do so would be to assume some fiducial uncertainty based on what we should get for 4MOST and DESI cross-correlations within some area, and then change the size of the prior based on the overlap areas.
 
 * Currently Tim's code does not easily allow for a change in scatter with redshift.  He could change this to a photo-z bias *and* a photo-z scatter per tomographic  bin, which would increase the number of nuisance parameters, if it's important to do so.
+
+## Building an area / depth FoM emulation code
+
+We would like an area vs. depth FoM emulation code that enables us to interpolate FoM values between the scenarios for a given year.  The factors that go into the FoM at lowest order are the area; the number density of LSS and WL samples (given the depth); the redshift distribution of LSS and WL samples (given the depth).  We will build the emulator around some fiducial values defined by the range of the existing scenarios for each year, with 3 areas and 3 depths (a 3x3 grid of values).  Below is a table with a proposal for the forecasting inputs for the areas and depths.  The area axis will be dealt with by the naive covariance rescaling, while the depth axis will require recalculation of covariances.  The values are based on the range of contiguous areas for all scenarios in the table above.
+
+
+| Year | Areas to emulate in units of 1000 deg^2 | Median i-band depths to emulate |
+| --- | --- | --- |
+| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 |
+| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 |
+| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 |
+| 10 | 10, 15, 20 | 26.3, 26.5, 26.7 |
+
+Note that some of the depths on the grid in different years are the same: 25.5 is on the grid in Y1 and Y3, 26.1 is on the grid in Y3 and Y6, and 26.3 is on the grid in Y6 and Y10.  Hence instead of 12 unique depths, there are only 9, reducing the number of covariance calculations.
+
+In order to actually forecast, we need to say how to map a given median i-band depth on this grid to a WL and LSS sample definition (number density, redshift distribution).
