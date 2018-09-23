@@ -179,4 +179,15 @@ We would like an area vs. depth FoM emulation code that enables us to interpolat
 
 Note that some of the depths on the grid in different years are the same: 25.5 is on the grid in Y1 and Y3, 26.1 is on the grid in Y3 and Y6, and 26.3 is on the grid in Y6 and Y10.  Hence instead of 12 unique depths, there are only 9, reducing the number of covariance calculations.
 
-In order to actually forecast, we need to say how to map a given median i-band depth on this grid to a WL and LSS sample definition (number density, redshift distribution).
+In order to actually forecast for a given depth, we need to say how to map a given median i-band depth on this grid to a WL and LSS sample definition (number density, redshift distribution).  The derived parameters are given in a second table below; here is the recipe for deriving them:
+
+* In the DESC SRD v1, we assumed that for a given median i-band depth, the LSS sample is defined such that its limit is 1 magnitude shallower.  In other words, we took median Y1 and Y10 depths of 25.13 and 26.35, and defined the Y1 and Y10 samples with limiting magnitudes of 24.1 and 25.3.  We will use the same  "1 magnitude shallower than median i-band depths" for the depth values in this table here.
+
+* Given that depth, we use the cumulative counts derived based on the HSC Deep survey to estimate the LSS sample number densities, just as in the DESC SRD v1.  The formula is N(<ilim) = 37.8 * 10^(0.359 * (ilim - 25)) arcmin^-2.
+
+| Year | Areas in units  | Median i-band depths | LSS sample limits | LSS number density |
+| --- | of 1000 deg^2| --- | --- | --- |
+| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 | 23.9, 24.2, 24.5 | 15, 20, 25 |
+| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 | 24.5, 24.8, 25.1 | 25, 32, 41 |
+| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 |
+| 10 | 10, 15, 20 | 26.3, 26.5, 26.7 | 25.3, 25.5, 25.7 | 48, 57, 67 |
