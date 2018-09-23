@@ -183,11 +183,13 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 
 * In the DESC SRD v1, we assumed that for a given median i-band depth, the LSS sample is defined such that its limit is 1 magnitude shallower.  In other words, we took median Y1 and Y10 depths of 25.13 and 26.35, and defined the Y1 and Y10 samples with limiting magnitudes of 24.1 and 25.3.  We will use the same  "1 magnitude shallower than median i-band depths" for the depth values in this table here.
 
-* Given that depth, we use the cumulative counts derived based on the HSC Deep survey to estimate the LSS sample number densities, just as in the DESC SRD v1.  The formula is N(<ilim) = 37.8 * 10^(0.359 * (ilim - 25)) arcmin^-2.
+* Given that depth, we use the cumulative counts derived based on the HSC Deep survey to estimate the LSS sample number densities, just as in the DESC SRD v1.  The formula is N(<ilim) = 37.8 * 10^(0.359 * (ilim - 25)) arcmin^-2.  In some cases, particularly for Y10, this assumes we can go beyond the nominal gold sample depth.  We will have to decide if we think that is justified (i.e., that we'll be able to understand the N(z) sufficiently based on cross-correlation analysis).  If we decide this is not safe, then it would simply mean discarding results for the two deeper points on our grid and reverting to the shallowest strategy with LSS sample limit of 25.3 in Y10.
 
-| Year | Areas (1000 deg^2) | Median i-band depths  | LSS sample limits | LSS nbar (arcmin^-2)  |
-| --- | --- | --- | --- | --- |
-| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 | 23.9, 24.2, 24.5 | 15, 20, 25 |
-| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 | 24.5, 24.8, 25.1 | 25, 32, 41 |
-| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 |
-| 10 | 10, 15, 20 | 26.3, 26.5, 26.7 | 25.3, 25.5, 25.7 | 48, 57, 67 |
+* Using the same approach for estimating the overall N(z) for the LSS sample as in the DESC SRD, we use a form N(z) propto z^2 Exp[-(z/z0)^alpha], with free parameters z0 and alpha.  I did this estimation for all values of LSS sample limits, and found that z0 and alpha followed second-order polynomials in ilim: z0 = 0.00627*(ilim-25)^2 + 0.0188*(ilim-25) + 0.272, and alpha = 0.0125*(ilim-25)^2 - 0.025*(ilim-25) + 0.909.  The values on the grid of ilim values are given in the table below.  Within a given year, the evolution of <z> on the grid of depths is mild.  For example, for Y10, <z> goes from 1.08 to 1.13, while the overall normalization of the density goes from 48/arcmin^2 to 67/arcmin^2.
+
+| Year | Areas (1000 deg^2) | Median i-band depths  | LSS sample limits ilim | N(<ilim) (arcmin^-2) | z0 | alpha  |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 | 23.9, 24.2, 24.5 | 15, 20, 25 | 0.259, 0.261, 0.264 | 0.952, 0.937,  0.925 |
+| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 | 24.5, 24.8, 25.1 | 25, 32, 41 | 0.264, 0.268, 0.274 | 0.925, 0.915, 0.907 |
+| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 | 0.270, 0.274, 0.278 | 0.912, 0.907, 0.903 |
+| 10 | 10, 15, 20 | 26.3, 26.5, 26.7 | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 |
