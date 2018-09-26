@@ -1,1 +1,78 @@
 \section{Dark Matter}
+\subsubsection{Microlensing: search for intermediate-mass Galactic black holes}
+\emph{Authors: Marc Moniez}
+    \begin{itemize}
+    \item Introduction
+    
+    The gravitational microlensing effect is the temporary magnification of a source
+when a massive compact object passes close enough to its line of sight.
+A review of the microlensing formalism can be found in \cite{j2006} and \cite{Rahvar_2015}.
+Assuming a single point-like lens of mass $M$ located at distance $D_L$ is deflecting the
+light from a single point-like source located at distance $D_S$, the magnification $A(t)$
+of the source luminosity as a function of time $t$ is given by \cite{Paczynski_1986} :
+%\cite{Schneider}:
+\begin{equation}
+\label{magnification}
+A(t)=\frac{u(t)^2+2}{u(t)\sqrt{u(t)^2+4}}\ ,
+\end{equation}
+where $u(t)$ is the distance of the lensing object to the undeflected line of sight, divided by
+the Einstein radius $R_{\mathrm{E}}$ :
+%\begin{eqnarray}
+%R_{\mathrm{E}} &=& \sqrt{\frac{4GM}{c^2}D_S x(1-x)} \\
+%&\simeq& 4.54\ \mathrm{AU}.\left[\frac{M}{\Msol}\right]^{\frac{1}{2}}
+%\left[\frac{D_S}{10 kpc}\right]^{\frac{1}{2}}
+%\frac{\left[x(1-x)\right]^{\frac{1}{2}}}{0.5}, \nonumber
+%\end{eqnarray}
+\begin{equation}
+R_{\mathrm{E}}\!\! =\!\! \sqrt{\frac{4GM}{c^2}D_S x(1-x)}
+\simeq\! 4.54\ \mathrm{AU}.\left[\frac{M}{M_\odot}\right]^{\frac{1}{2}}\!
+\left[\frac{D_S}{10 kpc}\right]^{\frac{1}{2}}\!\!
+\frac{\left[x(1-x)\right]^{\frac{1}{2}}}{0.5}, \nonumber
+\end{equation}
+$G$ is the Newtonian gravitational constant, and $x = D_L/D_S$.
+Assuming a lens moving at a constant relative transverse
+velocity $v_T$, reaching its minimum
+distance $u_0$ (impact parameter) to the undeflected line of sight
+at time $t_0$, $u(t)$ is given by $u(t)=\sqrt{u_0^2+(t-t_0)^2/t_{\mathrm{E}}^2}$,
+%\begin{equation}
+%\label{impact}
+%u(t)=\sqrt{u_0^2+\left( \frac{t-t_0}{t_{\mathrm{E}}}\right)^2},
+%\end{equation}
+where $t_{\mathrm{E}}=R_{\mathrm{E}} /v_T$ is the lensing timescale:
+\begin{eqnarray}
+t_{\mathrm{E}} \sim
+79\ \mathrm{days} \times %\\
+\left[\frac{v_T}{100\, km/s}\right]^{-1}
+\left[\frac{M}{M_\odot}\right]^{\frac{1}{2}}
+\left[\frac{D_S}{10\, kpc}\right]^{\frac{1}{2}}
+\frac{[x(1-x)]^{\frac{1}{2}}}{0.5}\; . %\nonumber
+\end{eqnarray}
+The so-called simple microlensing effect (point-like source and lens
+with rectilinear motions) has the following characteristic
+features: 
+Given the low probability of the alignment,
+the event should be singular in the history of the source
+(as well as of the deflector);
+the magnification, independent of the color,
+is a simple function of time
+depending only on ($u_0, t_0, t_{\mathrm{E}}$),
+with a symmetrical shape;
+as the source and the deflector are independent,
+the prior distribution of the events' impact parameters must be uniform;
+all stars at the same given distance have the same probability to be lensed;
+therefore the sample of lensed stars should be representative
+of the monitored population at that distance, particularly with respect to
+the observed color and magnitude distributions.
+
+    \item Search for long-timescale events
+    
+        The past and present microlensing surveys all suffered from a drastic decline of the
+detection efficiency for events with durations $t_{\mathrm{E}}$ larger than a few years, which are expected from massive black hole lenses ($M>10.M_\odot$). This is the reason why the published limits on the contribution of compact objects to the Galactic dark matter are not constraining beyond this mass. With 10 years of continuous observations, the light-curves measured by LSST will enable us to reach the sensitivy either to detect black holes up to $1000.M_\odot$ and measure their Galactic density, or to exclude their contribution to a significant fraction of the Galactic hidden matter.
+The main condition to succeed in this task is to ensure a time-sampling that spans the entire LSST survey duration and avoids very long gaps within the light-curves (apart the unavoidable inter-seasonal gaps). The final efficiency to long timescale events will not be sensitive to the details of the cadencing, as long as gaps longer the half a year are avoided.
+
+Synergies with the past and present databases have also to be seriously considered as the best way to confirm or not microlensing candidates.
+
+    \item Search for short-timescale events
+    
+    The previous conclusion does not apply when searching for shorter timescale events (few days to few months), since a sparse sampling makes such research inefficient. Nevertheless, if the objective is to perform optical depth measurements, then a non uniform, variable (adaptative) sampling should be appropriate to probe all timescales. But the search for short timescale events will only be efficient during a small fraction of the LSST schedule, and a systematic harvest --as liked by the planet hunters-- doesn't seem practicable with LSST alone. The ultimate efficiency in this case should be studied in collaboration with followup setups triggered by the LSST alert system.
+    \end{itemize}  
