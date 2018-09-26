@@ -198,7 +198,7 @@ In order to actually forecast for a given depth, we need to say how to map a giv
     * The neff (normalization only) is 11.2, 17.7, 23.2, 28.0/arcmin^2.  This is best fit by a quadratic formula (it's clearly not linear in depth): 4.33*(idepth-25)^2 + 7.03*(idepth-25) + 10.49
     * The z0 values are 0.191, 0.185, 0.178, 0.176.  This is reasonably linear: -0.0125*(idepth-25) + 0.193.
     * The alpha values are 0.870, 0.826, 0.798, 0.785.  This is reasonably linear: -0.069*(idepth-25) + 0.876.
-    * The resulting mean redshifts are 0.86, 0.95, 1.0, 1.04
+    * The resulting redshift distributions for the simulated depths are shown [here](https://github.com/LSSTDESC/ObsStrat/blob/static/static/all_years_neffz.png), while the variation between Y1 redshift distributions for different depths is illustrated [here](https://github.com/LSSTDESC/ObsStrat/blob/static/static/y1_neffz.png).
 
 * The values in the table below are based on these formulae for neff, z0, and alpha based on the four simulations.
 
