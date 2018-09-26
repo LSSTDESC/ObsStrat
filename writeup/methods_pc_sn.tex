@@ -7,7 +7,7 @@ where $N(r,z_{cosmo})$ is the number of pairs of SNIa separated by a comoving di
 at a cosmological redshift of $z_{\rm{cosmo}},$ and $\sigma_{v_{\rm{los}}}$ is the uncertanty in the
 measurement of the line of sight velocity of SNIa. Thus, estimating the signal to noise ratio depends on the size of both of these quantities $N(r, z_{cosmo})$ and $\sigma_{v_{\rm{los}}}.$ The former depends on the number of such SNIa pairs in the universe, and  survey parameters that determine the number of detected SNIa pairs. The second quantity is dependent on the uncertainty of the measured distance modulus of individual SNIa, which for low redshift supernovae of interest is largely a combination of the intrinsic dispersion known to be $\sim \mathcal{O}(0.1)$ mag, and an uncertainty due to the fitting of light curves. In what follows, we describe how we determine these quantities for different cadences. 
 
-Firs, we estimate the number of pairs of detected SNIa at a given comoving separation in redshift bins. To do so, we need a realization of SNIa positions and velocities in the universe that are consistent with the underlying correlations in large scale structure. To obtain these correlations, we start from an extra-galactic catalog based on large scale structure simulations. We add SNIa in the galaxies of the simulated extra-galactic catalog using a prescription based on some observed relationships of the SNIa - host galaxy connection. The SNIa-host galaxy connection is an area of active research from large SNIa surveys; consequently all the host galaxy properties observed are not found in the extra-galactic catalogs we can use. Consequently, we start with a simple realization prescription based on known aspects of the connection and easily observed properties of SNIa. This preserves two gross properties of SNIa distributions: the volumetric abundance rate as a function of redshift and the fact that SNIa are more abundant in galaxies with larger stellar mass. As a result of this work, we obtain a catalog of SNIa over a sky area of $A_{cat}.$ In Fig.~\ref{fig:catalog_area}, we show the region of the sky in which we have these supernovae. In Table.~\ref{fig:num_pairs_cat}, we show the number of pairs of SNIa at separations of $r $ Mpc in the lowest redshift bin of $z < 0.1.$
+Firs, we estimate the number of pairs of detected SNIa at a given comoving separation in redshift bins. To do so, we need a realization of SNIa positions and velocities in the universe that are consistent with the underlying correlations in large scale structure. To obtain these correlations, we start from an extra-galactic catalog based on large scale structure simulations. We add SNIa in the galaxies of the simulated extra-galactic catalog using a prescription based on some observed relationships of the SNIa - host galaxy connection. The SNIa-host galaxy connection is an area of active research from large SNIa surveys; consequently all the host galaxy properties observed are not found in the extra-galactic catalogs we can use. Consequently, we start with a simple realization prescription based on known aspects of the connection and easily observed properties of SNIa. This preserves two gross properties of SNIa distributions: the volumetric abundance rate as a function of redshift and the fact that SNIa are more abundant in galaxies with larger stellar mass. As a result of this work, we obtain a catalog of SNIa over a sky area of $A_{cat}.$ In Fig.~\ref{fig:catalog_area}, we show the region of the sky in which we have these supernovae. In Table.~\ref{tab:numpairscat}, we show the number of pairs of SNIa at separations of $r $ Mpc in the lowest redshift bin of $z < 0.1.$
 
 \begin{figure}
     \begin{center}
@@ -18,14 +18,7 @@ Firs, we estimate the number of pairs of detected SNIa at a given comoving separ
     \label{fig:catalog_area}
 \end{figure}
 
-\begin{figure}
-    \begin{center}
-        %\scalebox{1.}
-        {\includegraphics[width=0.4\textwidth]{figures/catalog_area}}
-        \caption{blah}
-    \end{center}
-    \label{tab:sep_pairs}
-\end{figure}
+\input{pairs}
 \begin{figure}
     \begin{center}
         %\scalebox{1.}
@@ -46,8 +39,16 @@ Thus, the estimate for number of pairs is given by
     \hat{N}_{pairs} = \left( A_{survey} / A_{catalog} \right)\hat{\epsilon}^2 \times N_{pairs}^{catalog}
 \end{equation}
 where the estimate $\hat{\epsilon}$ comes from the ratio $N_{det}/ N_{simulated}$ in SNANA. Thus if we were to get perfect light curves with lots of well observed points, as might be obtained if all low z SNI are followed up photometrically with a different telescoper, then the appropriate metric is $m_{Follo} \propto A_{survey} \times \epsilon^2$, while if LSST is the only photometric instrument, the appropriate metric is
-$m_{LSST} \propto A_{survey} \epsilon^2 /(1.0 + \left(\sigma_{lc}/0.1\right)^2)^{1/2}$
+$m_{LSST} \propto A_{survey} \epsilon^2 /(1.0 + \left(\sigma_{lc}/0.1\right)^2)^{1/2}$. We calculate these metrics in Tab.~\ref{tab:cadence_metrics} and show these in Fig.~\ref{fig:cadence_metrics}
 \input{cadenceTable}
+\begin{figure}
+    \begin{center}
+        %\scalebox{1.}
+        {\includegraphics[width=0.4\textwidth]{figures/metrics}}
+        \caption{Fig.~Metrics for the strategies provided both in the case where follow-up with some other photometric telescope will characterize the light curves perfectly, and where only LSST photometry will be used}
+    \end{center}
+    \label{fig:catalog_metrics}
+\end{figure}
 %Our prescription reproduces the observed volumentric abundances of SNIa as observed in un-targetted rolling searches of SNIa in previous surveys. It should be noted that no extra-galactic catalog is large enough to cover the LSST sky area. Hence, we use scaling relations to go from a list of all of the SNIa realized in our presciption over the catalog light cone volume to the detected number of pairs in the LSST sky using different observing strategies. We describe the current state of these scaling relations and our approximations for this estimate. 
 
 %Within the area of the galaxy catalog, we can count the number of SNIa pairs exploding throughout the survey separated a particular distance. We call this number $N_{pair}^{tV}$. Due to the survey strategy, we assume that of the N SNIa exploding through the survey period within a certain volume, we will only see $N_{det} = \epsilon N$ of them. Clearly, $\epsilon$ might be a function of SNIa properties, but we simply assume a flat efficiency of detection here. To count the number of pairs, we iterate over the detected SN and for each of them construct a spherical shell of radius $r Mpc$ and thickness $dr$. All SNIa that lie on this shell form a pair with the SN we are iterating over. Thus, the total number of pairs in a large enough volume where edge effects may be neglected is $2\times \pi r^2 dr \rho_{det} N_{det},$ where $N_{det}$ is the number of detected SNIa, $\rho_{det} = \epsilon N / V$ is the number density of SNIa over the survey period in this volume $V$
