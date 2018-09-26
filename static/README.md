@@ -195,7 +195,7 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 
 * Unfortunately, when analyzing to get the effective neff(z) for Y3 and Y6, I discovered a bug in the Y1 and Y10 neff(z) from the DESC SRD (!).  I will open an issue there to illustrate the impact of this bug. The bug is such that the overall normalization of neff is not affected, with the impact being primarily on the redshift distribution. I have now self-consistently re-simulated and calculated everything for Y1, Y3, Y6, and Y10.  The new results are as follows:
     * The four simulated depths are 25.1, 25.7, 26.1, and 26.35.
-    * The neff (normalization only) is 11.2, 17.7, 23.2, 28.0/arcmin^2.  This is best fit by a quadratic formula (it's clearly not linear in depth): 4.33*(idepth-25)**2 + 7.03*(idepth-25) + 10.49
+    * The neff (normalization only) is 11.2, 17.7, 23.2, 28.0/arcmin^2.  This is best fit by a quadratic formula (it's clearly not linear in depth): 4.33*(idepth-25)^2 + 7.03*(idepth-25) + 10.49
     * The z0 values are 0.191, 0.185, 0.178, 0.176.  This is reasonably linear: -0.0125*(idepth-25) + 0.193.
     * The alpha values are 0.870, 0.826, 0.798, 0.785.  This is reasonably linear: -0.069*(idepth-25) + 0.876.
     * The resulting mean redshifts are 0.86, 0.95, 1.0, 1.04
