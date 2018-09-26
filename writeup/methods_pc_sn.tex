@@ -14,8 +14,8 @@ Firs, we estimate the number of pairs of detected SNIa at a given comoving separ
         %\scalebox{1.}
         {\includegraphics[width=0.4\textwidth]{figures/catalog_area}}
         \caption{Area of the sky covered by the extra galactic catalog used (DC2)}
+        \label{fig:catalog_area}
     \end{center}
-    \label{fig:catalog_area}
 \end{figure}
 
 \input{pairs}
@@ -23,31 +23,39 @@ Firs, we estimate the number of pairs of detected SNIa at a given comoving separ
     \begin{center}
         %\scalebox{1.}
         {\includegraphics[width=0.4\textwidth]{figures/NumberPairsatDistance_z0p05}}
-        \caption{blah}
+        \caption{Number of pairs of SNIa in the extra galactic catalog }
+         \label{fig:num_pairs_cat}
     \end{center}
-    \label{fig:num_pairs_cat}
 \end{figure}
 We have not run simulated observations of these SNIa for this quick estimate. Instead, we parametrize the system by a median efficiency of detection $\epsilon = N_{det} / N_{sim} $ from other simulations being used in the cadence studies and a footprint area $A_{survey}$ covered by the particular observing strategy. For our purposes, we choose the footprint area to be the area of the sky where the observing strategy has at least $500$ visits over ten years, because this is the region over which the SNANA simulations run.
-Therefore, we work out how the number of detected pairs scale with $A_{survey}$ and $\epsilon$ and use this information to correct the theoretical values in $N_{pairs}$ counted in the extra-galactic catalog SN. We know that the number of SNIa scales with volume in the rest frame of the SN, and thus the numbers of both detected and simulated SN are proportional to the survey area. The number of pairs of SNIa separated by a distance $r$ Mpc can be found by iterating through the SNIa ($\sim N_{SN}$), and finding the number of SNIa lying in a shell of radius $r$ Mpc with a thichness $dr$ Mpc around it, and dividing by two to avoid double counting. Using the number density of detected SN $n^{det}_{SN} \equiv N_{det}/Vol = \epsilon N_{SN}/Vol = \epsilon n_{SN},$ where $n_{SN}$ is the number density of the SNIa independent of survey parameters. We can write the number of pairs of detected SNIa with separation $r$ Mpc as:
-
-\begin{equation}
-    N_{pairs} \propto N_{det} \times {n_{det}} \propto A_{survey} \epsilon^2 {n_{SN}}
-\end{equation}
-
+Therefore, we work out how the number of detected pairs scale with $A_{survey}$ and $\epsilon$ and use this information to correct the theoretical values in $N_{pairs}$ counted in the extra-galactic catalog SN. We know that the number of SNIa scales with volume in the rest frame of the SN, and thus the numbers of both detected and simulated SN are proportional to the survey area. The number of pairs of SNIa separated by a distance $r$ Mpc can be found by iterating through the SNIa ($\sim N_{SN}$), and finding the number of SNIa lying in a shell of radius $r$ Mpc with a thichness $dr$ Mpc around it, and dividing by two to avoid double counting. Using the number density of detected SN $n^{det}_{SN} \equiv N_{det}/Vol = \epsilon N_{SN}/Vol = \epsilon n_{SN},$ where $n_{SN}$ is the number density of the SNIa independent of survey parameters. We can write the number of pairs of detected SNIa with separation $r$ Mpc as 
+%\begin{equation}
+    $$
+    N_{pairs} \propto N_{det} \times {n_{det}} \propto A_{survey} \epsilon^2 {n_{SN}}.
+    $$
+%\end{equation}
 Thus, the estimate for number of pairs is given by
-\begin{equation}
+%\begin{equation}
+$$
     \hat{N}_{pairs} = \left( A_{survey} / A_{catalog} \right)\hat{\epsilon}^2 \times N_{pairs}^{catalog}
+    $$
+%\end{equation}
+where the estimate $\hat{\epsilon}$ comes from the ratio $N_{det}/ N_{simulated}$ in SNANA. Thus if we were to get perfect light curves with lots of well observed points, as might be obtained if all low z SNI are followed up photometrically with a different telescoper, then the appropriate metric is 
+\begin{equation}
+    m_{Follo} \propto A_{survey} \times \epsilon^2,
 \end{equation}
-where the estimate $\hat{\epsilon}$ comes from the ratio $N_{det}/ N_{simulated}$ in SNANA. Thus if we were to get perfect light curves with lots of well observed points, as might be obtained if all low z SNI are followed up photometrically with a different telescoper, then the appropriate metric is $m_{Follo} \propto A_{survey} \times \epsilon^2$, while if LSST is the only photometric instrument, the appropriate metric is
-$m_{LSST} \propto A_{survey} \epsilon^2 /(1.0 + \left(\sigma_{lc}/0.1\right)^2)^{1/2}$. We calculate these metrics in Tab.~\ref{tab:cadence_metrics} and show these in Fig.~\ref{fig:cadence_metrics}
+while if LSST is the only photometric instrument, the appropriate metric is
+\begin{equation}
+    m_{LSST} \propto A_{survey} \epsilon^2 /(1.0 + \left(\sigma_{lc}/0.1\right)^2)^{1/2}
+\end{equation}. We calculate these metrics in Tab.~\ref{tab:cadence_metrics} and show these in Fig.~\ref{fig:cadence_metrics}
 \input{cadenceTable}
 \begin{figure}
     \begin{center}
         %\scalebox{1.}
-        {\includegraphics[width=0.4\textwidth]{figures/metrics}}
+        \includegraphics[width=0.4\textwidth]{figures/metrics}
         \caption{Fig.~Metrics for the strategies provided both in the case where follow-up with some other photometric telescope will characterize the light curves perfectly, and where only LSST photometry will be used}
+    \label{fig:cadence_metrics}
     \end{center}
-    \label{fig:catalog_metrics}
 \end{figure}
 %Our prescription reproduces the observed volumentric abundances of SNIa as observed in un-targetted rolling searches of SNIa in previous surveys. It should be noted that no extra-galactic catalog is large enough to cover the LSST sky area. Hence, we use scaling relations to go from a list of all of the SNIa realized in our presciption over the catalog light cone volume to the detected number of pairs in the LSST sky using different observing strategies. We describe the current state of these scaling relations and our approximations for this estimate. 
 
