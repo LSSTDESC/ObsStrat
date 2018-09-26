@@ -12,11 +12,22 @@
 
 
 \subsection{Peculiar Velocities with SNe~Ia}
-Peculiar velocities provide a measure of $f\sigma\_8$, which in turn probes gravity.  As precise distance indicators Type~Ia supernovae (SNe~Ia)
+Peculiar velocities provide a measure of $f\sigma_8$, which in turn probes gravity.  As precise distance indicators Type~Ia supernovae (SNe~Ia)
 can provide precise peculiar velocities of their host galaxies \citep{2006PhRvD..73l3526H,2011ApJ...741...67D}.
 
-\citet{2017ApJ...847..128H} calculated the  expected precision of $f\sigma\_8$ using LSST-discovered SNe~Ia.
-In the sample variance limit, the variance in $f\sigma\_8$ is inversely proportional to the survey solid-angle $\Omega$, whereas
+\citet{2017ApJ...847..128H} calculated the  expected precision of $f\sigma_8$ using LSST-discovered SNe~Ia.
+The Fisher information matrix of a random Gaussian field with mean zero and covariance $C(k)$ parameterized by $\lambda$ is
+\begin{equation}
+F_{ij} = \frac{V}{2}\int \frac{d^3k}{(2\pi)^3} \text{Tr}\left[ C^{-1} \frac{\partial C}{\partial \lambda_i} C^{-1}
+\frac{\partial C}{\partial \lambda_j} \right].
+\end{equation}
+The covariance
+\begin{equation}
+C = P_{vv}(k) + \frac{\sigma^2}{n}
+\end{equation}
+has contributions from the power spectrum, noise in the velocity measurement, and the density of velocity probes.
+In the sample variance limit for a sample with fixed depth, the variance in $f\sigma_8$ (and other $\lambda$ parameters)
+is thus inversely proportional to the survey solid-angle $\Omega$, whereas
 in the shot-noise limit the variance is inversely proportional to $\Omega n^2 \propto N^2/\Omega$, where $n$ is the number density,
 and $N$ is the total number of supernovae.  
 
