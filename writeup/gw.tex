@@ -18,7 +18,7 @@ With the event of last summer being the only known observation of a kilonova it 
     \hline
     $\mathrm{m_{ej}}$ & $[0.01, 0.2]$ & $\mathrm{M_{\bigodot}}$ \\
     \hline
-    $\mathrm{v_{ej}}$ & $[0.01, \, 0.5 (\matrhm{m_{ej}}/0.01)^{-\mathrm{log}_{20}(2)}]$ & c
+    $\mathrm{v_{ej}}$ & $[0.01, \, 0.5 (\mathrm{m_{ej}}/0.01)^{-\mathrm{log}_{20}(2)}]$ & c
   \end{tabular}
   \caption{The space of parameters that describe the population of KNe in the Rosswog semi-analytic model. This range comes from the previous exploration of the parameter space in \citep{Rosswog2016a}.}
   \label{tab: ross_params}
@@ -28,7 +28,7 @@ The space spanned by these parameters is shown in Table \ref{tab: ross_params}, 
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.7]{Rosswog_parameter_dist}
+  \includegraphics[scale=0.7]{figures/Rosswog_parameter_dist}
   \caption{The parameter space of the two continuously varying parameters which characterize the population of KNe of the Rosswog model. The intersection of the red lines shows where, as determined by \citep{Rosswog2018}, the event GW170817 falls within the parameter space for a best fit to the infrared photometric light curves.}\label{fig: ross_params}
 \end{figure}
 
@@ -96,33 +96,31 @@ The metric we have chosen for evaluation of a cadence is the number of KNe that 
   \item At minimum one observation of location within 20 days before the first $\mathrm{SNR} \geq 5$ observation.
   \item At minimum one observation of location within 20 days after the last $\mathrm{SNR} \geq 5$ observation.
 \end{itemize}
-
+
 In this context an alert is an observation that has an observed signal-to-noise ratio greater than five after template subtraction. This is simulated using the per-filter efficiency vs. true signal-to-noise ratio response function. As this function is unknown for LSST prior to operation, we have used the set of functions that were found for the DES year-one analysis given their filter-set is quite similar to LSST [R. Kessler, private communication]. With this criteria the observations are filtered and the subset of transients which pass all conditions are then labeled as detections.\par
 Given that these are the detection results for kilonovae using a single realization of the redshift distribution for each cadence, which are themselves a draw from a Poisson distribution as explained above, the uncertainty on these values, is the square root of the sample mean. For the case of one sample, this is the number of detections that are found per cadence, so the uncertainty on number of detections is the square root of the numbers of detections.\par
 \subsubsection{Results}
-The results, see Figure \ref{fig:cadence_ranking}, are a simple ranking of the cadences for each KNe based on the number of detections metric. Immediately we conclude the DES-GW model, which is based on a single event, predicts a larger number of detections than the model of Rosswog, which describes a population of events. This is at least in part to the `blue flash' as described in many papers about the discovery, which is absent from most models of KNe \citep{Villar2017b}. Additionally, as was concluded in the paper by Scolnic et. al, the majority of our detections will come from the wide-fast-deep region of the survey as opposed to the deep-drilling-fields \citep{Scolnic2017a}. The typical redshift range of detected KNe, as shown in Figure \ref{fig:typical_nz}, is between $0 \leq  z \leq 0.2$, though some detections can extend out to $z \approx 0.3$. While this varies between cadences and models, this range is quite typical between all the cadences considered. The effect of changing KNe model, which can also be seen in Figure \ref{fig:typical_nz} is that the numbers are slightly suppressed and the lack any high redshift outlier detections.\par
+The results, see Figure \ref{fig:cadence_ranking} and \ref{fig:cadence_ranking_ddf}, are a simple ranking of the cadences for each KNe based on the number of detections metric. Immediately we conclude the DES-GW model, which is based on a single event, predicts a larger number of detections than the model of Rosswog, which describes a population of events. This is at least in part to the `blue flash' as described in many papers about the discovery, which is absent from most models of KNe \citep{Villar2017b}. Additionally, as was concluded in the paper by Scolnic et. al, the majority of our detections will come from the wide-fast-deep region of the survey as opposed to the deep-drilling-fields \citep{Scolnic2017a}. The typical redshift range of detected KNe, as shown in Figure \ref{fig:typical_nz}, is between $0 \leq z \leq 0.2$, though some detections can extend out to $z \approx 0.3$. While this varies between cadences and models, this range is quite typical between all the cadences considered. The effect of changing KNe model, which can also be seen in Figure \ref{fig:typical_nz} is that the numbers are slightly suppressed and the lack any high redshift outlier detections.\par
 
 \begin{figure}[h!]
-    \centering
-    \includegraphics[scale=1.0]{both_nz_base_kraken_2026}
-    \caption{Example redshift distribution of detected KNe within the sample of all simulated KNe. This distribution is for the `unofficial' project baseline cadence \texit{kraken 2026} for the DES-GW KNe SED model with an inlay of the results for the same cadence for the Rosswog model.}
-    \label{fig:typical_nz}
+  \centering
+  \includegraphics[scale=1.0]{figures/both_nz_base_kraken_2026}
+  \caption{Example redshift distribution of detected KNe within the sample of all simulated KNe. This distribution is for the unofficial project baseline cadence \protect \textit{kraken 2026} for the DES-GW KNe SED model with an inlay of the results for the same cadence for the Rosswog model.}
+  \label{fig:typical_nz}
 \end{figure}
 
 \begin{figure}[h!]
-    \centering
-    \begin{subfigure}
-      \centering
-      \includegraphics[scale=0.79]{wfd_detection_counts_by_cadence}
-    \end{subfigure}
-    \begin{subfigure}
-      \centering
-      \includegraphics[scale=0.79]{ddf_detection_counts_by_cadence}
-    \end{subfigure}
-      \caption{Ranking of cadence strategies (top panel: WFD, bottom panel: DDF) based entirely on the number of detections found in each cadence.}
-      \label{fig:cadence_ranking}
+  \centering
+  \includegraphics[scale=0.7]{figures/wfd_detection_counts_by_cadence}
+  \caption{Ranking of cadence strategies for the WFD part of the survey for both KNe models, based entirely on the number of detections found in each cadence.}
+  \label{fig:cadence_ranking}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.7]{figures/ddf_detection_counts_by_cadence}
+  \caption{Same as the above figure but for the DDF.}
+  \label{fig:cadence_ranking_ddf}
 \end{figure}
 
 \FloatBarrier
-\bibliographystyle{apalike}
-\bibliography{PhD}
