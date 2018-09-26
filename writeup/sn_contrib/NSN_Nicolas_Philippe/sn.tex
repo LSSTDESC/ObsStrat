@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 %\documentstyle [epsf,epsfig,11pt,amssymb]{article}
 \usepackage{rotating}
+\usepackage{subfigure}
 \usepackage{lsstdesc_macros}
 \usepackage[title]{appendix}
 
@@ -452,17 +453,32 @@ therefore: 9\%, 11\%, 28\%, 18\% 26\% and 9\% ($ugrizy$ respectively).
 changed during the night.  In this regard, very different strategies
 have been implemented by the various schedulers proposed so far.  This
 is illustrated on figure \ref{fig:hourglass_plot_filter_alloc}, which
-shows the filter usage for two different observing strategies.
-\FixMe{XX} attempts to minimize the filter changes during a night and
-in fact keeps observing in the same filter over several nights.
-Conversely, the \FixMe{XX} cadence presented on the same figure
-switches for a different filter after each observing block, so that
-each revisit of the same field is performed in a different band.  As
-we will see below, this has a major impact on the effective cadence
-delivered by the survey. As of today, most \opsim cadences try to
-minize the number of filter changes, all \altsched cadences switch
-filters after each observing block, and \slair has been experimenting
-both strategies.
+shows the filter usage for strategies {\em Pontus 2002} and {\em
+  AltSched rolling}.  {\em Pontus 2002} attempts to minimize the
+filter changes during a night and in fact keeps observing in the same
+filter over several nights.  Conversely, the \altsched family of
+cadences attempt to switch for a different filter after each observing
+block, so that each revisit of the same field is performed in a
+different band.  This has a major impact on the effective cadence
+delivered by the survey. As of today, most \opsim cadences released so
+far try to minize the number of filter changes, all \altsched cadences
+switch filters after each observing block, and \slair has been
+experimenting with both strategies.
+
+\begin{figure}
+  \begin{center}
+    \subfigure[Pontus 2002]{\includegraphics[width=0.48\linewidth]{Figures/pontus_2002_hourglass.png}}
+    \subfigure[AltSched rolling]{\includegraphics[width=0.48\linewidth]{Figures/alt_sched_rolling_hourglass.png}}
+    \caption{Hourglass plots showing the filter usage for two
+      different observing strategies. Most \opsim and \slair observing
+      strategies released so far tend to minimize the number of filter
+      changes. The AltSched strategy makes sure that each field is
+      observed twice a night in different filter. This results in a
+      higher number of filter changes, but is highly beneficial for
+      the SN follow-up. }
+    \label{fig:hourglass_plot_filter_alloc}
+  \end{center}
+\end{figure}
 
 \paragraph{Visit pairs} In all cadences proposed so far (except a few experiments)
 all fields are observed twice a night, 1 to 2 hours apart, in order to
@@ -823,9 +839,7 @@ feature rolling half mask &  161705 &  248253 &  498985 &  500143 &  468829 &  4
     all in the final white paper draft, but I list them here.}
   
   \input{wfd_nsn_maps}
-  
-  
-  
+    
   \section{DDF plots}
 
   \input DD_plots_cadence.tex
