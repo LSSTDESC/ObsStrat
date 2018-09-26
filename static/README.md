@@ -188,24 +188,24 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 * Using the same approach for estimating the overall N(z) for the LSS sample as in the DESC SRD, we use a form n(z) propto z^2 Exp[-(z/z0)^alpha], with free parameters z0 and alpha.  I did this estimation for all values of LSS sample limits, and found that z0 and alpha followed second-order polynomials in ilim: z0 = 0.00627*(ilim-25)^2 + 0.0188*(ilim-25) + 0.272, and alpha = 0.0125*(ilim-25)^2 - 0.025*(ilim-25) + 0.909.  The values on the grid of ilim values are given in the table below.  Within a given year, the evolution of the mean redshift on the grid of depths is mild.  For example, for Y10, the mean redshift goes from 1.08 to 1.13, while the overall normalization of the density goes from 48/arcmin^2 to 67/arcmin^2.
 
 * For the weak lensing sample, we use the default mean site seeing and exposure time for Y1, Y3, Y6, and Y10 to get neff and (z0, alpha) parameters for four simulated scenarios, assuming use of r- and i-band data for WL with the same cuts as in the DESC SRD.  We then find a fitting formula for neff and (z0, alpha) as a function of depth based on those four simulated scenarios.  We are interpolating from just a few scenarios here because it requires making image simulations which can be kind of expensive.  For reference, the values in the DESC SRD were:
-    * Y1: neff = 10.4/arcmin^2, z0=0.13, alpha=0.78 (mean redshift: 0.85), median i-band depth 25.1
-    * Y10: neff = 26.3/arcmin^2, z0=0.11, alpha=0.68 (mean redshift: 1.05), median i-band depth 26.35
+    * Y1: neff = 10/arcmin^2, z0=0.13, alpha=0.78 (mean redshift: 0.85), median i-band depth 25.1
+    * Y10: neff = 27/arcmin^2, z0=0.11, alpha=0.68 (mean redshift: 1.05), median i-band depth 26.35
 
-* When we simulate new scenarios for Y3 and Y6, we use the usual sqrt(t) scaling to assume they correspond to median i-band depths of 25.7 and 26.1, respectively.  (The Y10 vs. Y1 depths above conform to this sqrt(t) scaling as well.)  Simulation results:
-    * Y3: neff = 17.7/arcmin^2
-    * Y6: neff = 23.2/arcmin^2
-    * Together with the Y1 and Y10 results from above, the neff can be fit very well with a line: neff(idepth) = 12.8 * (idepth-25) + 9.  The results shown in the table use this.
+* When we simulate new scenarios for Y3 and Y6, we use the usual sqrt(t) scaling to assume they correspond to median i-band depths of 25.7 and 26.1, respectively.  (The Y10 vs. Y1 depths above conform to this sqrt(t) scaling as well.)
 
-* Unfortunately, when analyzing to get the effective neff(z) for Y3 and Y6, I discovered a bug in the Y1 and Y10 neff(z) from the DESC SRD (!).  The overall normalization of neff was not affected, just the redshift distribution. For now I have results for Y3 and Y6 without bugs, since I identified and fixed the bug when producing them.  They cannot be combined with the buggy Y1 and Y10 results in a sensible way, unfortunately.  Later this week I should self-consistently recalculate them all (Y1 and Y10 as well, which I had avoided simulating due to limited computing resources) and record this bug in the Requirements repo.  However, for now I think we should simply take the DESC SRD v1 Y1 and Y10 alpha and z0 with a linear fit to interpolate to intermediate values:
-    * alpha = 0.788 - 0.08*(idepth-25)
-    * z0 = 0.132 - 0.016*(idepth-25)
+* Unfortunately, when analyzing to get the effective neff(z) for Y3 and Y6, I discovered a bug in the Y1 and Y10 neff(z) from the DESC SRD (!).  I will open an issue there to illustrate the impact of this bug. The bug is such that the overall normalization of neff is not affected, with the impact being primarily on the redshift distribution. I have now self-consistently re-simulated and calculated everything for Y1, Y3, Y6, and Y10.  The new results are as follows:
+    * The four simulated depths are 25.1, 25.7, 26.1, and 26.35.
+    * The neff (normalization only) is 11.2, 17.7, 23.2, 28.0/arcmin^2.  This is best fit by a quadratic formula (it's clearly not linear in depth): 4.33*(idepth-25)**2 + 7.03*(idepth-25) + 10.49
+    * The z0 values are 0.191, 0.185, 0.178, 0.176.  This is reasonably linear: -0.0125*(idepth-25) + 0.193.
+    * The alpha values are 0.870, 0.826, 0.798, 0.785.  This is reasonably linear: -0.069*(idepth-25) + 0.876.
+    * The resulting mean redshifts are 0.86, 0.95, 1.0, 1.04
 The values in the table below are based on these formula from interpolation of Y1 and Y10 results.
 
 | Year | Areas (1000 deg^2) | Median i-band depths (idepth) | LSS sample limits (ilim) | N(<ilim) (arcmin^-2) | LSS z0 | LSS alpha  | WL neff (arcmin^-2) | WL z0 | WL  alpha |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 | 23.9, 24.2, 24.5 | 15, 20, 25 | 0.259, 0.261, 0.264 | 0.952, 0.937,  0.925 | 7.7, 11.6, 15.4 | 0.134, 0.129, 0.124 | 0.796, 0.772, 0.748 |
-| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 | 24.5, 24.8, 25.1 | 25, 32, 41 | 0.264, 0.268, 0.274 | 0.925, 0.915, 0.907 | 15.4, 19.2, 23.1 | 0.124, 0.119, 0.114 | 0.748, 0.724, 0.7 |
-| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 | 0.270, 0.274, 0.278 | 0.912, 0.907, 0.903 | 20.5, 23.1, 25.6 | 0.118, 0.114, 0.111 | 0.716, 0.7, 0.684 |
-| 10 | 10, 15, 20 | 26.3, 26.5, 26.7  | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 | 25.6, 28.2, 30.8 | 0.111, 0.108, 0.105 | 0.684, 0.668, 0.652 |
+| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 | 23.9, 24.2, 24.5 | 15, 20, 25 | 0.259, 0.261, 0.264 | 0.952, 0.937,  0.925 | 9.8, 12.1, 15.1 | 0.194, 0.190, 0.186 | 0.883, 0.862, 0.841 |
+| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 | 24.5, 24.8, 25.1 | 25, 32, 41 | 0.264, 0.268, 0.274 | 0.925, 0.915, 0.907 | 15.1, 18.9, 23.5 | 0.186, 0.183, 0.179 | 0.841, 0.821, 0.800 |
+| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 | 0.270, 0.274, 0.278 | 0.912, 0.907, 0.903 | 20.3, 23.5, 26.9 | 0.181, 0.179, 0.176 | 0.814, 0.800, 0.786 |
+| 10 | 10, 15, 20 | 26.3, 26.5, 26.7  | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 | 26.9, 30.8, 35.0 | 0.176, 0.174, 0.171 | 0.786, 0.772, 0.759 |
 
-* Effects not included: variations in typical seeing, variations in photo-z uncertainty (their  values and the priors on them).
+* Effects not included: variations in typical seeing, variations in photo-z uncertainty (their values and the priors on them).
