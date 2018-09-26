@@ -199,7 +199,8 @@ In order to actually forecast for a given depth, we need to say how to map a giv
     * The z0 values are 0.191, 0.185, 0.178, 0.176.  This is reasonably linear: -0.0125*(idepth-25) + 0.193.
     * The alpha values are 0.870, 0.826, 0.798, 0.785.  This is reasonably linear: -0.069*(idepth-25) + 0.876.
     * The resulting mean redshifts are 0.86, 0.95, 1.0, 1.04
-The values in the table below are based on these formula from interpolation of Y1 and Y10 results.
+
+* The values in the table below are based on these formulae for neff, z0, and alpha based on the four simulations.
 
 | Year | Areas (1000 deg^2) | Median i-band depths (idepth) | LSS sample limits (ilim) | N(<ilim) (arcmin^-2) | LSS z0 | LSS alpha  | WL neff (arcmin^-2) | WL z0 | WL  alpha |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
