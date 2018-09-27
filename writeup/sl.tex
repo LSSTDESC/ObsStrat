@@ -5,7 +5,7 @@
 
 
 \section{Strong Lensing}
-\textit{Authors: Simon Huber\footnote{shuber@mpa-garching.mpg.de}, Sherry H.~Suyu\footnote{suyu@mpa-garching.mpg.de}, Tanja Petrusevska\footnote{tanja.petrushevska@ung.si} }
+\textit{Authors: Simon Huber\footnote{shuber@mpa-garching.mpg.de}, Sherry H.~Suyu\footnote{suyu@mpa-garching.mpg.de}, Tanja Petrushevska\footnote{tanja.petrushevska@ung.si} }
 
 \
 
@@ -64,17 +64,16 @@ high numbers.
 
 The goal of this section is to evaluate different
 cadences for LSNe time-delay measurements. For this purpose we have investigated
-14 different observing strategies: 11 from the call for whitepapers
+18 different observing strategies: 15 from the call for whitepapers
 (baseline2018a, kraken\_2026, colossus\_2665, pontus\_2002,
 colossus\_2664, colossus\_2667, pontus\_2489, kraken\_2035,
 mothra\_2045, pontus\_2502,
-kraken\_2036)\footnote{\url{http://astro-lsst-01.astro.washington.edu:8080/}},
+kraken\_2036, kraken\_2042, kraken\_2044, mothra\_2049, nexus\_2097)\footnote{\url{http://astro-lsst-01.astro.washington.edu:8080/}},
 pontus\_2506 which is a cadence from Tiago Ribeiro doing the revisit
 after 30 minutes in different filters, and alt\_sched and
 alt\_sched\_rolling from Daniel Rothchild and collaborators
-\footnote{\url{http://altsched.rothchild.me:8080/}}. In the future, we
-will also investigate the new cadences kraken\_2042, kraken\_2044,
-mothra\_2049 and nexus\_2097. To simulate observations randomly, we have used 202
+\footnote{\url{http://altsched.rothchild.me:8080/}}. 
+To simulate observations randomly, we have used 202
 mock LSNe Ia from the OM 10 catalog \citep{Oguri:2010},
 and produced the light curves for the mock SNe images with
 the spherically symmetric SN Ia W7 model \citep{1984:Nomoto}
@@ -93,7 +92,7 @@ work will be presented in Huber et al. (in preparation).
 The structure of this subsection is organized as follows. In
 \ref{sec:simulation of mock data} we describe how we simulate and
 evaluate the mock data and in \ref{sec:results} we present our results
-where we have quantified 14 cadences for LSNe Ia.
+where we have quantified 18 cadences for LSNe Ia.
 
 \subsubsection{Simulating and evaluating mock data}
 \label{sec:simulation of mock data}
@@ -224,7 +223,7 @@ per pair of images.
 
 \subsubsection{Results}
 \label{sec:results}
-In this section we summarize the results and quantify the 14
+In this section we summarize the results and quantify the 18
 investigated cadences. Given that $H_0 \propto \frac{1}{t}$, where $t$
 is the time delay between two images, we aim for accuracy
 ($\tau_\mathrm{d,50}$) smaller than 1 percent and precision ($\delta$)
@@ -279,7 +278,7 @@ Table \ref{tab: fraction of systems} has to be combined with the total number of
 N_\mathrm{LSNe Ia, cad} = N_\mathrm{LSNe Ia, OM 10} \frac{\Omega_\mathrm{cad}}{\Omega_\mathrm{OM 10}} \frac{\bar{t}_\mathrm{eff,cad}}{t_\mathrm{eff, OM 10}}
 \end{align}
 %
-where $N_\mathrm{LSNe Ia, OM 10} = 45.7$, $\Omega_\mathrm{OM 10} = \SI{20000}{\square\deg}$ and $t_\mathrm{eff, OM 10}=\SI{2.5}{\year}$ from \cite{Oguri:2010}. $\Omega_\mathrm{cad}$ is the survey area for a given cadence. We assume $\Omega_\mathrm{pontus\_2002}=\SI{24700}{\square\deg}$ and for the other strategies $\Omega_\mathrm{cad}=\SI{18000}{\square\deg}$. $\bar{t}_\mathrm{eff,cad}$ is the cumulative seasonal length for a given cadence, where we have averaged over all LSST fields where observations are taken. The results for the 14 cadences are shown in Table \ref{tab: total number of LSNe Ia from OM 10}. Interestingly, the order has changed substantially in comparison to Table \ref{tab: fraction of systems}. The key message from this is that for a rolling cadence many LSNe Ia will not be detected, because of the alternating observation scheme.
+where $N_\mathrm{LSNe Ia, OM 10} = 45.7$, $\Omega_\mathrm{OM 10} = \SI{20000}{\square\deg}$ and $t_\mathrm{eff, OM 10}=\SI{2.5}{\year}$ from \cite{Oguri:2010}. $\Omega_\mathrm{cad}$ is the survey area for a given cadence. We assume $\Omega_\mathrm{cad}=\SI{24700}{\square\deg}$ for pontus\_2002, kraken\_2044, mothra\_2049 and nexus\_2097, and for the other strategies $\Omega_\mathrm{cad}=\SI{18000}{\square\deg}$. $\bar{t}_\mathrm{eff,cad}$ is the cumulative seasonal length for a given cadence, where we have averaged over all LSST fields where observations are taken. The results for the investigated cadences are shown in Table \ref{tab: total number of LSNe Ia from OM 10}. Interestingly, the order has changed substantially in comparison to Table \ref{tab: fraction of systems}. The key message from this is that for a rolling cadence many LSNe Ia will not be detected, because of the alternating observation scheme.
 %
 \begin{table}
 \centering
@@ -326,35 +325,26 @@ alt\_sched\_rolling & 35.3  \\
 %
 Combining Tables \ref{tab: fraction of systems} and \ref{tab: total
   number of LSNe Ia from OM 10}, we get the total number of LSNe Ia
-with accuracy < 1 \% and precision < 5 \%, which is summarized in
+with accuracy $<$ 1 \% and precision $<$ 5 \%, which is summarized in
 Table \ref{tab: total number accuracy less 1 precision less 5
   percent}. We see that even for the best strategies we will just have
 a few systems where time-delay measurements are possible with only
 LSST data. Follow up observations are therefore necessary for
 increasing the number of LSNe Ia with delays.
 
-Our optimal cadence would deliver a high number of LSNe Ia (Table
-\ref{tab: total number of LSNe Ia from OM 10}) and additionally
-deliver as many precise/accurate delay measurements as possible just
-with LSST data (Table \ref{tab: total number accuracy less 1 precision
-  less 5 percent}). From this we define 3 categories. The first are our
+From our investigation we define 3 categories as shown in table \ref{tab: favoured strategies}. The first are our
 favoured cadences to measure time delays just with LSST data. Our
-second category are cadences which are potentially good with
-observational follow-up in addition to LSST because they give a high
-number of LSNe Ia, and we expect the additional follow-up observations
-would yield delay measurements. An investigation of all cadences
-assuming follow up is ongoing. Preliminary results in table \ref{tab: follow up and number of LSNe Ia} show that the
+second category are cadences which are good with
+observational follow-up in addition to LSST. Results in table \ref{tab: follow up and number of LSNe Ia} show that the
 numbers in Table \ref{tab: total number of LSNe Ia from OM 10}
 dominate the follow up case, which means that rolling cadences are
-disfavoured. These cadences and other cadences which yield low number
-of discovered SNe systems are summarized in the third category.
+disfavoured. The disfavoured ones are summarized in the third category.
 
-To summarize, for our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as
- a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore cadences with long cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$ and big survey areas
- $\Omega_\mathrm{cad}$ are favoured. Of the cadence strategies that we have investigated, the median inter-night gap 
+To summarize, for our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore cadences with long cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$ and big survey areas
+ $\Omega_\mathrm{cad}$ are favoured. Of the investigated cadence strategies, the median inter-night gap 
  between observations (all filters) fluctuates between
  1 and 2 days \footnote{\url{https://cadence-hackathon.readthedocs.io/en/latest/current_runs.html}} and
- therefore only plays a minor role. Disfavoured cadence strategies are mostly "rolling" ones because of their shorter cumulative seasonal lengths.
+ therefore only plays a minor role. To reduce the median inter-night gap the best option for our science case would be doing only single visits per night, because "rolling" cadences are clearly disfavoured because of their shorter cumulative seasonal lengths.
 %
 \begin{table}
 \centering
@@ -401,77 +391,103 @@ pontus\_2502 & 0.9 &0.0 \\
 \begin{tabular}{c|c|c|c}
 & doubles & quads & total fraction of systems \\
 \hline
+kraken\_2044 & 27.0 & 5.3 & 26.0 \% \\
+\hline
 pontus\_2002 & 24.9 & 3.7 & 24.0 \% \\
 \hline
 colossus\_2667 & 23.8 &4.3 & 28.0 \%  \\
 \hline
+alt\_sched & 21.3 & 3.7 & 32.0 \% \\
+\hline
+kraken\_2042 & 19.7 & 3.9 & 26.0 \% \\
+\hline
+pontus\_2489 & 20.5 & 3.1 & 24.0 \% \\
+\hline
+pontus\_2506 & 20.0 & 3.3 & 26.0 \% \\
+\hline
+kraken\_2026 & 19.2 & 3.3 & 25.0 \% \\
+\hline
 baseline2018a & 19.3 & 2.9 & 24.0 \%  \\
 \hline
+colossus\_2665 & 19.2 &2.9 & 24.0 \%  \\
+\hline
+colossus\_2664 & 18.7 &2.8 & 24.0 \%  \\
+\hline
+kraken\_2035 & 17.0 & 2.9 & 22.0 \% \\
+\hline
+mothra\_2049 & 15.3& 2.5 & 26.0 \% \\
+\hline
+nexus\_2097 & 15.5& 2.0 & 22.0 \% \\
+\hline
+pontus\_2502 & 13.4 & 1.6 & 19.0 \% \\
+\hline
+alt\_sched\_rolling & 11.7 & 2.0 & 33.0 \% \\
+\hline
 kraken\_2036 & 10.5 & 1.9 & 24.0 \% \\
+\hline
+mothra\_2045 & 10.1& 1.7 & 25.0 \% \\
+
 \end{tabular}
-\caption{This table shows the total number of LSNe Ia using LSST as a discovering machine in combination with follow-up observations in 3 filters (g,r,i) every second night. We assume follow-up observation would start 2 days after the second LSST data point in any filter exceeding the 5-$\sigma$ depth. The table on the right hand side shows the fraction of the 100 investigated systems where the time delay could be measured with accuracy better than 1 percent and precision better than 5 percent. Since the total fraction depends only slightly on the LSST cadence strategy, the numbers in columns 2 and 3 are approximately proportional to the numbers in table \ref{tab: total number of LSNe Ia from OM 10}. \todo{Simon}{include other cadence strategies*}}
+\caption{This table shows the total number of LSNe Ia using LSST as a discovering machine in combination with follow-up observations in 3 filters (g,r,i) every second night. We assume follow-up observation would start 2 days after the second LSST data point in any filter exceeding the 5-$\sigma$ depth. The table on the right hand side shows the fraction of the 100 investigated systems where the time delay could be measured with accuracy better than 1 percent and precision better than 5 percent. We see that the total fraction is very similar for most of the cadences and therefore, the numbers in columns 2 and 3 are dominated by the numbers in table \ref{tab: total number of LSNe Ia from OM 10}. Effects like the enhanced sampling are helpful as shown by comparing the rank of alt\_sched to table \ref{tab: total number of LSNe Ia from OM 10}, but overall just play a minor role.}
 \label{tab: follow up and number of LSNe Ia}
 \end{table}
 %
 \begin{table}
 \centering
 \begin{tabular}{c|c|c|c}
-& favoured with  & potentially good with obs. & disfavoured for  obs. \\
+& favoured with  & good with obs. & disfavoured for  obs. \\
 & LSST data only &  follow-up in addition to LSST & follow-up\\
-\hline
-colossus\_2667 & x & x (preferred) & \\
-\hline
-pontus\_2489 & x & x (preferred) & \\
-\hline
-pontus\_2506 & x & x \\
 \hline
 kraken\_2044 & TBD & x (preferred) & \\
 \hline
 pontus\_2002 & & x (preferred) &   \\
 \hline
+colossus\_2667 & x & x (preferred) & \\
+\hline
+alt\_sched & x  & x & \\
+\hline
 kraken\_2042 & TBD & x & \\
+\hline
+pontus\_2489 & x & x & \\
+\hline
+pontus\_2506 & x & x \\
+\hline
+kraken\_2026 & & x & \\
 \hline
 baseline2018a & & x &    \\
 \hline
 colossus\_2665 & & x &   \\
 \hline
-kraken\_2026 & & x & \\
+colossus\_2664 & & x &   \\
 \hline
 kraken\_2035 & & x &    \\
 \hline
-colossus\_2664 & & x &   \\
-\hline
-alt\_sched & x  & & x \\
+mothra\_2049 & TBD & & x  \\
 \hline
 nexus\_2097 & TBD  & & x  \\
 \hline
 pontus\_2502 &&  &x  \\
 \hline
-mothra\_2049 & TBD & & x  \\
+alt\_sched\_rolling & x & & x  \\
 \hline
 kraken\_2036 & & & x  \\
 \hline
 mothra\_2045 & & & x  \\
-\hline
-alt\_sched\_rolling & x & & x  \\
 \end{tabular}
 \caption{This table ranks 18 different cadences. The separation in
   this 3 categories (columns on the right) is done by taking results
-  from Tables \ref{tab: total number of LSNe Ia from OM 10} and
-  \ref{tab: total number accuracy less 1 precision less 5
-    percent}. Our first column contains the best strategies for
+  from Tables \ref{tab: total number accuracy less 1 precision less 5 percent} and
+  \ref{tab: follow up and number of LSNe Ia}. Our first column contains the best strategies for
   measuring time delays with only LSST data. Our second column
-  contains all strategies which are potentially good for observational
-  follow up, because they provide more than 75 LSNe Ia, and those with
-  more than 80 systems are the preferred ones. The third column
+  contains all strategies which are good for observational
+  follow up, because they provide about 20 systems or more. The preferred ones are those with more than 28 systems. The third column
   contains all disfavoured strategies in terms of follow-up
-  observation because the total number LSNe Ia is expected to be below 70. \todo{Simon}{include 4 new cadence strategies*}}
+  observation.}
 \label{tab: favoured strategies}
 \end{table}
-%
 \FloatBarrier
 \subsection{Supernovae Lensed by Galaxy Clusters}
-\textit{Contributors: Tanja Petrusevska}
+\textit{Contributors: Tanja Petrushevska}
 
 \
 
