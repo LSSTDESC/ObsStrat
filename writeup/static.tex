@@ -17,7 +17,7 @@ point, there will likely be some regrouping to address whatever systematic uncer
 identified as the tallest poles in the Y1 analysis, so the next substantive analysis updates will
 likely occur at Y3.  After this point Y6 and Y10 are somewhat arbitrary but suitably-spaced
 benchmarks.  We use the Dark Energy Task Force (DETF \todorm{cite this!}) Figure of Merit
-(FoM). \todorm{Define this if it hasn't been defined elsewhere in the writeup already.}
+(FoM). \todorm{Define the DETF FoM if it hasn't been defined elsewhere in the writeup already.}
 
 Given our adopted analyses, the following factors affect constraining power in the forecasts:
 \begin{itemize}
@@ -35,8 +35,8 @@ Given our adopted analyses, the following factors affect constraining power in t
   uncertainties due to dust reddening within the Milky Way.  These cuts are somewhat arbitrarily
   defined and could in principle be tuned for different strategies to maximize constraining power
   given the combination of depth and area factors.  The median survey depths after this cut, and
-  their standard deviation, was discussed in the LSS section.  \todorm{Once Humna's text is visible,
-    make this connection more clear/direct.}  The impact of the median survey depth is as follows:
+  their standard deviation, were discussed in the LSS section.
+  The impact of the median survey depth is as follows:
   \begin{itemize}
     \item To modify the LSS tracer sample number density, assuming that we allow it to float in some
       way that is tied to the median depth.  The redshift distribution may also change.
@@ -54,35 +54,43 @@ Given our adopted analyses, the following factors affect constraining power in t
   significant impact on the forecasts, so we neglect this in the initial forecasts.
 \end{itemize}
 
-The above considerations have informed our approach to forecasting.  In particular, we group the
-strategies based on those with similar usable areas and depths after the depth cuts described
-above.  We only carry out forecasts for those groups of strategies, defined as follows
-(\todorm{Consider turning this into a table, with FoM results and some explanation.}):
-\begin{enumerate}
-\item Y1: There are four groups of strategies: (1a) `mothra\_2045', (1b) `pontus\_2002', (1c)
-  `pontus\_2502', and (1d) everything else.  The DESC SRD Y1 baseline had a median depth of 25.13 in
-  $i$-band and an area of 12.3k~deg$^2$.  Group (1d) is quite similar to this in median depth and
-  hence in number densities and redshift distributions, but with an area that is 14\% higher.  Group
-  (1a) gives an increased depth by 0.4 magnitudes, which will substantially increase the WL and LSS
-  number counts and modify their redshift distribution, but has a usable area 45\% below group (1d).
-  Group (1b) is 0.2 magnitudes shallower than the DESC SRD Y1 baseline, but has the largest area,
-  15.5k~deg$^2$; hence we have to make the LSS and WL sample number densities 20\% and 30\% lower
-  than in the DESC SRD Y1 baseline, while keeping the redshift distribution fixed and accounting for
-  the larger area.   Group (1c) has a similar depth as (1d) but 15\% smaller area than (1d), so can
-  use the same forecasting parameters except for the area.
-\item Y3: \todorm{}
-\item Y6: \todorm{}
-\item Y10: There are three groups of strategies: (10a) `mothra\_2045', (10b) `pontus\_2002' (largest
-  area at 19.2k~deg$^2$, but shallowest and hence somewhat worse in terms of photo-z quality), and (10c)
-  everything else (typically falling within $\pm 500$~deg$^2$ of 14.5k~deg$^2$).  The DESC SRD Y10
-  baseline had a median depth of 26.35 in $i$-band and 14.3k~deg$^2$.  This is similar area to
-  (10c), but roughly 0.2 mag shallower in median depth.  Roughly speaking, as mentioned above, we
-  expect a modest change in the redshift distribution and no change in area for (10c) compared to
-  the DESC SRD Y10 baseline, but the number density could increase by $\sim$20\% for LSS and $30$\%
-  for WL.  In contrast, (10a) and (10b) are more similar in depth to the DESC SRD baseline, and
-  hence we use the same number densities and redshift distributions, but with 19\% lower and 35\%
-  higher areas than the DESC SRD baseline, respectively.
-\end{enumerate}
+The above considerations have informed our approach to forecasting.  We have developed a FoM
+emulator that takes the usable area and median depth for a given survey strategy after some cuts to
+identify the usable area for 
+WL, CL, and LSS, and returns an estimate of the FoM for that strategy with and without Stage III
+priors.  The approach to forecasting is described at
+\url{https://github.com/LSSTDESC/ObsStrat/tree/static/static#building-an-area--depth-fom-emulation-code}.
+\todorm{Translate that Markdown text into paper text.  Provide some simple formulae and a table of
+  FoM values for all strategies at Y1, Y3, Y6, and Y10 -- filling in Table~\ref{table:staticfom}.
+  Emphasize the main lessons based on the
+  emulation process, rather than the specifics for the strategies that are now available, and use
+  the table to illustrate those lessons learned.}
+
+\begin{table}[ht]
+\caption{Illustration of the WL, LSS, and CL joint FoM values for the strategies that have been
+  released so far.  \todorm{Fill in numbers; rank based on one column and explain which one/why.
+    Decide if we want to show only without Stage III or also with Stage III.}}
+\begin{tabular}{lllll}
+\label{table:staticfom}
+OpSim run & Y1 FoM & Y3 FoM & Y6 FoM & Y10 FoM \\ \hline
+mothra\_2045   &  & & & \\
+kraken\_2044   &  & & & \\
+nexus\_2097    &  & & & \\
+pontus\_2002   &  & & & \\
+kraken\_2036   &  & & & \\
+pontus\_2502   &  & & & \\
+kraken\_2035   &  & & & \\
+colossus\_2664 &  & & & \\
+kraken\_2026   &  & & & \\
+baseline2018a  &  & & & \\
+colossus\_2665 &  & & & \\
+colossus\_2667 &  & & & \\
+kraken\_2042   &  & & & \\
+pontus\_2489   &  & & & \\
+\end{tabular}
+\end{table}
+
+
 
 \todorm{Tie results to LSS, WL section results.  Boil it down to simple statements about the
   features of the strategy that matter, rather than about these particular strategies.
