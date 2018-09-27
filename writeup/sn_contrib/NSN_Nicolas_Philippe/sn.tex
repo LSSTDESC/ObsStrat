@@ -190,13 +190,13 @@ that:
 \begin{equation}
 \mathrm{SNR_{band}} = \sum_{i} 5 \times (f^{-2}_{i|5} L_i^2)^{1/2}\label{eqn:snr}
 \end{equation} 
-where $5-\sigma$ is the limiting flux of each visit $f_{i|5}$.
-This metrics is simpler in the sense that it does not require to use a
-SN light curve fitter. One just need lightcurve templates and the
+where $5-\sigma$ is the limiting flux of each visit $f_{i|5}$.  This
+metrics is simpler in the sense that it does not require to use a SN
+light curve fitter. One just need lightcurve templates and the
 limiting magnitudes of each visit -- given in the cadence
-databases. In practice, using $SNR_g > $ (for z<), and $SNR_r > $,
-$SNR_i > $ and $SNR_z > $ allows to fulfill the requirement on color
-resolution above.
+databases. In practice, using $SNR_g > 30, SNR_r > 40, SNR_i > 30$
+(for $z<0.3$), and $SNR_r > 40$, $SNR_i > 30$ and $SNR_z > 20$ for
+$z>0.3$ allows to fulfill the requirement on color resolution above.
 
 
 \subsection{SN samples}
@@ -255,7 +255,7 @@ distances.
 
 
 \subsection{Metrics}
-
+\label{sec:metrics}
 We propose to use as our primary metrics the size and depth of the
 subset of well sampled SNe.  More precisely, we estimate, for each
 cadence, the following quantities:
@@ -344,6 +344,7 @@ Parameter & Range \\
 
 
 \subsection{Wide Fast Deep}
+\label{sec:wide_fast_deep_analysis_method}
 WFD observations involve a large number of fields.  The observations
 are dithered, and the size and depth of the final sample depends
 heavily on the details of the observing strategy (in particular, the
@@ -446,7 +447,7 @@ the total footprint of the survey.
 \paragraph{Effective SN cadence} What ultimately determines the quality of the SN light curves
 and distances is the {\em effective} cadence delivered by the survey,
 i.e.  the cadence evaluated after having stacked all the same-band
-revisit pairs or triplets. The cadence may be estimated, on each
+revisit pairs (or sometimes triplets) performed during one single night. The cadence may be estimated, on each
 healpixel, by computing the mean time interval between visits -- after
 having excluded the long duration gaps when the healpixel is not
 observable.
@@ -460,8 +461,8 @@ cadence maps for {\tt Pontus\_2502}, {\tt altsched} and {\tt altsched
   rolling} strategies.  On figure \ref{fig:effective_cadence}, we
 report the median cadence in $r$ (computed from similar maps).  The
 best effective cadences are delivered by the \altsched like
-strategie. We note that there is about a factor 7 between the best and
-worst effective cadences.
+strategies. We note that there is about a factor 7 between the best
+and worst effective cadences.
 
 \begin{figure}
   \begin{center}
@@ -508,8 +509,8 @@ worst effective cadences.
   \end{center}
 \end{figure}
 
-In the remaining of this section, we discuss the key design elements
-that can explain such large differences. 
+In the remaining of this section, we discuss some of the key design
+elements that can explain such large differences.
 
 
 \paragraph{Global filter allocation} All \opsim and \slair cadences   share the same global filter balance: 
@@ -601,17 +602,18 @@ distinct nights, which is likely to degrade the effective SN cadence
 (deeper visits, less often).  All \altsched simulations attempt to
 avoid this, as do the recent experiements conducted with \slair.
 
-\paragraph{Season length} Another feature that may have an impact on the cadence, and the size of the SN sample
-is the season duration.  Nearby supernova light curves are less
+\paragraph{Season length} This is another feature that may alter the cadence, and the size of the SN sample.
+Nearby supernova light curves are less
 affected by redshift time dilation, so season duration is not as
 crucial as for DDF observations.  However, it is a quantity worth
 estimating, in particular to see whether it correlates with the
 effective cadence and/or the total size of the SN sample.
 Figure \ref{fig:season_length} shows the average season length for
 each cadence studied in this work (sorted by $r$-band effective
-cadence).  Most strategies manage to observe each field during about
-150 consecutive days. Some \slair strategies deliver short seasons
-($\sim 130$ days) or very long seasons ($\sim 170$ days). We do not
+cadence).  We see considerable differences in season durations (from 130 to 200 days).
+Most \opsim and all \altsched strategies manage to observe each field during about
+150 consecutive days. The shorter (130 days) and longer (170 days) seasons come mainly from  \slair 
+for reasons that have not been elucidated yet. In any case, we do not
 note any significant correlation between season duration and cadence.
 
 \begin{figure}
@@ -631,18 +633,23 @@ note any significant correlation between season duration and cadence.
 the best and the worst cadences delivered by the various strategies
 released so far.  We will see in the next section, that effective
 cadence is the key to maximize the size and depth of the SN sample.
-There are a few design elements that help improving the effective
+We have discussed a few design elements that help improving the effective
 cadence: (1) implementing a rolling strategy (2) change filters often
 during the night (3) avoid same band visit pairs.
 
-We note that each of these elements taken alone is not
+However, each of these elements taken alone is not
 sufficient. Combining all of them has been tried, for example in the
 \slair cadences {\tt tms\ roll} and {\tt rolling mix*} and has brought
 tremendous improvements with respect to the previous experiments
-conducted with this scheduler.  However, the best \slair cadences are
-still behind \altsched regarding cadence.  On top of the elements
+conducted with this scheduler.  However, the best \slair simulations
+are still behind \altsched regarding cadence.  On top of the elements
 discussed above, the core of the \altsched observing strategy ensures
-an extreme regularity of the cadence. \FixMe{discuss 1 day gaps}. 
+an extreme regularity of the cadence.
+
+\FixMe{nrl, 2018-09-27: we still need to estimate (1) the same-filter
+  1-day gaps (2) the cadence rms. I think that would help
+  understanding the difference between the best SLAIR cadences and
+  Altsched. }.
 
 
 
@@ -664,6 +671,39 @@ Key properties of \spt, \ddfa, \ddfb, \ddfc~and \ddfb~fields are given on Figure
 
 \subsection {WFD}
 
+We have conducted the analysis described in section
+\ref{sec:wide_fast_deep_analysis_method} on all the cadences released
+so far.  The final maps that report, for each healpixel (1) the final
+number of SNe (2) the mean redshift limit
+($\left<z_{\mathrm{faint|med}}\right>$) reached (3) the average
+(restframe) cadence obtained are included in appendix
+\ref{sec:wfd_maps} (figures \ref{fig:altsched_rolling_good_weather} to
+\ref{fig:feature_baseline}). Finally, the animations that show the evolution
+of the maps as the survey unfolds are available at the following address:
+\begin{center}
+  \href{http://supernovae.in2p3.fr/~nrl/lsst_sn_cadence}{http://supernovae.in2p3.fr/\~{}nrl/lsst\_sn\_cadence}
+\end{center}
+Inspecting these maps, we essentially recover the ranking of cadences
+presented in the previous section.  We note that on some cadences,
+especially the rolling cadences, the average properties (size and
+depth) of the SN sample vary significantly as a function of the sky
+direction. Some of these effects are related to seasonality (better
+seeing allows to go deeper, for example) and depend on how realistic
+the \opsim weather and seeing logs are. Others are clearly artefacts
+of the observing cadence and can be corrected. For example, the on the
+{\tt Mothra} and {\tt SLAIR} rolling cadences, are lines clearly
+visible which correspond to depleted regions at the boundary between
+the areas observed each year. The same is true on altsched rolling,
+which also displays a strongly depleted region, at the region where
+the scheduler switches between the upper and lower declination area.
+Cures exists for these effects and are being discussed. 
+
+Our primary metrics, ($z_{\mathrm{faint|median}}$, $N_{\mathrm{faint|median}}$) 
+presented in section \ref{sec:metrics}, can be derived from these
+maps.  Figures \ref{fig:nsn_zmax_med} and \ref{fig:nsn_zmax_faint}
+give a synthetic presentation of our cadence evaluation, in the planes
+(\zfaint, \nsnfaint) and (\zmed, \nsnmed), respectively.
+
 \begin{sidewaysfigure}
   \begin{center}
     \includegraphics[width=\linewidth]{Figures/summary_plot_wfd_mediansn.pdf}
@@ -673,9 +713,9 @@ Key properties of \spt, \ddfa, \ddfb, \ddfc~and \ddfb~fields are given on Figure
       median SN no longer passes the requirements listed in section
       \ref{sec:sn_sampling_requirements} and (2) the size of the
       subset of well-sampled SNe~Ia.}
+    \label{fig:nsn_zmax_med}
   \end{center}
 \end{sidewaysfigure}
-
 
 \begin{sidewaysfigure}
   \begin{center}
@@ -686,8 +726,28 @@ Key properties of \spt, \ddfa, \ddfb, \ddfc~and \ddfb~fields are given on Figure
       which redshift the faintest SN no longer passes the requirements
       listed in section \ref{sec:sn_sampling_requirements} and (2) the
       size of the redshift limited SN~Ia sample produced by LSST.}
+    \label{fig:nsn_zmax_faint}
   \end{center}
 \end{sidewaysfigure}
+
+Again, we recover our previous ranking.  The rolling version of
+\altsched is the best performing cadence.  It will allow us to build a
+very deep sample \zmed $\sim 0.45$ of more than well sampled 300,000
+SNe.  {\tt altsched} covers more area, at the expense of a lower
+cadence.  As a consequence, it is not as deep, but allows to obtain a
+larger number of well-sampled SNe.
+
+Most of the cadences released for the white paper call do not allow to
+go as deep, no to secure as many well sampled SNe. The best \opsim and
+\slair rolling cadences allow to reach redshift limits that are
+similar to the non-rolling version of \altsched and yield samples that
+are about 40\% smaller. All of them, in particular {\tt rolling mix}
+and {\tt tms roll} fulfill the principles exposed above. Why they do
+not reach the performances of {\tt altsched} rolling is how unclear at
+this point and should be investigated further.
+
+
+
 
 \subsection{ DD}
 
@@ -942,6 +1002,7 @@ feature rolling half mask &  161705 &  248253 &  498985 &  500143 &  468829 &  4
   %\end{table}
   
   \section{WFD maps}
+  \label{sec:wfd_maps}
   The final maps reporting (1) the final number of well sampled SNe in
   each healpixel covered by the survey (2) the average maximum
   redshift at which a normal SN no longer passes the light curve
