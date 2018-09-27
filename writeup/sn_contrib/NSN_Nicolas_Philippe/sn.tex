@@ -356,7 +356,10 @@ The celestial sphere is pixellized in Healpix superpixels\footnote{we
   have verified that (1) larger pixels (nside=32) leads to
   underestimating the number of SNe by ~ 15\% \FixMe{recheck that} and
   that smaller pixels (nside=128 and above) give exactly the same
-  results.}.  Using a simple model of the LSST focal plane, we play
+  results.}.  The directions / healpixel affected by a Galactic extinction $E(B-V)$ larger than 0.25
+are masked and not included in our assessment. We consider only the $griz$ observations which are the ones
+that matter to derive SN luminosity distances. 
+Using a simple model of the LSST focal plane, we play
 the cadence, and determine, the list of superpixels observed for a
 given exposure. This allows us to build a log which reports the mjd,
 band, and observing conditions of each healpixel observation.
@@ -426,7 +429,7 @@ Four classes of observing strategies have been studied in detail:
   DESC week (CMU) and the 2018 LSST community workshop (Tucson).
 \end{itemize}
 
-In table \ref{tab:global_cadence_strats} we report, for each cadence
+In table \ref{tab:global_cadence_stats} we report, for each cadence
 the total number of exposures per filter. This gives a general idea of
 the total open shutter time, and the global filter allocation.  In
 table \ref{tab:sn_specific_cadence_stats}, we show SN-specific key
@@ -435,33 +438,105 @@ for a given location of the sky (e.g. a healpixel), the median cadence
 delivered by the observing strategy, the median season duration and
 the total footprint of the survey.
 
-As can be seen from tables \ref{tab:global_cadence_strats} and
-\ref{tab:sn_specific_cadence_stats}, the proposed observing strategies
-differ on a few key quantities:
+
+\subsection{Key properties}
+
+\subsubsection {WFD}
+
+\paragraph{Effective SN cadence} What ultimately determines the quality of the SN light curves
+and distances is the {\em effective} cadence delivered by the survey,
+i.e.  the cadence evaluated after having stacked all the same-band
+revisit pairs or triplets. The cadence may be estimated, on each
+healpixel, by computing the mean time interval between visits -- after
+having excluded the long duration gaps when the healpixel is not
+observable.
+
+The effective cadence varies considerably from one observing strategy
+to another.  As an illustration, we present on figures
+\ref{fig:pontus_2502_effective_cadences},
+\ref{fig:altsched_effective_cadences} and
+\ref{fig:altsched_rolling_effective_cadences}, we present effective
+cadence maps for {\tt Pontus\_2502}, {\tt altsched} and {\tt altsched
+  rolling} strategies.  On figure \ref{fig:effective_cadence}, we
+report the median cadence in $r$ (computed from similar maps).  The
+best effective cadences are delivered by the \altsched like
+strategie. We note that there is about a factor 7 between the best and
+worst effective cadences.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{Figures/pontus_2502_cadence.png}
+    \caption{Average $\Delta T$ between observations for {\tt
+        Pontus\_2502}, a (slightly rolling) strategy that implements
+      same-band visit pairs. }
+    \label{fig:pontus_2502_effective_cadences}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{Figures/altsched_cadence.png}
+    \caption{Average $\Delta T$ between observations for {\tt
+        Altsched}, a strategy that avoid same band visit pairs.}
+    \label{fig:altsched_effective_cadences}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{Figures/altsched_rolling_cadence.png}
+    \caption{Average $\Delta T$ between observations for {\tt
+        Altsched} rolling, a rolling strategy that avoids same band
+      visit pairs.}
+    \label{fig:altsched_rolling_effective_cadences}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{Figures/cadence.png}
+    \caption{Assessment of the effective SN cadence for all
+      strategies: median $\Delta T$ between observations (after
+      grouping same night observations). \altsched cadences are shown
+      in red, \opsim cadences released for the white paper call in
+      blue, \slair in orange, and early cadences in deep blue. The
+      rolling (resp. non-rolling) cadences are displayed with open
+      (resp. solid) markers. }
+    \label{fig:effective_cadence}
+  \end{center}
+\end{figure}
+
+In the remaining of this section, we discuss the key design elements
+that can explain such large differences. 
+
 
 \paragraph{Global filter allocation} All \opsim and \slair cadences   share the same global filter balance: 
-$\sim 7\%, 10\%, 22\%, 22\%, 21\%$ and $18\%$ of the open shutter time
+$\sim 7\%, 10\%, 22\%, 22\%, 21\%$ and $18\%$ of the total open shutter time
 are allocated to the $u, g, r, i, z$- and $y$ bands respectively.
 \altsched makes a different choice, based on the fact that the
 low-throughput of the LSST camera in $y$, combined with the high sky
 brightness in that band limit the impact of $y$-band observations.
 About half of the $y$-band observing time is therefore reallocated to
 $g$, $r$ and $i$ and $z$ bands, the resulting filter balance is
-therefore: 9\%, 11\%, 28\%, 18\% 26\% and 9\% ($ugrizy$ respectively).
+therefore: 9\%, 11\%, 28\%, 18\% 26\% and 9\% ($ugrizy$ respectively). Of course, having more
+observing time in $griz$ can only improve the quality of SN~Ia light curves and distances.
+
 
 \paragraph{Filter allocation strategy} Another key point, is how the filters are
 changed during the night.  In this regard, very different strategies
 have been implemented by the various schedulers proposed so far.  This
 is illustrated on figure \ref{fig:hourglass_plot_filter_alloc}, which
-shows the filter usage for strategies {\em Pontus 2002} and {\em
+shows the filter usage for  {\em Pontus 2002} and {\em
   AltSched rolling}.  {\em Pontus 2002} attempts to minimize the
 filter changes during a night and in fact keeps observing in the same
 filter over several nights.  Conversely, the \altsched family of
 cadences attempt to switch for a different filter after each observing
 block, so that each revisit of the same field is performed in a
-different band.  This has a major impact on the effective cadence
+different band.  As we will see below, this has a major impact on the effective cadence
 delivered by the survey. As of today, most \opsim cadences released so
-far try to minize the number of filter changes, all \altsched cadences
+far try to minimize the number of filter changes, all \altsched cadences
 switch filters after each observing block, and \slair has been
 experimenting with both strategies.
 
@@ -480,57 +555,94 @@ experimenting with both strategies.
   \end{center}
 \end{figure}
 
-\paragraph{Visit pairs} In all cadences proposed so far (except a few experiments)
-all fields are observed twice a night, 1 to 2 hours apart, in order to
-improve the detectability of short term transients and solar system
-objects.  Depending on the filter allocation strategy, this may have a
-strong impact on the sampling quality of the SN~Ia light curves.
-Indeed, SN~Ia luminosities vary significantly over time scales of one
-to two days, and same band observations taken during a same night can
-be considered as one single visit. When dealing with a fixed total
-number of visits per sky direction, re-observing a field in the same
-band during a night degrades the SN light curve sampling by a factor
-$\sim 2$.  As an illustration, we show on figure
-\ref{fig:effective_number_of_visits} show the median number of
-effective visits visits for all cadences. The cadences that are best
-for SNe~Ia are: 
+\paragraph{The combined effet of visit pairs and filter allocation strategy} In all cadences proposed so far
+(except a few simulations, notably {\tt colossus\_2667} and {\tt
+  kraken\_2044}) all fields are observed twice a night, 1 to 2 hours
+apart, in order to improve the detectability of short term transients
+and solar system objects.  Depending on the filter allocation
+strategy, this has a strong impact on the sampling quality of the
+SN~Ia light curves.  Indeed, SN~Ia luminosities vary significantly
+over time scales of 1-2 days.  Same band observations taken during a
+given night may therefore be considered as one single visit. When
+dealing with a fixed total number of visits per sky direction,
+re-observing a field in the same band during a night degrades the SN
+light curve sampling by a factor $\sim 2$.
 
-%% On figure \ref{fig:effective_cadence}, we display the map of
-%% effective cadences for
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{Figures/night_visit_ratio.png}
+    \caption{Number of nights vs. number of visits for the median
+      healpixel. We clearly see the effect of the same-band revisit
+      strategy.  \altsched cadences are show in red, \opsim WPC in
+      blue, \slair in orange, and early cadences in deep blue. The
+      rolling (resp. non-rolling) cadences are displayed with open
+      (resp. solid) markers. }
+    \label{fig:effective_number_of_visits}
+  \end{center}
+\end{figure}
 
-\paragraph{Season duration}
+To estimate that, we compute, for each cadence, the healpix maps
+giving the total number of {\em visits} per pixel and the total number
+of {\em nights} (several visits per night).  On figure
+\ref{fig:effective_number_of_visits}, we show, for each cadence, the
+ratio of the median of these maps.  
+
+The survey strategies are sorted according to the effective $r$-band
+cadence delivered by the survey (see figure
+\ref{fig:effective_cadence}).  We note that most good-cadence
+strategies avoid same band revisit pairs. Some strategies however, are
+able to compensate.  These are either rolling strategies ({\tt
+  Mothra\_2049}, {\tt Mothra\_2045} or {\tt Kraken\_2036}) or by
+increasing the total number of visits ({\tt Pontus\_2489}).
+
+All \opsim cadences, except {\tt colossus\_2667} and {\tt
+  kraken\_2044} the number of visits is about twice the number of
+distinct nights, which is likely to degrade the effective SN cadence
+(deeper visits, less often).  All \altsched simulations attempt to
+avoid this, as do the recent experiements conducted with \slair.
+
+\paragraph{Season length} Another feature that may have an impact on the cadence, and the size of the SN sample
+is the season duration.  Nearby supernova light curves are less
+affected by redshift time dilation, so season duration is not as
+crucial as for DDF observations.  However, it is a quantity worth
+estimating, in particular to see whether it correlates with the
+effective cadence and/or the total size of the SN sample.
+Figure \ref{fig:season_length} shows the average season length for
+each cadence studied in this work (sorted by $r$-band effective
+cadence).  Most strategies manage to observe each field during about
+150 consecutive days. Some \slair strategies deliver short seasons
+($\sim 130$ days) or very long seasons ($\sim 170$ days). We do not
+note any significant correlation between season duration and cadence.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{Figures/season_length.png}
+    \caption{Median season duration for each cadence in this
+      study. \altsched cadences are show in red, \opsim WPC in blue,
+      \slair in orange, and early cadences in deep blue. The rolling
+      (resp. non-rolling) cadences are displayed with open
+      (resp. solid) markers. }
+    \label{fig:season_length}
+  \end{center}
+\end{figure}
 
 
+\paragraph{} To conclude: we note a very large gap (about a factor 7) between
+the best and the worst cadences delivered by the various strategies
+released so far.  We will see in the next section, that effective
+cadence is the key to maximize the size and depth of the SN sample.
+There are a few design elements that help improving the effective
+cadence: (1) implementing a rolling strategy (2) change filters often
+during the night (3) avoid same band visit pairs.
 
-\paragraph{Rolling versus non-rolling cadences} 
-
-\paragraph{Survey footprint}
-
-\subsection{Key properties}
-
-
-As a conclusion:
-
-\subsubsection {WFD}
-
-%% \begin{table}
-%%   \begin{center}
-%%     \begin{tabular}{}
-%%       \hline
-%%       \hline
-%%       cadence & $u$   & $g$ & $r$ & $i$ & $z$ & $y$ \\
-%%       \hline
-%%       Minion  & $N_v$ & 
-%%     \end{tabular}
-%%   \end{center}
-%% \end{table}
-
-nb visits. n visits/night. Median internight gap. average cadence in a
-given time window. season duration.
-
-1 plot that gives the average cadence vs. season duration. 
-
-Here, we show that clearly altsched dominates. 
+We note that each of these elements taken alone is not
+sufficient. Combining all of them has been tried, for example in the
+\slair cadences {\tt tms\ roll} and {\tt rolling mix*} and has brought
+tremendous improvements with respect to the previous experiments
+conducted with this scheduler.  However, the best \slair cadences are
+still behind \altsched regarding cadence.  On top of the elements
+discussed above, the core of the \altsched observing strategy ensures
+an extreme regularity of the cadence. \FixMe{discuss 1 day gaps}. 
 
 
 
@@ -548,7 +660,7 @@ Plots illustrating the four key points mentioned above are given on Figures \ref
 Key properties of \spt, \ddfa, \ddfb, \ddfc~and \ddfb~fields are given on Figures \ref{fig:spt deep_cad} to\ref{fig:kraken_m5}.
 
 
-\section{ Results: Number of well-measured type Ia supernovae}
+\section{Results: Number of well-measured type Ia supernovae}
 
 \subsection {WFD}
 
@@ -695,8 +807,7 @@ where $5-\sigma$ limiting flux of each visit $f_{i|5}$.
 %\begin{table}
 %\begin{center}
   \begin{longtable}{l|ccccccc}
-    \caption{Global filter allocation of all cadences studied in this note\label{tab:global_cadence_stats}}        \\
-    
+    \caption{Global filter allocation of all cadences studied in this note\label{tab:global_cadence_stats}\label{tab:global_cadence_stats}}        \\
     \hline
     \hline    
   name & \multicolumn{7}{c}{\# visits} \\
