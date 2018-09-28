@@ -1,0 +1,222 @@
+\subsection{Number of well-sampled type Ia supernovae}
+
+\subsubsection{Deep Drilling fields}
+
+\paragraph{Method}
+
+The strategy to estimate the number of well-measured type Ia supernovae may be summarized in four steps: (1) light curves are simulated and fitted using observations of a given cadence; (2) selection criteria are applied to get high-quality supernovae; (3) the resulting observing efficiency curves are then convolved with a production rate \cite{perrett} so as to estimate the number of well-measured type Ia supernovae that may be collected by LSST given an observing strategy. 
+
+Table \ref{tab:sim_ddf} summarizes the parameter used in SN simulations. The selection of a sample of well-measured type Ia supernovae is done in two steps. A sample of observable supernovae is selected by requiring light curves to have \phasemin $\leq$ -5 and \phasemax $\geq$ 20 (where \phasemin~ and \phasemax~ are the minimal and maximum phases of the LC points, respectivelly). For each supernovae in this reference sample, additional selection criteria are applied:
+\begin{itemize}
+\item $N_{bef} \geq 4$ and $N_{aft} \geq 10$ where $N_{bef}$ and $N_{aft}$ are the number of LC points (with SNR$\geq$ 5) before and after \daymax.
+ \item $\sigma_c \leq 0.04$ where $\sigma_c$ is the error on the \sncolor~parameter estimated from the fit of the light curve.
+\end{itemize}
+The season length which depends on the redshift is estimated using the supernovae of the reference sample.
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Parameter & Range \\
+\hline
+                    & (-2.0,0.2),(0.0,0.0),(2.0,-0.2) \\
+ (\strech,\sncolor) & (-2.0,0.0),(-2.0,0.2),(0.0,-0.2) \\
+                    & (0.0,0.2),(2.0,0.0),(2.0,0.2) \\
+\hline
+\redshift           & [0.01,1.3] (step: 0.025) \\
+\hline
+\daymax             & [\tmin,\tmax] (step: 1 day) \\
+                    & (\tmin~and \tmax~ are the min and max MJD of a season) \\
+                    \hline
+\end{tabular}
+\caption{Range of the parameters used to simulate type Ia SN}\label{tab:sim_ddf}
+\end{center}
+\end{table}
+
+\paragraph{Results}
+
+Typical detection efficiencies are given on Fig. \ref{fig:effi} for the \cosmos~field and feature\_baseline\_10 yrs cadence . One may observe that the lowest efficiencies (independently on the (\strech,\sncolor) values) correspond to the first two seasons of observations which are known to be very bad for this observing strategy and for this field (see for instance Figs. \ref{fig:cosmos_cad} and \ref{fig:cosmos_m5}).
+
+\begin{figure}[htbp]
+\begin{center}
+  
+  \includegraphics[width=12cm]{nsn/effi_feature_cosmos.png}
+ \caption{Detection efficiency as a function of the redshift for the \cosmos~field and feature\_baseline\_10yrs observing strategy (10 seasons). Blue, red and black lines correspond to faint, medium and bright supernovae, respectivelly.}\label{fig:effi}
+\end{center}
+\end{figure}
+
+Efficiency curves are convolved with a production rate \cite{perrett} to estimate the number of well-measured type Ia supernovae that may be collected by LSST. Summary plots are given for the reference fields (Fig \ref{fig:nsn_four}) and for all the DDF (Fig \ref{fig:nsn_all}). One may observe that, despite bad observing years, \feature~ shows the best results in terms of number of well-measured type Ia supernovae. Equivalent results are obtained with Colossus\_2667.
+
+\begin{figure}[htbp]
+\begin{center}
+  
+  \includegraphics[width=15cm]{nsn/NSN_season_4DDF.png}
+  \includegraphics[width=15cm]{nsn/NSN_all_4DDF.png}
+ \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. Four DDF (\cosmos,\xmmlss,\cdfs,\elais) have been considered. The red line corresponds to 15k supernovae.}\label{fig:nsn_four}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+  
+  \includegraphics[width=15cm]{nsn/NSN_season_allDDF.png}
+  \includegraphics[width=15cm]{nsn/NSN_all_allDDF.png}
+ \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. All DDF have been considered.The red line corresponds to 27k supernovae.}\label{fig:nsn_all}
+\end{center}
+\end{figure}
+
+When considering all DDF the winner is of course kraken\_2035 (27K after ten years) since this observing strategy considered 9 DDFs whereas all others observed 4 to 5 fields. One may observe that extrapolating a four fields configuration results (like the ones obtained with \feature) to a 9 DDF observing strategy will probably lead to an overestimation of the resulting number of well-measured type Ia supernovae. It is indeed difficult to maintain the same quality (in terms of cadence, season length and thus depth) when moving from a 4 to a 9 DDF strategy.
+
+\begin{figure}[htbp]
+\begin{center}
+  
+  \includegraphics[width=15cm]{nsn/Z95_NSN.png}
+ \caption{95\% redshift limit (ie corresponding to the detection of 95\% of the supernovae of the corresponding sample) as a function of the number of faint supernovae. Each point correspond to a field, a season and an observing strategy.}\label{fig:z95}
+\end{center}
+\end{figure}
+
+Another way to assess the quality of an observing strategy is to estimate the redshift detection limit for faint supernovae (per season and per field). On Figure \ref{fig:z95} is displayed the 95\% redshift limit (ie corresponding to the detection of 95\% of the supernovae of the corresponding sample) as a function of the number of faint supernovae. Huge variations among and inside strategies are observed. This plot reflects the quality of the proposed cadences. It seems that \redshift~of 0.7-0.75 may be reached with four fields. Once again \feature~tend to give the highest redshifts and the most homogeneous results among the fields and seasons. 
+
+
+\subsubsection{Wide Fast Deep}
+\label{sec:wide_fast_deep_analysis_method}
+
+\paragraph{Method}
+
+WFD observations involve a large number of fields.  The observations
+are dithered, and the size and depth of the final sample depends
+heavily on the details of the observing strategy (in particular, the
+filter allocation strategy and the field selection function \ldots)
+For this reason, we opted for a slightly different approach, which we
+describe below.
+
+The celestial sphere is pixellized in Healpix superpixels\footnote{we
+  choose nside=64, which corresponds to 0.8 deg$^2$ healpixels.  We
+  have verified that (1) larger pixels (nside=32) leads to
+  underestimating the number of SNe by ~ 15\% \FixMe{recheck that} and
+  that smaller pixels (nside=128 and above) give exactly the same
+  results.}.  The directions / healpixel affected by a Galactic extinction $E(B-V)$ larger than 0.25
+are masked and not included in our assessment. We consider only the $griz$ observations which are the ones
+that matter to derive SN luminosity distances. 
+Using a simple model of the LSST focal plane, we play
+the cadence, and determine, the list of superpixels observed for a
+given exposure. This allows us to build a log which reports the mjd,
+band, and observing conditions of each healpixel observation.
+
+We can then analyze this log, using as a probe, a fiducial SN~Ia,
+e.g. the ``faint'' or ``normal'' SNe~Ia defined in the previous
+section. For each mjd and each pixel, we determine:
+\begin{eqnarray}
+  z_{\mathrm{lim}} & = & \mathrm{max}\left(z | \mathrm{LC(z)\ fulfill\ requirements}\right) \\
+  N_{z<z_{\mathrm{lim}}} &= & \delta\Omega_{\mathrm{pix}} \int_0^{z_\mathrm{lim}} \frac{\Delta T_{\mathrm{step}}}{1+z}\ {\mathcal{R}}(z)\ dV(z)
+\end{eqnarray}
+where $\delta\Omega_{\mathrm{pix}}$ is the solid angle subtended by
+one pixel, $\Delta T_{\mathrm{step}}$ is the simulation time step (in
+observer frame days) and $\mathcal{R}(z)$ is the SN~Ia volumetric rate
+(we adopt the rate published in (Perrett et al, 2012)).  We also
+compute the average cadence (in day$^{-1}$), i.e. the number of $g, r,
+i$ or $z$ visits in a fiducial restframe interval.
+
+The quantities above are determined for each pixel and each night
+(identified by its mjd).  We report them in full sky maps, which give
+an assessment of how the cadence performs in a $\sim 50$ day time
+interval around the current mjd. From these maps, we can build global
+maps giving, as a function of the position on the sky (1) the density
+of supernovae (2) the median maximum redshift (3) the median cadence.
+We can also collate these maps in videos, that are useful to evaluate
+the observing strategy as a function of time.
+
+\begin{sidewaysfigure}
+    \begin{center}
+      \includegraphics[width=\linewidth]{nsn/mothra_2045_02611.png}
+      \caption{Example of cadence analysis maps.  Cadence {\em
+          Mothra\_2045}, mjd=62464 (2029-11-24) {\em Upper panels:}
+        (left) total number of well sampled supernovae per healpixel,
+        (middle): median \zmed after 2611 days of survey, (right):
+        median cadence, after 2611 days of survey. {\em Lower panels:}
+        (left) number of SNe~Ia peaking at mjd=62464 and passing the
+        light curve quality cuts (middle) \zmed, i.e.  maximum
+        redshift at which a SN peaking at mjd=62464 would pass the
+        requirements}
+    \end{center}
+\end{sidewaysfigure}
+
+
+
+
+\paragraph{Results}
+
+We have conducted the analysis described above on all the cadences released
+so far.  The final maps that report, for each healpixel (1) the final
+number of SNe (2) the mean redshift limit
+($\left<z_{\mathrm{faint|med}}\right>$) reached (3) the average
+(restframe) cadence obtained are included in appendix
+\ref{sec:wfd_maps} (figures \ref{fig:altsched_rolling_good_weather} to
+\ref{fig:feature_baseline}). Finally, the animations that show the evolution
+of the maps as the survey unfolds are available at the following address:
+\begin{center}
+  \href{http://supernovae.in2p3.fr/~nrl/lsst_sn_cadence}{http://supernovae.in2p3.fr/\~{}nrl/lsst\_sn\_cadence}
+\end{center}
+Inspecting these maps, we essentially recover the ranking of cadences
+presented in the previous section.  We note that on some cadences,
+especially the rolling cadences, the average properties (size and
+depth) of the SN sample vary significantly as a function of the sky
+direction. Some of these effects are related to seasonality (better
+seeing allows to go deeper, for example) and depend on how realistic
+the \opsim weather and seeing logs are. Others are clearly artefacts
+of the observing cadence and can be corrected. For example, the on the
+{\tt Mothra} and {\tt SLAIR} rolling cadences, are lines clearly
+visible which correspond to depleted regions at the boundary between
+the areas observed each year. The same is true on altsched rolling,
+which also displays a strongly depleted region, at the region where
+the scheduler switches between the upper and lower declination area.
+Cures exists for these effects and are being discussed. 
+
+Our primary metrics, ($z_{\mathrm{faint|median}}$, $N_{\mathrm{faint|median}}$) 
+presented in section \ref{sec:metrics}, can be derived from these
+maps.  Figures \ref{fig:nsn_zmax_med} and \ref{fig:nsn_zmax_faint}
+give a synthetic presentation of our cadence evaluation, in the planes
+(\zfaint, \nsnfaint) and (\zmed, \nsnmed), respectively.
+
+\begin{sidewaysfigure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{nsn/summary_plot_wfd_mediansn.pdf}
+    \caption{Representation of the cadences analyzed in this study in
+      the plane (\zmed, \nsnmed). This gives an assessement, for each
+      cadence, of (1) the sample depth, i.e. at which redshift the
+      median SN no longer passes the requirements listed in section
+      \ref{sec:sn_sampling_requirements} and (2) the size of the
+      subset of well-sampled SNe~Ia.}
+    \label{fig:nsn_zmax_med}
+  \end{center}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{nsn/summary_plot_wfd_faintsn.pdf}
+    \caption{Representation of the cadences analyzed in this study in
+      the plane (\zfaint, \nsnfaint). This gives an assessement, for
+      each cadence, of (1) the redshift limit of the survey, i.e. at
+      which redshift the faintest SN no longer passes the requirements
+      listed in section \ref{sec:sn_sampling_requirements} and (2) the
+      size of the redshift limited SN~Ia sample produced by LSST.}
+    \label{fig:nsn_zmax_faint}
+  \end{center}
+\end{sidewaysfigure}
+
+Again, we recover our previous ranking.  The rolling version of
+\altsched is the best performing cadence.  It will allow us to build a
+very deep sample \zmed $\sim 0.45$ of more than well sampled 300,000
+SNe.  {\tt altsched} covers more area, at the expense of a lower
+cadence.  As a consequence, it is not as deep, but allows to obtain a
+larger number of well-sampled SNe.
+
+Most of the cadences released for the white paper call do not allow to
+go as deep, no to secure as many well sampled SNe. The best \opsim and
+\slair rolling cadences allow to reach redshift limits that are
+similar to the non-rolling version of \altsched and yield samples that
+are about 40\% smaller. All of them, in particular {\tt rolling mix}
+and {\tt tms roll} implement the design principles exposed in section
+\ref{sec:wfd_cadence_key_properties}. Why they do not reach the
+performances of {\tt altsched rolling} is unclear at this point and is
+being investigated.

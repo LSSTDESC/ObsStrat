@@ -1,0 +1,158 @@
+\documentclass [11pt,a4paper]{article}
+\usepackage{graphicx,subfigure}
+%\documentstyle [epsf,epsfig,11pt,amssymb]{article}
+\usepackage{rotating}
+\usepackage{lsstdesc_macros}
+\usepackage[title]{appendix}
+
+\RequirePackage[colorlinks,breaklinks]{hyperref}  
+\hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=blue} 
+\usepackage{longtable}
+\usepackage{natbib}
+%\usepackage{subcaption}
+
+% Set up generic page
+%
+%\setlength{\textheight}{23cm}
+%\setlength{\textwidth}{17cm}
+%\unitlength 1mm
+%\font\ninerm=cmr9
+
+\textwidth=16.cm
+%\textheight=26cm
+\setlength{\hoffset}{-1.cm}
+\setlength{\voffset}{-1.cm}
+\parskip=0.1cm
+
+%\newcommand{\ttt}{{\mbox{\newfont t}}}
+
+\newcommand{\cosmos}{COSMOS}
+\newcommand{\xmmlss}{XMM-LSS}
+\newcommand{\cdfs}{CDFS}
+\newcommand{\elais}{ELAIS-S1}
+\newcommand{\spt}{SPT DEEP}
+\newcommand{\ddfa}{DDF\_820}
+\newcommand{\ddfb}{DDF\_858}
+\newcommand{\ddfc}{DDF\_1200}
+\newcommand{\ddfd}{DDF\_2689}
+\newcommand{\feature}{feature\_baseline\_10yrs}
+\newcommand{\strech}{$X_1$}
+\newcommand{\sncolor}{$c$}
+\newcommand{\daymax}{$T_0$}
+\newcommand{\redshift}{$z$}
+\newcommand{\tmin}{$T_{min}$}
+\newcommand{\tmax}{$T_{max}$}
+\newcommand{\phasemin}{$ph_{min}$}
+\newcommand{\phasemax}{$ph_{max}$}
+\newcommand{\tgapcosmos}{$T_{gap}^{\cosmos}$}
+\newcommand{\tgapothers}{$T_{gap}^{others}$}
+\newcommand{\zfaint}{$z_{\mathrm{faint}}\ $}
+\newcommand{\nsnfaint}{$N_{z<z_{\mathrm{faint}}}\ $}
+\newcommand{\zmed}{$z_{\mathrm{med}}\ $}
+\newcommand{\nsnmed}{$N_{z<z_{\mathrm{med}}}\ $}
+\newcommand{\FixMe}[1]{{\color{red} \bf \large #1}}
+\newcommand{\opsim}{{\tt OpSim\ }}
+\newcommand{\slair}{{\tt SLAIR\ }}
+\newcommand{\altsched}{{\tt AltSched\ }}
+\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
+
+\graphicspath{{Figures/}}
+
+\begin{document}
+
+\renewcommand\appendix{\par
+  \setcounter{section}{0}
+  \setcounter{subsection}{0}
+  \setcounter{figure}{0}
+  \setcounter{table}{0}
+  \renewcommand\thesection{Appendix} %\Alph{section}}
+  \renewcommand\thefigure{\Alph{section}\arabic{figure}}
+  \renewcommand\thetable{\Alph{section}\arabic{table}} 
+}
+
+\begin{titlepage}
+   \vspace*{\stretch{1.0}}
+   \begin{center}
+      \Large\textbf{Final assessment for the white paper call}\\
+        \vspace*{0.5cm}
+      \Large\textbf{DESC-SN group} \\
+      
+		  \vspace*{0.5cm}
+
+      \large\textit{T. Allam Jr.,R.Biswas, J.Carrick, Ph.Gris, R.Hlo\v{z}ek, I.Hook, A.Kim, M.Lochner, J.McEwen, H. Peiris, N.Regnault, R. Schuhmann, C.Setzer} \\
+	\vspace*{0.5cm}
+
+      \large\textit{September 21 2018}
+   \end{center}
+   \vspace*{\stretch{2.0}}
+\end{titlepage}
+
+
+\tableofcontents
+
+
+\section{Key design elements}
+
+\input{key_design}
+
+
+\section{Overview of observing strategies}
+
+\input{overview_strategy}
+
+
+\section{Metrics}
+
+\input{nsn}
+
+\input{overlap_4MOST}
+
+\input{peculiar_velocity}
+
+\input{classification}
+
+\input{w0wa}
+
+
+
+\section{Metrics and proposed observing strategies: summary}
+ 
+
+\section{New proposals}
+
+\input{new_proposals}
+
+\section{Conclusion}
+
+\begin{thebibliography}{9}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\href{#1}{#1}}
+\providecommand{\dodoi}[1]{doi:~\href{http://doi.org/#1}{\nolinkurl{#1}}}
+\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl.net/#1}}}
+\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https://arxiv.org/abs/#1}}}
+
+
+\bibitem{perrett} Evolution in the Volumetric Type Ia Supernova Rate from the Supernova Legacy Survey, K.Perrett {\it et al}, The Astronomical Journal, Volume 144, Issue 2 (2012).
+
+\bibitem[Davis et al.(2011)]{2011ApJ...741...67D} Davis, T.~M., Hui, L., Frieman, J.~A., et al.\ 2011, \apj, 741, 67.  
+\bibitem[Hui, \& Greene(2006)]{2006PhRvD..73l3526H} Hui, L., \& Greene, P.~B.\ 2006, \prd, 73, 123526.
+  
+\bibitem[Howlett et al.(2017)]{2017ApJ...847..128H} Howlett, C., Robotham, A.~S.~G., Lagos, C.~D.~P., et al.\ 2017, \apj, 847, 128.
+
+%\bibitem{2011ApJ...741...67D} Davis, T.~M., Hui, L., Frieman, J.~A., et al.\ 2011, \apj, 741, 67.  
+%\bibitem{2006PhRvD..73l3526H} Hui, L., \& Greene, P.~B.\ 2006, \prd, 73, 123526.
+  
+%\bibitem{2017ApJ...847..128H} Howlett, C., Robotham, A.~S.~G., Lagos, C.~D.~P., et al.\ 2017, \apj, 847, 128.
+  
+ \end{thebibliography}
+
+\clearpage
+
+
+\appendix
+  
+
+\input appendix.tex
+
+
+\end{document}

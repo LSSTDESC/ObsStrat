@@ -1,0 +1,28 @@
+\subsection{DDF observing strategy}
+
+In OpSim the choice to observe a given field is done on the fly according to an optimized selection function depending on criteria including (among others) observing conditions, slew time minimization, last time of visit, and total observing time. While the use of a simple metric (see below) would help in choosing another approach could be to use a pre-defined table that would specify which DDF are to be observed on a given night.
+
+Let us consider the four reference fields \cosmos, \xmmlss, \cdfs~and \elais. Since the location are well known, it is possible to estimate when these fields are visible (that is with an altitude between 20 and 86.5 degrees) for a large enough period (typically 20 to 40 minutes) of good observing conditions (ie with airmass lower than a reference value - typically 1.5). We may define a (boolean) parameter dubbed observability equal to one when the above-mentioned conditions are filled, and 0 otherwise. This parameter is displayed on Figure \ref{fig:observability} (top). \xmmlss,\cdfs, and \elais~ are located in the same (Ra) region and may thus be observed during the same night whereas \cosmos~may be observed when all others are not visible. Season lengths of observability (Figure \ref{fig:observability} - bottom) range from 200 to 290 days.
+
+
+\begin{figure}[!htbp]
+\begin{center}
+  
+  \includegraphics[width=18cm,height=12cm]{new_proposals/observability.png}
+  \includegraphics[width=18cm,height=8cm]{new_proposals/Season_length.png}
+ \caption{Top: observability (see definition in the text) and airmass as a function of the night number (first year of LSST operation). Bottom: season length as a function of the season for an airmass limit of 1.5 (full lines) and 1.9 (dashed lines).}\label{fig:observability}
+\end{center}
+\end{figure}
+
+The table of observations may be defined using median gap values \tgapcosmos~and \tgapothers~when \cosmos~and \xmmlss,\cdfs,\elais~are not observable, respectively. Observing time windows are then defined by:
+\begin{itemize}
+\item{[\tgapothers-w/2,\tgapothers+w/2]: \cosmos~ is observed}
+\item{[\tgapcosmos-w,\tgapcosmos+w]: \xmmlss, \cdfs, \elais~are observed.}
+\end{itemize}
+with a width w equal to 2/3*(\tgapcosmos-\tgapothers).
+
+\subsection{altsched rolling 80/20}
+
+\subsection{altsched rolling 75/25}
+
+\subsection{Adding a simple metric for SN in OpSim/SLAIR}
