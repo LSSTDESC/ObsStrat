@@ -8,10 +8,12 @@ class Photo_z_quality(metrics.BaseMetric):
     """
     def __init__(self, m5Col='fiveSigmaDepth', units='XXXsome kind of unit', maps=['DustMap'],
                  wavelen_min=None , wavelen_max=None , wavelen_step=1., filterCol='filter',
+                 nfilters_limit=6,
                  implement_depth_ebv_cut=False, i_lim_mag=26.0, **kwargs):
         self.filternames = ['u', 'g', 'r', 'i', 'z', 'y']
         self.m5Col = m5Col
         self.filterCol = filterCol
+        self.nfilters_limit = int(nfilters_limit)
         self.implement_depth_ebv_cut = implement_depth_ebv_cut
         self.i_lim_mag = i_lim_mag
         ### Without the corrention for MW extinction
@@ -59,12 +61,18 @@ class Photo_z_quality(metrics.BaseMetric):
             # get ebv
             ebv = slicePoint['ebv']
 
-        # figure out the conditions
-        discard_condition = (nfilters !=6) # want coverage in all 6 filters
+        # figure out the conditions with the number of filters in which we want coverage
+        if self.nfilters_limit == 6:
+            discard_condition = (nfilters != 6) # want coverage in all 6 filters
+        else:
+            discard_condition = (nfilters <= self.nfilters_limit) # want coverage in all 6 filters
+
+        # now incorporaate depth + ebv cuts if needed
         if self.implement_depth_ebv_cut:
             discard_condition = discard_condition or (ebv>0.2) or (ext_iband_coadd<self.i_lim_mag)
 
-        if discard_condition: # want coverage in all 6 filters
+        # mask the datapt if dicard_condition is true
+        if discard_condition:
             # return a single badval which will mask the datapoint in the bundle.metricValues.
             coadd_depths = self.badval
             
