@@ -157,12 +157,56 @@ https://lsstc.slack.com/files/U2W4A5V2S/FCP43S43Z/screen_shot_2018-09-05_at_11.2
   * `pontus_2502` has a similar depth as baseline2018a, and decreased area (12k deg^2, 15% smaller than baseline).  So it can use the forecasts for baseline2018a but with the area modified.
   * `pontus_2002` is about 0.2 magnitudes shallower than the DESC SRD analysis but has the largest area, 15.5k deg^2.  Following the rule of thumb from Y10, we could probably use a similar redshift distribution but modify the lens and source number densities to be 20% and 30% lower than in the DESC SRD analysis.
 
-* For Y3, Y6: we do not have a DESC SRD starting point.  Do we need Y3 and Y6 forecasts or could we try to make do without?
-
-* Husni and Melissa should recalculate using Humna's depth cuts consistently.
+* Husni and Melissa should recalculate using Humna's depth cuts consistently.  Husni's writeup includes this recalculation.
 
 * The forecasts should be like those in the DESC SRD except for one thing: we should marginalize over the uncertainty in mean redshift and photo-z scatter and allow for different priors for the different strategies.  (In the DESC SRD we did not marginalize over those things, but rather forecast without that uncertainty and then set requirements based on what that uncertainty does to the constraining power.)
 
 * We need a way to say whether the priors on photo-z bias and scatter should differ for each strategy.  One obvious way to do so would be to assume some fiducial uncertainty based on what we should get for 4MOST and DESI cross-correlations within some area, and then change the size of the prior based on the overlap areas.
 
 * Currently Tim's code does not easily allow for a change in scatter with redshift.  He could change this to a photo-z bias *and* a photo-z scatter per tomographic  bin, which would increase the number of nuisance parameters, if it's important to do so.
+
+## Building an area / depth FoM emulation code
+
+We would like an area vs. depth FoM emulation code that enables us to interpolate FoM values between the scenarios for a given year.  The factors that go into the FoM at lowest order are the area; the number density of LSS and WL samples (given the depth); the redshift distribution of LSS and WL samples (given the depth).  We will build the emulator around some fiducial values defined by the range of the existing scenarios for each year, with 3 areas and 3 depths (a 3x3 grid of values).  Below is a table with a proposal for the forecasting inputs for the areas and depths.  The area axis will be dealt with by the naive covariance rescaling, while the depth axis will require recalculation of covariances.  The values are based on the range of contiguous areas for all scenarios in the table above.
+
+
+| Year | Areas to emulate in units of 1000 deg^2 | Median i-band depths to emulate |
+| --- | --- | --- |
+| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 |
+| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 |
+| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 |
+| 10 | 10, 15, 20 | 26.3, 26.5, 26.7 |
+
+Note that some of the depths on the grid in different years are the same: 25.5 is on the grid in Y1 and Y3, 26.1 is on the grid in Y3 and Y6, and 26.3 is on the grid in Y6 and Y10.  Hence instead of 12 unique depths, there are only 9, reducing the number of covariance calculations.
+
+In order to actually forecast for a given depth, we need to say how to map a given median i-band depth on this grid to a WL and LSS sample definition (number density, redshift distribution).  The derived parameters are given in a second table below; here is the recipe for deriving them:
+
+* In the DESC SRD v1, we assumed that for a given median i-band depth, the LSS sample is defined such that its limit is 1 magnitude shallower.  In other words, we took median Y1 and Y10 depths of 25.13 and 26.35, and defined the Y1 and Y10 samples with limiting magnitudes of 24.1 and 25.3.  We will use the same  "1 magnitude shallower than median i-band depths" for the depth values in this table here.
+
+* Given that depth, we use the cumulative counts derived based on the HSC Deep survey to estimate the LSS sample number densities, just as in the DESC SRD v1.  The formula is N(<ilim) = 37.8 * 10^(0.359 * (ilim - 25)) arcmin^-2.  In some cases, particularly for Y10, this assumes we can go beyond the nominal gold sample depth.  We will have to decide if we think that is justified (i.e., that we'll be able to understand the N(z) sufficiently based on cross-correlation analysis).  If we decide this is not safe, then it would simply mean discarding results for the two deeper points on our grid and reverting to the shallowest strategy with LSS sample limit of 25.3 in Y10.
+
+* Using the same approach for estimating the overall N(z) for the LSS sample as in the DESC SRD, we use a form n(z) propto z^2 Exp[-(z/z0)^alpha], with free parameters z0 and alpha.  I did this estimation for all values of LSS sample limits, and found that z0 and alpha followed second-order polynomials in ilim: z0 = 0.00627*(ilim-25)^2 + 0.0188*(ilim-25) + 0.272, and alpha = 0.0125*(ilim-25)^2 - 0.025*(ilim-25) + 0.909.  The values on the grid of ilim values are given in the table below.  Within a given year, the evolution of the mean redshift on the grid of depths is mild.  For example, for Y10, the mean redshift goes from 1.08 to 1.13, while the overall normalization of the density goes from 48/arcmin^2 to 67/arcmin^2.
+
+* For the weak lensing sample, we use the default mean site seeing and exposure time for Y1, Y3, Y6, and Y10 to get neff and (z0, alpha) parameters for four simulated scenarios, assuming use of r- and i-band data for WL with the same cuts as in the DESC SRD.  We then find a fitting formula for neff and (z0, alpha) as a function of depth based on those four simulated scenarios.  We are interpolating from just a few scenarios here because it requires making image simulations which can be kind of expensive.  For reference, the values in the DESC SRD were:
+    * Y1: neff = 10/arcmin^2, z0=0.13, alpha=0.78 (mean redshift: 0.85), median i-band depth 25.1
+    * Y10: neff = 27/arcmin^2, z0=0.11, alpha=0.68 (mean redshift: 1.05), median i-band depth 26.35
+
+* When we simulate new scenarios for Y3 and Y6, we use the usual sqrt(t) scaling to assume they correspond to median i-band depths of 25.7 and 26.1, respectively.  (The Y10 vs. Y1 depths above conform to this sqrt(t) scaling as well.)
+
+* Unfortunately, when analyzing to get the effective neff(z) for Y3 and Y6, I discovered a bug in the Y1 and Y10 neff(z) from the DESC SRD (!).  I will open an issue there to illustrate the impact of this bug. The bug is such that the overall normalization of neff is not affected, with the impact being primarily on the redshift distribution. I have now self-consistently re-simulated and calculated everything for Y1, Y3, Y6, and Y10.  The new results are as follows:
+    * The four simulated depths are 25.1, 25.7, 26.1, and 26.35.
+    * The neff (normalization only) is 11.2, 17.7, 23.2, 28.0/arcmin^2.  This is best fit by a quadratic formula (it's clearly not linear in depth): 4.33*(idepth-25)^2 + 7.03*(idepth-25) + 10.49
+    * The z0 values are 0.191, 0.185, 0.178, 0.176.  This is reasonably linear: -0.0125*(idepth-25) + 0.193.
+    * The alpha values are 0.870, 0.826, 0.798, 0.785.  This is reasonably linear: -0.069*(idepth-25) + 0.876.
+    * The resulting redshift distributions for the simulated depths are shown [here](https://github.com/LSSTDESC/ObsStrat/blob/static/static/all_years_neffz.png), while the variation between Y1 redshift distributions for different depths is illustrated [here](https://github.com/LSSTDESC/ObsStrat/blob/static/static/y1_neffz.png).
+
+* The values in the table below are based on these formulae for neff, z0, and alpha based on the four simulations.
+
+| Year | Areas (1000 deg^2) | Median i-band depths (idepth) | LSS sample limits (ilim) | N(<ilim) (arcmin^-2) | LSS z0 | LSS alpha  | WL neff (arcmin^-2) | WL z0 | WL  alpha |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 7.5, 13, 16 | 24.9, 25.2, 25.5 | 23.9, 24.2, 24.5 | 15, 20, 25 | 0.259, 0.261, 0.264 | 0.952, 0.937,  0.925 | 9.8, 12.1, 15.1 | 0.194, 0.190, 0.186 | 0.883, 0.862, 0.841 |
+| 3 | 10, 15, 20 | 25.5, 25.8, 26.1 | 24.5, 24.8, 25.1 | 25, 32, 41 | 0.264, 0.268, 0.274 | 0.925, 0.915, 0.907 | 15.1, 18.9, 23.5 | 0.186, 0.183, 0.179 | 0.841, 0.821, 0.800 |
+| 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 | 0.270, 0.274, 0.278 | 0.912, 0.907, 0.903 | 20.3, 23.5, 26.9 | 0.181, 0.179, 0.176 | 0.814, 0.800, 0.786 |
+| 10 | 10, 15, 20 | 26.3, 26.5, 26.7  | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 | 26.9, 30.8, 35.0 | 0.176, 0.174, 0.171 | 0.786, 0.772, 0.759 |
+
+* Effects not included: variations in typical seeing, variations in photo-z uncertainty (their values and the priors on them).
