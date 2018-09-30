@@ -210,3 +210,19 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 | 10 | 10, 15, 20 | 26.3, 26.5, 26.7  | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 | 26.9, 30.8, 35.0 | 0.176, 0.174, 0.171 | 0.786, 0.772, 0.759 |
 
 * Effects not included: variations in typical seeing, variations in photo-z uncertainty (their values and the priors on them).
+
+## Depth optimization for a given strategy
+
+The above calculations assume the same fixed depth cuts for all strategies, without any optimization.  Below is the plan for optimizing the depth cut for each strategy, using the FoM emulator:
+
+* Start with just two strategies to build up intuition, e.g., baseline2018a and pontus2002 (so baseline and a single large-area strategy).
+
+* The cuts take the form of requiring E(B-V)<X, depth>Y.  We will keep X fixed, but vary Y in steps of 0.1 magnitude in either direction.  As we vary Y to become deeper, the median depth will get deeper but area will go down; we can stop moving in that direction once the area decreases by say 25% compared to our current value of Y.  As we vary Y to become shallower, the median depth will get shallower and the area will go up until it plateaus (at the point where the depth>Y cut does nothing and only E(B-V)<X is relevant).  So we can stop once it plateaus.
+
+* For each strategy, we can use the process in step (2) to build up a curve in the 2D space of median depth vs. area.  A given point on the curve is determined by the value of Y that produced it.
+
+* We can use the FoM emulator, once we have it, to evaluate the FoM along that curve.  This can be used to provide a 1st order correction to our current 0th order plan to calculate FoMs for a fixed value of Y, and can tell us whether we need to more seriously explore optimization of Y before making conclusions (plus inform the step size in Y, etc.).
+
+* Once we have the FoM emulator all set up, we can use this to optimize the FoM value for each strategy as a matter of course.
+
+Once the white papers are submitted, we can consider turning this into a streamlined process in MAF rather than a multi-step process that requires hand-tuning.
