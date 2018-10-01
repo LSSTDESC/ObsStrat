@@ -1,12 +1,81 @@
 \subsection{Number of well-sampled type Ia supernovae}
 
+\subsubsection{SN samples}
+
+The SN sample usable for cosmology can be defined from the light curve
+requirements listed in the previous section. The key quantity is the
+redshift limit, $z_{lim}$, beyond which one starts loosing events
+because of poor sampling.  This ``redshift-limit'' is not a
+detectability limit.  It is the redshift value beyond which we start
+losing a fraction of the events, because their photometric follow-up
+does not match the requirements listed in the previous section.
+
+The definition of the redshift limit depends on the intrinsic
+luminosity of the supernova considered.  SN~Ia luminosities can be
+parametrized using two parameters, e.g. lightcurve width ($X_1$) and
+SN restframe B-V color at peak ($C$).  As shown on figure
+\ref{fig:jla_X1_C}, the SN distribution in this parameter space is
+compact and more than 95\% of the statistics can be enclosed in a
+tight ellipse. 
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{key_design/sn_parameter_space.pdf}
+    \caption{JLA supernovae the $(X_1,Color)$ parameter space --
+      (blue: nearby, green: SDSS, orange: SNLS).  The large dots
+      indicate the position of the faint, median and bright fiducial
+      SNe used for the cadence analyses.}
+    \label{fig:jla_X1_C}
+  \end{center}
+\end{figure}
+
+On the same figure, we have represented three fiducial SNe of
+particular interest: the red dot represents the faintest SN in this
+region of the parameter space $(X_1=-2, C=0.2)$, the green dot and
+blue dots show the average $(X_1=0, C=0)$ and brightest SN $(X_1=2,
+C=-0.2)$ respectively.
+
+We can define the redshift limit \zfaint as the limit beyond which the
+faintest fiducal SN no longer passes the light curve requirements. By
+doing this, we ensure that all SNe that live in the fiducial $(X_1,C)$
+parameter space and are below \zfaint do pass our light curve
+requirements.  \zfaint defines a {\em redshift-limited sample} whose
+selection function does not depend on the SN properties.
+
+We can also define a similar limit, using the median supernova,
+instead of the faint one.  This defines a SN sample whose upper
+redshift bins are affected by a selection bias, which must be
+determined using a simulation -- which itself depends on our knowledge
+of the SN luminosity distribution at those redshifts.  The uncertainty
+affecting the determination of the selection function generally limits
+the usefulness of the redshift bins affected by a selection bias.
+Since the selection function is generally symmetric around its 50\%
+point, the size of the sample limited by \zmed gives a good
+approximation of the total number of LSST SNe that will have precise
+distances.
+
+For each cadence we may thus estimate the following quantities in addition to the total number of well-sampled supernovae: 
+
+\begin{itemize}
+\item the sample redshift limit, \zfaint defined above, and the number
+  of well sampled supernovae below the redshift limit \nsnfaint
+\item the redshift \zmed at which the median supernova defined above
+  no longer passes the signal-to-noise requirements, and the number of
+  well-sampled supernovae below this redshift, \nsnmed.  
+\end{itemize}
+The former give an assessment of the size and depth of the redshift
+limited sample, i.e. the sample of supernovae usable for cosmology,
+and whose selection function is extremely easy to determine.  The
+latter gives an assessment of the size and depth of the sample of SNe
+that will have precise distances.
+
 \subsubsection{Deep Drilling fields}
 
 \paragraph{Method}
 
 The strategy to estimate the number of well-measured type Ia supernovae may be summarized in four steps: (1) light curves are simulated and fitted using observations of a given cadence; (2) selection criteria are applied to get high-quality supernovae; (3) the resulting observing efficiency curves are then convolved with a production rate \cite{perrett} so as to estimate the number of well-measured type Ia supernovae that may be collected by LSST given an observing strategy. 
 
-Table \ref{tab:sim_ddf} summarizes the parameter used in SN simulations. The selection of a sample of well-measured type Ia supernovae is done in two steps. A sample of observable supernovae is selected by requiring light curves to have \phasemin $\leq$ -5 and \phasemax $\geq$ 20 (where \phasemin~ and \phasemax~ are the minimal and maximum phases of the LC points, respectivelly). For each supernovae in this reference sample, additional selection criteria are applied:
+Table \ref{tab:sim_ddf} summarizes the parameter used in SN simulations. The selection of a sample of well-measured type Ia supernovae is done in two steps. A sample of observable supernovae is selected by requiring light curves to have \phasemin $\leq$ -5 and \phasemax $\geq$ 20 (where \phasemin~ and \phasemax~ are the minimal and maximum phases of the LC points, respectively). For each supernovae in this reference sample, additional selection criteria are applied:
 \begin{itemize}
 \item $N_{bef} \geq 4$ and $N_{aft} \geq 10$ where $N_{bef}$ and $N_{aft}$ are the number of LC points (with SNR$\geq$ 5) before and after \daymax.
  \item $\sigma_c \leq 0.04$ where $\sigma_c$ is the error on the \sncolor~parameter estimated from the fit of the light curve.
@@ -41,7 +110,7 @@ Typical detection efficiencies are given on Fig. \ref{fig:effi} for the \cosmos~
 \begin{center}
   
   \includegraphics[width=12cm]{nsn/effi_feature_cosmos.png}
- \caption{Detection efficiency as a function of the redshift for the \cosmos~field and feature\_baseline\_10yrs observing strategy (10 seasons). Blue, red and black lines correspond to faint, medium and bright supernovae, respectivelly.}\label{fig:effi}
+ \caption{Detection efficiency as a function of the redshift for the \cosmos~field and feature\_baseline\_10yrs observing strategy (10 seasons). Blue, red and black lines correspond to faint, medium and bright supernovae, respectively.}\label{fig:effi}
 \end{center}
 \end{figure}
 

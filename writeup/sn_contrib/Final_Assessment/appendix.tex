@@ -1,27 +1,5 @@
 \begin{appendices}
 
-\section{Derivation of formula \ref{eqn:snr}}
-
-\label{sec:snr}
-
-If we fit a light curve model $L(t) = A \times \ell(t)$ on a
-lightcurve $(t_i, y_i, \sigma_i)$, the least square estimate of $A$ is
-given by:
-$$
-\hat{A} = \frac{\sum w_i \ell_i y_i}{\sum w_i \ell_i^2}
-$$
-and the signal-to-noise ratio on $\hat{A}$ is:
-$$
-SNR = \sum_i (w_i L_i^2)^{1/2}
-$$ since we are in the background dominated regime, the weights may be
-expressed as a function of the $5-\sigma$ limiting flux of each visit
-$f_{i|5}$, and we have:
-$$
-SNR_{\mathrm{band}} = \sum_{i} 5 \times (f^{-2}_{i|5} L_i^2)^{1/2}
-$$
-where $5-\sigma$ limiting flux of each visit $f_{i|5}$.
-
-
 \section{Cadence global statistics}
 
 %\begin{table}
