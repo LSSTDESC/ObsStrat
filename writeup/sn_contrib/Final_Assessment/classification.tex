@@ -1,10 +1,11 @@
 \subsection{Photometric classification}
 
 \myparagraph{Method}
+
 The aim of this investigation is to analyse the affect a particular cadence has
 on ones ability to photometrically classify supernova. This investigation has been carried out by the
-developers of {\sc snmachine} who work in the Supernova Working Group under the umbrella of the Dark Energy Science
-Collaboration (DESC). {\sc snmachine} is a DESC product that is used as a photometric
+developers of {\tt snmachine} who work in the Supernova Working Group under the umbrella of the Dark Energy Science
+Collaboration (DESC). {\tt snmachine} is a DESC product that is used as a photometric
 classification pipeline \cite{lochner2016photometric}.
 
 The motivation for this work comes from the desire to identify as many Supernova
@@ -17,24 +18,25 @@ important. If one can obtain a greater set of Type 1a's, an updated Hubble
 digram plot can be produced and the fundamental parameters of the cosmological
 model can be tested further.
 
-In order to conduct this analysis, use of third
-party software, {\sc SNANA}, has been used to generate light curves that correspond to
-different cadences runs from {\sc OpSim} outputs. The generated light curves are
-then used as inputs in the {\sc snmachine} pipeline, an example of which is
+In order to conduct this analysis, a third
+party software, {\tt SNANA}, has been used to generate light curves that correspond to
+different cadences runs from \opsim outputs. The generated light curves are
+then used as inputs in the {\tt snmachine} pipeline, an example of which is
 shown below.
 
 An interpolation is done for the between the sampled points to produce a smooth
 light curves with one can then apply a wavelet decomposition to. The resulting
 wavelet coefficients are then processed further to reduce dimensionality using a
-principle component analysis. These principle components are what are then
+principle component analysis. These principle components are then
 provided as features to a random forest classifier. To ensure a controlled test,
 for each cadence run a classifier is trained on 2000 light
 curves only and then tested on the remaining set of light curves that are in the
-corresponding dataset produced from {\sc SNANA} in relation to specific {\sc OpSim} cadence
-simulation. 
+corresponding dataset produced from {\tt SNANA} in relation to specific \opsim cadence
+simulations. 
 
 \myparagraph{Results}
-The results for which are shown below in Figure\ref{fig:rocs}
+
+%The results for which are shown below in Figure\ref{fig:rocs}
 \begin{figure}
   \centering
   \subfigure[DDFY1]{\label{fig:ddfy1}\includegraphics[width=0.8\textwidth]{classification/photometric_classification_roc_results_ddfY1.png}}
@@ -42,15 +44,17 @@ The results for which are shown below in Figure\ref{fig:rocs}
    \caption{Comparison for the DDFY1 and DDFY10 ROC curves}\label{fig:rocs}
 \end{figure}
 
-Figure\ref{fig:ddfy1} shows the
-comparative classification performances between 13 cadences for the Deep
-Drilling Fields of Year 1 whereas Figure\ref{fig:ddfy10} compares the same
+Figure\ref{fig:ddfy1}~shows the comparative classification performance between 13 cadences for the Deep
+Drilling Fields of Year 1 whereas Figure\ref{fig:ddfy10}~compares the same
 cadences for the Deep Drilling Fields over the entire survey.
 
 The area under the Receiver Operating Characteristic (auROC) curves were chosen as the metric
 to evaluate the performance. It was felt this single scalar would be most useful
 for being able to differentiate the ability of the various cadence strategies
 to perform photometric classification.
+
+
+\myparagraph{Conclusion}
 
 By interpolating the sampled light curved with Gaussian process and then applying a
 wavelet decomposition to these interpolated light curves, one obtains features
@@ -61,11 +65,7 @@ Gaussian processes and thus provided better features through via the wave decomp
 
 Therefore it can be understood that in order to classify transients, short sampling of a light
 curve is important. This is particularly important for early classification
-leading to possible spectroscopic follow up. Work from Philippe Gris
-investigates
-the number of \emph{well-sampled} light curves one can obtain from the different
-cadence strategies. Separate to that study, analysis of cadence impact on
-classification is done here, but nonetheless, a well sampled light curve would
+leading to possible spectroscopic follow up. A well sampled light curve would
 indeed boost classification rate. Thus, before any analysis is conducted, one
 could assume a rolling cadence with 2 to 3 days would be beneficial to the
 cause.
@@ -73,6 +73,7 @@ With this in mind, the results of the analysis shown here do not in particular
 point to a specific cadence as be favourable, but the performance of some
 strategies do not perform as well as others in the Year 1 case and over the
 Year 10 full survey.
+
 
 This research can be taken further in several ways and there are plans to
 continue this analysis for Wide-Fast-Deep cadence runs also. Work is currently
@@ -86,8 +87,3 @@ also hoped that number of Supernova used for training affects classification
 performances, this work is done but alternations are required to the code for a complete
 analysis. Finally it would be beneficial to understand the elements of each cadence
 strategy to give further insight as to why certain cadences perform the way they do.
-
-\myparagraph{Conclusions} 
-It is difficult to say at this stage which cadence is preferred until further
-analysis is done, and one leaves this to the working group leaders to draw
-concrete conclusions.
