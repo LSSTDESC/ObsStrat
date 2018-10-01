@@ -1,9 +1,65 @@
 \subsection{Number of well-sampled type Ia supernovae}
 
+\subsubsection{Requirements on SN sampling}
+\label{sec:sn_sampling_requirements}
+
+Light curves are the essential ingredient to (1) measure standardized
+luminosity distances and (2) photometrically identify SNe~Ia from
+their full light curve. This drives a series of requirements which are
+summarized below.
+
+\begin{enumerate}
+
+\item each SN must have good quality measurements in at least three
+  bands. We need two bands, covering the restframe $B$ and $V$ region,
+  to constrain the restframe color of the SN. We need to provision an
+  additional band (redder than restframe $V$), to enable next
+  generation standardization techniques, that will likely rely on two
+  restframe colors.
+
+\item the follow-up of each supernova must be good enough in the
+  observer-frame bands that correspond to the $B$- and $V$-restframe
+  spectrum ($3800 \angstrom < \lambda < 7000 \angstrom$).  At
+  high-redshift, in particular, one should avoid relying on the $UV$
+  restframe region to derive a distance, given the high intrinsic
+  dispersion of SN~Ia at those wavelengths.
+  
+\item we require the light curve shape to be well sampled in the
+  (restframe) phase interval $[-10;+30]$ days, with at least five
+  visits before peak (each of those visits in any of the eligible
+  band), and ten visits after peak.  To obtain this in the lower
+  redshift region of the Hubble diagram, one requires an
+  observer-frame cadence of 4 days.  At higher redshifts redshifts
+  (DDF fields), this requirement may be slightly relaxed. However,
+  since we are going to rely almost exclusively on photometric
+  identification, it is essential to secure a tight sampling of the SN
+  color evolution at all redshift.
+  
+\item we require that the photon noise contribution to the distance
+  measurement is subdominant w.r.t. the intrinsic dispersion of the
+  SNe (after standardization).  There are several ways to quantify
+  this.  With today's standardization techniques, the SN standardized
+  distance modulus is:
+  \begin{equation}
+    \mu = m^\star_B + \alpha X_1 - \beta C - \cal{M}
+  \end{equation}
+  where $m^\star_B$ is the peak brightness in restframe $B$, $X_1$
+  characterize the lightcurve width, and $C$ is an estimate of the
+  restframe color $B-V$. $\alpha$, $\beta$ and $\cal{M}$ are global
+  parameters, fit along with the cosmology. If the light curve is
+  correctly sampled (see point above), the propagation of the
+  measurement uncertainties affecting $m^\star_B$, $X_1$ and $C$ is
+  dominated by the contribution of $\sigma_C$. (since $\beta \sim
+  3$). In practice, requiring $\sigma C < 0.04$ ensures that $\sigma
+  \mu < 0.1$, below the intrinsic dipersion in the Hubble diagram,
+  after standardization.
+\end{enumerate}
+
+
 \subsubsection{SN samples}
 
 The SN sample usable for cosmology can be defined from the light curve
-requirements listed in the previous section. The key quantity is the
+requirements listed in the previous section. A key quantity is the
 redshift limit, $z_{lim}$, beyond which one starts loosing events
 because of poor sampling.  This ``redshift-limit'' is not a
 detectability limit.  It is the redshift value beyond which we start
@@ -71,7 +127,7 @@ that will have precise distances.
 
 \subsubsection{Deep Drilling fields}
 
-\paragraph{Method}
+\myparagraph{Method}
 
 The strategy to estimate the number of well-measured type Ia supernovae may be summarized in four steps: (1) light curves are simulated and fitted using observations of a given cadence; (2) selection criteria are applied to get high-quality supernovae; (3) the resulting observing efficiency curves are then convolved with a production rate \cite{perrett} so as to estimate the number of well-measured type Ia supernovae that may be collected by LSST given an observing strategy. 
 
@@ -83,10 +139,13 @@ Table \ref{tab:sim_ddf} summarizes the parameter used in SN simulations. The sel
 The season length which depends on the redshift is estimated using the supernovae of the reference sample.
 
 \begin{table}[!htbp]
-\begin{center}
-\begin{tabular}{|c|c|}
-\hline
+  \begin{center}
+    \caption{Range of the parameters used to simulate type Ia SN}\label{tab:sim_ddf}
+\begin{tabular}{cc}
+  \hline
+  \hline
 Parameter & Range \\
+\hline
 \hline
                     & (-2.0,0.2),(0.0,0.0),(2.0,-0.2) \\
  (\strech,\sncolor) & (-2.0,0.0),(-2.0,0.2),(0.0,-0.2) \\
@@ -98,11 +157,10 @@ Parameter & Range \\
                     & (\tmin~and \tmax~ are the min and max MJD of a season) \\
                     \hline
 \end{tabular}
-\caption{Range of the parameters used to simulate type Ia SN}\label{tab:sim_ddf}
 \end{center}
 \end{table}
 
-\paragraph{Results}
+\myparagraph{Results}
 
 Typical detection efficiencies are given on Fig. \ref{fig:effi} for the \cosmos~field and feature\_baseline\_10 yrs cadence . One may observe that the lowest efficiencies (independently on the (\strech,\sncolor) values) correspond to the first two seasons of observations which are known to be very bad for this observing strategy and for this field (see for instance Figs. \ref{fig:cosmos_cad} and \ref{fig:cosmos_m5}).
 
@@ -119,8 +177,8 @@ Efficiency curves are convolved with a production rate \cite{perrett} to estimat
 \begin{figure}[htbp]
 \begin{center}
   
-  \includegraphics[width=15cm]{nsn/NSN_season_4DDF.png}
-  \includegraphics[width=15cm]{nsn/NSN_all_4DDF.png}
+  \includegraphics[width=15cm,height=10cm]{nsn/NSN_season_4DDF.png}
+  \includegraphics[width=15cm,height=10cm]{nsn/NSN_all_4DDF.png}
  \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. Four DDF (\cosmos,\xmmlss,\cdfs,\elais) have been considered. The red line corresponds to 15k supernovae.}\label{fig:nsn_four}
 \end{center}
 \end{figure}
@@ -128,21 +186,22 @@ Efficiency curves are convolved with a production rate \cite{perrett} to estimat
 \begin{figure}[htbp]
 \begin{center}
   
-  \includegraphics[width=15cm]{nsn/NSN_season_allDDF.png}
-  \includegraphics[width=15cm]{nsn/NSN_all_allDDF.png}
+  \includegraphics[width=15cm,height=10cm]{nsn/NSN_season_allDDF.png}
+  \includegraphics[width=15cm,height=10cm]{nsn/NSN_all_allDDF.png}
  \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. All DDF have been considered.The red line corresponds to 27k supernovae.}\label{fig:nsn_all}
 \end{center}
 \end{figure}
 
-When considering all DDF the winner is of course kraken\_2035 (27K after ten years) since this observing strategy considered 9 DDFs whereas all others observed 4 to 5 fields. One may observe that extrapolating a four fields configuration results (like the ones obtained with \feature) to a 9 DDF observing strategy will probably lead to an overestimation of the resulting number of well-measured type Ia supernovae. It is indeed difficult to maintain the same quality (in terms of cadence, season length and thus depth) when moving from a 4 to a 9 DDF strategy.
+\myparagraph{Conclusion}
 
-\begin{figure}[htbp]
-\begin{center}
-  
-  \includegraphics[width=15cm]{nsn/Z95_NSN.png}
+When considering all DDF the winner (w.r.t. the total number of oberved and well-sampled supernovae) is of course kraken\_2035 (30K after ten years) since this observing strategy considered 9 DDFs whereas all others observed 4 to 5 fields. One may observe that extrapolating a four fields configuration results (like the ones obtained with \feature) to a 9 DDF observing strategy will probably lead to an overestimation of the resulting number of well-measured type Ia supernovae. It is indeed difficult to maintain the same quality (in terms of cadence, season length and thus depth) when moving from a 4 to a 9 DDF strategy.
+
+\begin{sidewaysfigure}
+\begin{center}  
+  \includegraphics[width=\linewidth]{nsn/Z95_NSN.png}
  \caption{95\% redshift limit (ie corresponding to the detection of 95\% of the supernovae of the corresponding sample) as a function of the number of faint supernovae. Each point correspond to a field, a season and an observing strategy.}\label{fig:z95}
 \end{center}
-\end{figure}
+\end{sidewaysfigure}}
 
 Another way to assess the quality of an observing strategy is to estimate the redshift detection limit for faint supernovae (per season and per field). On Figure \ref{fig:z95} is displayed the 95\% redshift limit (ie corresponding to the detection of 95\% of the supernovae of the corresponding sample) as a function of the number of faint supernovae. Huge variations among and inside strategies are observed. This plot reflects the quality of the proposed cadences. It seems that \redshift~of 0.7-0.75 may be reached with four fields. Once again \feature~tend to give the highest redshifts and the most homogeneous results among the fields and seasons. 
 
@@ -150,7 +209,7 @@ Another way to assess the quality of an observing strategy is to estimate the re
 \subsubsection{Wide Fast Deep}
 \label{sec:wide_fast_deep_analysis_method}
 
-\paragraph{Method}
+\myparagraph{Method}
 
 WFD observations involve a large number of fields.  The observations
 are dithered, and the size and depth of the final sample depends
@@ -162,13 +221,13 @@ describe below.
 The celestial sphere is pixellized in Healpix superpixels\footnote{we
   choose nside=64, which corresponds to 0.8 deg$^2$ healpixels.  We
   have verified that (1) larger pixels (nside=32) leads to
-  underestimating the number of SNe by ~ 15\% \FixMe{recheck that} and
+  underestimating the number of SNe by \~ 15\% and
   that smaller pixels (nside=128 and above) give exactly the same
   results.}.  The directions / healpixel affected by a Galactic extinction $E(B-V)$ larger than 0.25
 are masked and not included in our assessment. We consider only the $griz$ observations which are the ones
 that matter to derive SN luminosity distances. 
 Using a simple model of the LSST focal plane, we play
-the cadence, and determine, the list of superpixels observed for a
+the cadence, and estimate the list of superpixels observed for a
 given exposure. This allows us to build a log which reports the mjd,
 band, and observing conditions of each healpixel observation.
 
@@ -210,10 +269,7 @@ the observing strategy as a function of time.
     \end{center}
 \end{sidewaysfigure}
 
-
-
-
-\paragraph{Results}
+\myparagraph{Results}
 
 We have conducted the analysis described above on all the cadences released
 so far.  The final maps that report, for each healpixel (1) the final

@@ -88,24 +88,24 @@ feature rolling half mask &  161705 &  248253 &  498985 &  500143 &  468829 &  4
                      &    6.9 \% &   10.6 \% &   21.9 \% &   22.0 \% &   20.6 \% &   18.0 \% & \\
 \hline
 \hline
-\multicolumn{8}{c}{Altsched family}\\
+\multicolumn{8}{c}{\altsched~family}\\
 \hline
-       altsched wide &  175870 &  229198 &  585108 &  386768 &  543465 &  149779 &  2070188 \\ 
+       \altsched~wide &  175870 &  229198 &  585108 &  386768 &  543465 &  149779 &  2070188 \\ 
                      &    8.5 \% &   11.1 \% &   28.3 \% &   18.7 \% &   26.3 \% &    7.2 \% & \\
 \hline
-       altsched wide &  174191 &  224852 &  583361 &  390035 &  542420 &  164683 &  2079542 \\ 
+       \altsched~wide &  174191 &  224852 &  583361 &  390035 &  542420 &  164683 &  2079542 \\ 
                      &    8.4 \% &   10.8 \% &   28.1 \% &   18.8 \% &   26.1 \% &    7.9 \% & \\
        \hline
-    altsched rolling &  158792 &  203909 &  567306 &  376261 &  556285 &  186852 &  2049405 \\ 
+    \altsched~rolling &  158792 &  203909 &  567306 &  376261 &  556285 &  186852 &  2049405 \\ 
                      &    7.7 \% &    9.9 \% &   27.7 \% &   18.4 \% &   27.1 \% &    9.1 \% & \\
 \hline
-            altsched &  170952 &  221660 &  570519 &  376786 &  529925 &  177866 &  2047708 \\ 
+            \altsched &  170952 &  221660 &  570519 &  376786 &  529925 &  177866 &  2047708 \\ 
                      &    8.3 \% &   10.8 \% &   27.9 \% &   18.4 \% &   25.9 \% &    8.7 \% & \\
 \hline
-       altsched (GW) &  170952 &  221660 &  570519 &  376786 &  529925 &  177866 &  2047708 \\ 
+       \altsched (GW) &  170952 &  221660 &  570519 &  376786 &  529925 &  177866 &  2047708 \\ 
                      &    8.3 \% &   10.8 \% &   27.9 \% &   18.4 \% &   25.9 \% &    8.7 \% & \\
 \hline
- altsched + twilight &  170952 &  481678 &  570519 &  376786 &  529925 &  177866 &  2307726 \\ 
+ \altsched + twilight &  170952 &  481678 &  570519 &  376786 &  529925 &  177866 &  2307726 \\ 
                      &    7.4 \% &   20.9 \% &   24.7 \% &   16.3 \% &   23.0 \% &    7.7 \% & \\
 
 \hline
@@ -154,4 +154,48 @@ feature rolling half mask &  161705 &  248253 &  498985 &  500143 &  468829 &  4
 
   \input{DD_plots_cadence}
 
+  \section{Overlap with 4MOST}
+
+  \begin{figure}[!htbp]
+  \begin{tabular}{cc}
+    
+    \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2664_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2664_wfd_avail_overlap.png} \cr
+    \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2665_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2665_wfd_avail_overlap.png} \cr
+    \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2667_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2667_wfd_avail_overlap.png} \cr
+
+  \end{tabular}
+  \caption{Left: the LSST Healpix maps colour-coded by number of
+    visits {\bf CHECK}. Right: The corresponding 4MOST overlap map,
+    where red represents the overlap area, blue represents areas of
+    LSST WFD that have no 4MOST coverage and yellow represents 4MOST
+    area with no LSST coverage. Note that the LSST DDFs are
+    deliberately missing from the LSST maps in this analysis. }
+  \label{overlap_maps}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \begin{tabular}{cc}
+
+    \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2026_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2026_wfd_avail_overlap.png} \cr
+    \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2036_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2036_wfd_avail_overlap.png} \cr
+    \includegraphics[width=7.0cm]{overlap_4MOST/mothra_2045_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/mothra_2045_wfd_avail_overlap.png} \cr
+
+  \end{tabular}
+  \caption{continued}
+  
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{tabular}{cc}
+    
+    \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2002_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2002_wfd_avail_overlap.png} \cr
+    \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2489_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2489_wfd_avail_overlap.png} \cr
+    \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2502_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2502_wfd_avail_overlap.png} \cr
+        
+  \end{tabular}
+  \caption{continued}
+  \label{overlap_maps_c}
+\end{figure}
+
+  
 \end{appendices}

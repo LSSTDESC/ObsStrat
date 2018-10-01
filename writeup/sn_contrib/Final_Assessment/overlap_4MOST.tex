@@ -1,6 +1,6 @@
 \subsection{Overlap with 4MOST extragalactic surveys}
 
-\paragraph{Method}
+\myparagraph{Method}
 
 The 4MOST facility will be a highly multiplexed, optical, fibre-fed
 spectrograph mounted on the 4-metre VISTA telescope. It is due to
@@ -24,11 +24,10 @@ to obtain spectral time-sequences of AGN in 4MOST's deep fields (that
 are likely to coincide with at least a subset of LSST's deep fields,
 TBD), for reverberation mapping.
 
-
 \begin{figure}[!htbp]
-\begin{centering}
+\begin{center}
   \includegraphics[width=10.0cm]{overlap_4MOST/4most_fndep.png}
-\end{centering}
+\end{center}
 
 \caption{One realisation of the sky coverage of 4MOST extragalactic
   surveys, colour coded by number of visits. This is based on
@@ -51,7 +50,7 @@ exceptions if, for example, there was an interesting deep field a bit
 north or south of the current range.
 
 
-\paragraph{Results}
+\myparagraph{Results}
 
 In order to compare the overall spatial coverage of 4MOST and the
 various possible LSST survey strategies, we have divided the sky into
@@ -62,10 +61,11 @@ here.
 For the LSST surveys we used each OpSim simulation (with DESC dithers
 {\bf CHECK} ) to make a healpix map, and kept all healpixels with more
 than 500 visits over 10 years.
+\begin{comment}
 \footnote{The code used to
   make these is the script
   {\tt https://github.com/rbiswas4/OpSimSummary/blob/master/scripts/make\_simlibs.py}}
-
+\end{comment}
 
 For 4MOST, we used the most recent 4MOST 4FS simulation,
 (round9/c/run01 dated 2018-5-14) and made a Healpix map using the
@@ -76,64 +76,29 @@ was kept.
 
 We then calculated number of overlapping healpixels and multiplied by the
 spatial area of one healpixel to give the overlapping areas shown in
-Table~\ref{4most_overlap_tab}. Maps are shown in Figure~\ref{overlap_maps}.
+Table~\ref{4most_overlap_tab}. Maps are shown in Figures~\ref{overlap_maps} - \ref{overlap_maps_c}.
 
 \begin{table}[!htbp]
-\begin{tabular}{|c|c|}\hline
-LSST OpSim run & Overlapping area (sq deg) \cr\hline
-colossus\_2664 &        12805 \cr
-colossus\_2665 &	13096 \cr
-colossus\_2667 &	12644 \cr
+  \begin{center}
+ \caption{Overlapping areas between LSST WFD and 4MOST extragalactic surveys}
+\begin{tabular}{cc}\hline \hline
+  LSST OpSim run & Overlapping area (sq deg) \cr\hline \hline
+  mothra\_2045   &	11702 \cr
+  colossus\_2667 &	12644 \cr
 kraken\_2026   &	12644 \cr
 kraken\_2036   &        12644 \cr
-mothra\_2045   &	11702 \cr
-pontus\_2002   &	15000 \cr
 pontus\_2489   &	12644 \cr  
-pontus\_2502   &	12644 \cr  \hline
+pontus\_2502   &	12644 \cr
+colossus\_2664 &        12805 \cr
+colossus\_2665 &	13096 \cr
+pontus\_2002   &	15000 \cr
+  \hline
 \end{tabular}
+\end{center}
 \label{4most_overlap_tab}
 \end{table}
 
 
-\begin{figure}[!htbp]
-  \begin{tabular}{cc}
-    
-    \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2664_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2664_wfd_avail_overlap.png} \cr
-    \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2665_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2665_wfd_avail_overlap.png} \cr
-    \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2667_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/colossus_2667_wfd_avail_overlap.png} \cr
-
-  \end{tabular}
-  \caption{Left: the LSST Healpix maps colour-coded by number of
-    visits {\bf CHECK}. Right: The corresponding 4MOST overlap map,
-    where red represents the overlap area, blue represents areas of
-    LSST WFD that have no 4MOST coverage and yellow represents 4MOST
-    area with no LSST coverage. Note that the LSST DDFs are
-    deliberately missing from the LSST maps in this analysis. }
-  \label{overlap_maps}
-\end{figure}
-
-\begin{figure}[!htbp]
-  \begin{tabular}{cc}
-
-    \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2026_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2026_wfd_avail_overlap.png} \cr
-    \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2036_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/kraken_2036_wfd_avail_overlap.png} \cr
-    \includegraphics[width=7.0cm]{overlap_4MOST/mothra_2045_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/mothra_2045_wfd_avail_overlap.png} \cr
-
-  \end{tabular}
-  \caption{continued}
-  
-\end{figure}
-
-\begin{figure}[htbp]
-  \begin{tabular}{cc}
-    
-    \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2002_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2002_wfd_avail_overlap.png} \cr
-    \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2489_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2489_wfd_avail_overlap.png} \cr
-    \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2502_wfd_avail_ldep.png} & \includegraphics[width=7.0cm]{overlap_4MOST/pontus_2502_wfd_avail_overlap.png} \cr
-        
-  \end{tabular}
-  \caption{continued}
-\end{figure}
 
 
 \subparagraph{Temporal overlap}
@@ -149,7 +114,7 @@ should observe in the same declination range.  Coordination of LSST
 and 4MOST surveys is essential.
 
 
-\paragraph{Conclusion}
+\myparagraph{Conclusion}
 
 Of the LSST cadence simulations considered, Pontus\_2002 gives the
 largest overall spatial overlap, of approx. 15,000 sq deg, compared to
@@ -159,4 +124,4 @@ but goes a little too far in that some of extended LSST area is then
 not covered by 4MOST.
 
 As stressed above, temporal coordination of the 4MOST and LSST surveys is
-essential if transient science is to me maximised.
+essential if transient science is to be maximised.
