@@ -1,4 +1,4 @@
-\subsection{Number of well-sampled type Ia supernovae}
+\subsection{Number of well-measured type \sne}
 
 \subsubsection{Requirements on SN sampling}
 \label{sec:sn_sampling_requirements}
@@ -56,7 +56,7 @@ summarized below.
 \end{enumerate}
 
 
-\subsubsection{SN samples}
+\subsubsection{SN samples}\label{sec:metrics}
 
 The SN sample usable for cosmology can be defined from the light curve
 requirements listed in the previous section. A key quantity is the
@@ -179,7 +179,7 @@ Efficiency curves are convolved with a production rate \cite{perrett} to estimat
   
   \includegraphics[width=15cm,height=10cm]{nsn/NSN_season_4DDF.png}
   \includegraphics[width=15cm,height=10cm]{nsn/NSN_all_4DDF.png}
- \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. Four DDF (\cosmos,\xmmlss,\cdfs,\elais) have been considered. The red line corresponds to 15k supernovae.}\label{fig:nsn_four}
+ \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. Four DDF (\cosmos,\xmmlss,\cdfs,\elais) have been considered.}\label{fig:nsn_four}
 \end{center}
 \end{figure}
 
@@ -188,13 +188,13 @@ Efficiency curves are convolved with a production rate \cite{perrett} to estimat
   
   \includegraphics[width=15cm,height=10cm]{nsn/NSN_season_allDDF.png}
   \includegraphics[width=15cm,height=10cm]{nsn/NSN_all_allDDF.png}
- \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. All DDF have been considered.The red line corresponds to 27k supernovae.}\label{fig:nsn_all}
+ \caption{Top: Number of well-measured type Ia supernovae as a function of the season. Bottom: Number of  well-measured type Ia supernovae as a function of observing strategy after ten years of operation. All DDF have been considered.}\label{fig:nsn_all}
 \end{center}
 \end{figure}
 
 \myparagraph{Conclusion}
 
-When considering all DDF the winner (w.r.t. the total number of oberved and well-sampled supernovae) is of course kraken\_2035 (30K after ten years) since this observing strategy considered 9 DDFs whereas all others observed 4 to 5 fields. One may observe that extrapolating a four fields configuration results (like the ones obtained with \feature) to a 9 DDF observing strategy will probably lead to an overestimation of the resulting number of well-measured type Ia supernovae. It is indeed difficult to maintain the same quality (in terms of cadence, season length and thus depth) when moving from a 4 to a 9 DDF strategy.
+When considering all DDF the winner (w.r.t. the total number of well-sampled supernovae) is of course kraken\_2035 (30K after ten years) since this observing strategy considered 9 DDFs whereas all others observed 4 to 5 fields. One may observe that extrapolating a four fields configuration results (like the ones obtained with \feature) to a 9 DDF observing strategy will probably lead to an overestimation of the resulting number of well-measured type Ia supernovae. It is indeed difficult to maintain the same quality (in terms of cadence, season length and thus depth) when moving from a 4 to a 9 DDF strategy.
 
 \begin{sidewaysfigure}
 \begin{center}  
@@ -203,7 +203,7 @@ When considering all DDF the winner (w.r.t. the total number of oberved and well
 \end{center}
 \end{sidewaysfigure}
 
-Another way to assess the quality of an observing strategy is to estimate the redshift detection limit for faint supernovae (per season and per field). On Figure \ref{fig:z95} is displayed the 95\% redshift limit (ie corresponding to the detection of 95\% of the supernovae of the corresponding sample) as a function of the number of faint supernovae. Huge variations among and inside strategies are observed. This plot reflects the quality of the proposed cadences. It seems that \redshift~of 0.7-0.75 may be reached with four fields. Once again \feature~tend to give the highest redshifts and the most homogeneous results among the fields and seasons. 
+Another way to assess the quality of an observing strategy is to estimate the redshift detection limit for faint supernovae (see \ref{sec:metrics}). On Figure \ref{fig:z95} is displayed the 95\% redshift limit (ie corresponding to the detection of 95\% of the faint supernovae sample) as a function of the number of faint supernovae. Huge variations among and inside strategies are observed. This plot reflects the quality of the proposed cadences. It seems that \redshift~of 0.7-0.75 may be reached with four fields. Once again \feature~tend to give the highest redshifts and the most homogeneous results among the fields and seasons. 
 
 
 \subsubsection{Wide Fast Deep}
@@ -241,7 +241,7 @@ section. For each mjd and each pixel, we determine:
 where $\delta\Omega_{\mathrm{pix}}$ is the solid angle subtended by
 one pixel, $\Delta T_{\mathrm{step}}$ is the simulation time step (in
 observer frame days) and $\mathcal{R}(z)$ is the SN~Ia volumetric rate
-(we adopt the rate published in (Perrett et al, 2012)).  We also
+(we adopt the rate published in \cite{perrett}).  We also
 compute the average cadence (in day$^{-1}$), i.e. the number of $g, r,
 i$ or $z$ visits in a fiducial restframe interval.
 

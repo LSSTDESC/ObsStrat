@@ -4,17 +4,14 @@
 
 The aim of this investigation is to analyse the affect a particular cadence has
 on ones ability to photometrically classify supernova. This investigation has been carried out by the
-developers of {\tt snmachine} who work in the Supernova Working Group under the umbrella of the Dark Energy Science
-Collaboration (DESC). {\tt snmachine} is a DESC product that is used as a photometric
+developers of {\tt snmachine}, a DESC product that is used as a photometric
 classification pipeline \cite{lochner2016photometric}.
 
-The motivation for this work comes from the desire to identify as many Supernova
-as Type 1a in order to help constrain the nature of Dark Energy.
+The motivation for this work comes from the desire to identify as many \sne in order to help constrain the nature of Dark Energy.
 LSST will observe many more Supernova than ever before, but at a rate that is
 not feasible for all of these transients to be spectroscopically followed up and
-confirmed as Type 1a or not.
-Thus, the ability to classify these objects photometrically will be very
-important. If one can obtain a greater set of Type 1a's, an updated Hubble
+confirmed as Type 1a or not. Thus, the ability to classify these objects photometrically will be very
+important. If one can obtain a greater set of \sne, an updated Hubble
 digram plot can be produced and the fundamental parameters of the cosmological
 model can be tested further.
 
@@ -44,8 +41,8 @@ simulations.
    \caption{Comparison for the DDFY1 and DDFY10 ROC curves}\label{fig:rocs}
 \end{figure}
 
-Figure\ref{fig:ddfy1}~shows the comparative classification performance between 13 cadences for the Deep
-Drilling Fields of Year 1 whereas Figure\ref{fig:ddfy10}~compares the same
+Figure \ref{fig:ddfy1}~shows the comparative classification performance between 13 cadences for the Deep
+Drilling Fields of Year 1 whereas Figure \ref{fig:ddfy10}~compares the same
 cadences for the Deep Drilling Fields over the entire survey.
 
 The area under the Receiver Operating Characteristic (auROC) curves were chosen as the metric
@@ -61,9 +58,7 @@ wavelet decomposition to these interpolated light curves, one obtains features
 that can be provided to a classifier, in this case a Random Forest algorithm.
 The performance of the interpolation is directly affected by the amount of
 samples one has on the light curve. More samples improves the reliability of the
-Gaussian processes and thus provided better features through via the wave decomposition.
-
-Therefore it can be understood that in order to classify transients, short sampling of a light
+Gaussian processes and thus provided better features through via the wave decomposition. Therefore it can be understood that in order to classify transients, short sampling of a light
 curve is important. This is particularly important for early classification
 leading to possible spectroscopic follow up. A well sampled light curve would
 indeed boost classification rate. Thus, before any analysis is conducted, one
