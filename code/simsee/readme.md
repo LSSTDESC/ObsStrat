@@ -1,8 +1,8 @@
-`simsee`
-========
+# `simsee` and `owsee`
 
-Introduction
-------------
+## `simsee`
+
+### Introduction
 
 `simsee` is a program for generating seeing data sets for use by survey
 strategy simulators. It is designed for LSST's opsim4, and will be
@@ -16,8 +16,8 @@ copying values from an input table of DIMM data, and only generate new
 artifical values based on its model where there are gaps in the DIMM
 data. 
 
-Dependencies
-------------
+### Dependencies
+
 
 `simsee` depends on the numpy, pandas, and astropy python modules. It
 has been tested using the following versions:
@@ -32,16 +32,14 @@ has been tested using the following versions:
 The use of these by `simsee` is fairly genereric, and it *should* work
 fine with other versions.
 
-Obtaining
----------
+### Obtaining
 
 `simsee` is part of the [obs_strat github product](https://github.com/LSSTDESC/obs_strat).
 
 For the remainder of this document, `${OBS_STRAT_DIR}` refers to the
 directory into which this product was checked out.
 
-Testing
--------
+### Testing
 
 Testing requires an input DIMM data set not included in the github
 repository. To run the self test, begin by copying the test data to
@@ -57,8 +55,7 @@ The tests can then be run thus:
 python -m doctest ${OBS_STRAT_DIR}/code/simsee/python/simsee.py
 ```
 
-Configuration
--------------
+### Configuration
 
 `simsee` reads a set of model parameters from a configuration file, and
 generates an output table with the seeing for a sequence of times
@@ -78,8 +75,7 @@ data. The input data file must be an hdf5 file containing a single
 pandas DataFrame with a "time" index and a "seeing" column, in units
 of arcseconds.
 
-Execution
----------
+### Execution
 
 `simsee` can be run thus:
 
@@ -87,8 +83,7 @@ Execution
 python ${OBS_STRAT_DIR}/code/simsee/python/simsee.py myconfig.conf > myseeing.txt
 ```
 
-Output
-------
+### Output
 
 `simsee` creates a tab separated ascii text table with the following
 columns:
@@ -104,8 +99,7 @@ columns:
 <dt>dimm_time</td> <dd>If the data is directly copied from a DIMM measurement, the time of the DIMM measurement of the input data set is reported here. If it was generated using the model, the keyword "artificial" is present instead.</dd>
 </dl>
 
-Export for `opsim4`
--------------------
+### Export for `opsim4`
 
 There is a shell script that loads this data file into an sqlite
 database that can be read by LSST's opsim4:
@@ -113,3 +107,78 @@ database that can be read by LSST's opsim4:
 ```sh
 ${OBS_STRAT_DIR}/code/simsee/sh/create_opsim_seeing_db.sh myseeing.txt myseeing.db
 ```
+
+## `owsee`
+
+### Introduction
+
+`owsee` reads an `opsim4` or similar (e.g. `altSched`) database and
+overwrites the seeing and derived depth values with values from a
+defferent seeing database. The intention is to make a quick and dirty
+approximation to what the reference simulations would look like with
+alternate seeing databases. This isn’t really fair: a given schedule
+change its selection of exposures based on the seeing, and the
+database produced by `owsim` will not reflect the these changes. For
+example, if the scheduler choses different programs based on seeing,
+or implements a seeing dependent airmass limit, then the result of
+`owsim` will include exposures taken under conditions under which the
+scheduler in question would not have chosen them.
+
+If the behaviour of the scheduler is independent of the seeing, or
+only weakly dependent, then the resultant database will be a useful
+approximation.
+
+### Environment
+
+The `owsee` script uses `opsim4` code to calculate derived parameters
+(depth and effective FWHM), and therefore was developed in a docker
+container in which `opsim4` is distributed. The specific container
+used for development was `opsim4_fbs_py3-opsim4.1.3`, downloaded
+[here](https://hub.docker.com/r/oboberg/opsim4_fbs_py3/tags/).
+
+### Execution
+
+`owsee` is run thus:
+
+```sh
+python ${OBS_STRAT_DIR}/code/simsee/python/oswee.py \
+   new_seeing.db \
+   old_opsim4.db \
+   new_sim.db
+```
+
+`new_seeing.db` is an `sqlite3` database of seeing values, in the same
+format as used by `opsim4` (and produced by the
+`create_opsim_seeing.db` script described above).
+
+`old_opsim4.db` is the simulation database in which you want to
+replace seeing values.
+
+`new_sim.db` is a simulation database into which the modified
+simulation should be written.
+
+In addition, there is an optional `--apply_clouds` flag that applies a
+(very crude) estimate of cloud extinction in addition to the seeing
+modification.
+
+### Output
+
+The database written by `owsee` is an `sqlite3` database which can be
+analyzed by the LSST `MAF` tool. Its schema is completely identical to
+the original `opsim4` database. The `opsim4` output database includes
+many tables, and provides an SQL "view" that summarizes the
+results. The `MAF` tools (usually) just queies that view. The `owsee`
+utility does not attempt to reproduces the underlying tables in the
+`opsim4` database, but rather produces a single with the same columns
+as the summary view queried by `MAF`, allowing `MAF` to be used to
+analyze the results.
+
+### Known issues
+
+When tested by overwriting a simulation using the seeing database
+originally used to generate the simulation, the result is not
+identical to the original: the seeing values in the overwritten
+database are offset by a few minutes from the input database. This
+indicates a difference between `opsim4` and `owsee` in how times in
+the seeing database are matched to start times of exposures, but is
+unlikely to be scientifically significant.
