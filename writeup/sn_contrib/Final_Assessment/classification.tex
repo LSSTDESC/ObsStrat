@@ -56,29 +56,13 @@ to perform photometric classification.
 By interpolating the sampled light curved with Gaussian process and then applying a
 wavelet decomposition to these interpolated light curves, one obtains features
 that can be provided to a classifier, in this case a Random Forest algorithm.
-The performance of the interpolation is directly affected by the amount of
-samples one has on the light curve. More samples improves the reliability of the
-Gaussian processes and thus provided better features through via the wave decomposition. Therefore it can be understood that in order to classify transients, short sampling of a light
-curve is important. This is particularly important for early classification
-leading to possible spectroscopic follow up. A well sampled light curve would
-indeed boost classification rate. Thus, before any analysis is conducted, one
-could assume a rolling cadence with 2 to 3 days would be beneficial to the
-cause.
-With this in mind, the results of the analysis shown here do not in particular
-point to a specific cadence as be favourable, but the performance of some
-strategies do not perform as well as others in the Year 1 case and over the
-Year 10 full survey.
+
+ The performance of the interpolation is directly affected by the amount of samples one has on the light curve. More samples improves the reliability of the Gaussian processes and thus provided better features via the wave decomposition.
+
+ Therefore it can be understood that in order to classify transients, short sampling of a light curve is important. This is particularly crucial for early classification leading to possible spectroscopic follow up.
+
+ The results for the DDFY1 case show a significant difference in classification performance between cadences, with kraken\_2042 being most favourable. This cadences has single 30 second snaps in all bands, thus providing better sampling along the light curve. This is one of the elements that could explain the good performance, and further studies are being carried out to explore which other elements of cadence result in better classification performance.
+
+ Further analysis was also done on Wide-Fast-Deep (WFD) cadence runs with work in progress for models trained on DDF and then tested on WFD.
 
 
-This research can be taken further in several ways and there are plans to
-continue this analysis for Wide-Fast-Deep cadence runs also. Work is currently
-taking place to investigate the performance of classifiers trained on DDF runs
-and then tested on WFD. Work is also being carried out for a comparative stufy
-of WFD cadence runs much like what has been shown above for DDFY1 and DDFY10.
-Further to the two DDF runs presented, further analysis will be carried out for
-more years to see the performances for years in between and to see if there
-are classification trends that change through the lifetime of the survey. It is
-also hoped that number of Supernova used for training affects classification
-performances, this work is done but alternations are required to the code for a complete
-analysis. Finally it would be beneficial to understand the elements of each cadence
-strategy to give further insight as to why certain cadences perform the way they do.
