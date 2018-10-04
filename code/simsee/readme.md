@@ -173,12 +173,3 @@ utility does not attempt to reproduces the underlying tables in the
 as the summary view queried by `MAF`, allowing `MAF` to be used to
 analyze the results.
 
-### Known issues
-
-When tested by overwriting a simulation using the seeing database
-originally used to generate the simulation, the result is not
-identical to the original: the seeing values in the overwritten
-database are offset by a few minutes from the input database. This
-indicates a difference between `opsim4` and `owsee` in how times in
-the seeing database are matched to start times of exposures, but is
-unlikely to be scientifically significant.

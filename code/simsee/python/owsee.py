@@ -74,26 +74,26 @@ def overwrite_seeing(visits,
     # second interval, which we can then index. This is much faster
     # than querying for the time for each visit.
     sorted_seeing_df = seeing_df.sort_values('s_date')
+    db_min_time, db_max_time = seeing_df.s_date.min(), seeing_df.s_date.max()
+    db_time_range = db_max_time - db_min_time
     seeing_time = pd.Timestamp('2022-01-01T00:00:00Z') \
                   + pd.to_timedelta(sorted_seeing_df.s_date, unit='s')
     seeing_time = pd.DatetimeIndex(seeing_time, tz='UTC')
     sorted_seeing_df['time'] = seeing_time
     sorted_seeing_df.set_index('time', inplace=True)
     seeing = sorted_seeing_df.seeing
-    seeing = seeing.resample('1S').ffill()
+    seeing = seeing.resample('1S').nearest()
     
     def update_seeing_one_row(visit):
+        # wrap in a way that imitates opsim4
+        db_clocktime = np.round(
+            db_min_time + SURVEY_START_CLOCKTIME
+            + (visit.observationStartTime
+               - SURVEY_START_CLOCKTIME) % db_time_range)
         visit_time = pd.Timestamp('1970-01-01T00:00:00Z') \
-                     + pd.to_timedelta(np.round(visit.observationStartTime),
-                                       unit='s')
-        while visit_time > seeing_time.max():
-            visit_time -= pd.to_timedelta(2*365, unit='D')
-            
-        try:
-            fwhm_500 = seeing[visit_time]
-        except:
-            import pdb; pdb.set_trace()
-            
+                     + pd.to_timedelta(db_clocktime, unit='s')
+
+        fwhm_500 = seeing[visit_time]    
         visit['seeingFwhm500'] = fwhm_500
         
         fwhm_eff, fwhm_geom = seeing_model.seeing_at_airmass(
