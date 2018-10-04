@@ -15,8 +15,7 @@ To simulate the electromagnetic signal from KNe we separately consider two model
 \citet{Cowperthwaite2017}.
 
 Based on the diversity of other electromagnetic transients, it would be naive to assume that GW170817 is representative of the electromagnetic properties of the entire range of neutron star mergers. Thus, we adopt an alternative model that is physically motivated and spans a parameter space describing a population of KNe. We have chosen a semi-analytic eigenmode expansion (SAEE) model for the SED evolution of KNe \citep{Rosswog2018}. The semi-analytic model, while one-dimensional, uses a sophisticated radiation transport treatment building on the works of \citet{Wollaeger2017} and \citet{Pinto2000}.
-
-\begin{table}[hb!]
+\begin{table}[h!]
   \centering
   \begin{tabular}{c|c|c}
     SAEE Model Parameter & Range & Units \\
@@ -71,7 +70,11 @@ Now, choosing a maximum redshift, $z_{\mathrm{max}}$, and, computing $N_{\mathrm
 
 Given the cumulative redshift distribution of events, $N_{\mathrm{total}}(z)$, we scale this to the total number of events $N_{\mathrm{total}}(z_{\mathrm{max}})$. This yields a cumulative probability distribution function of transient events as a function of redshift, $F(z) = N_{\mathrm{total}}(z)/ N_{\mathrm{total}}(z_{\mathrm{max}})$. Next, we draw from a uniform unit interval distribution, $u_i\in(0,1]$, where $i$ runs from $1$ to $N_{\mathrm{ total}}^{\mathrm{realization}}$. Then, using the inverse of the cumulative distribution function, we map these draws from the uniform distribution to the redshifts which generate these values, $F^{-1}(u_i) \rightarrow z_i$. This produces a set of redshifts for all the transient events that occur within the observer frame represented by $\Delta \Omega_{\mathrm{obs}}$, $\Delta T_{\mathrm{obs}}$, and the redshift range, $z \in [0,z_{\mathrm{max}}]$.
 
-\begin{table}[ht!]
+\subsubsection{Simulations}
+With the number of events and their redshift distribution calculated, we place the KNe randomly, with a uniform prior in right ascension and declination within the declination band that covers the entire LSST sky footprint for a given cadence. Additionally, the time of explosion for each event is randomly chosen with a uniform prior over the survey lifetime. This includes some buffer at the start of the survey to include events that would only overlap at the end of their evolution. Then, given a choice of KNe model, we generate a time-series SED for each event. Depending on the pairing of redshift, right ascension, and declination that it has been assigned, the SED is redshifted, dimmed, and modified with dust extinction according to the extinction map $E(B-V)$ and LSST per-band-filter corrections from
+\citet{Schlafly2011}. Each object is also assigned a peculiar velocity which Doppler-shifts the SED in the event rest frame, such that $1 + z_{\mathrm{obs}} = (1+z_{\mathrm{cosmo}})(1+z_{\mathrm{pec}})$. A summary of these parameter choices is presented in Table \ref{tab: sim_params}.
+
+\begin{table}[h!]
 \centering
 \resizebox{\columnwidth}{!}{%
   \begin{tabular}{c|c|c}
@@ -89,10 +92,7 @@ Peculiar Velocity & Gaussian($\mu = 0; \sigma = 300 \mathrm{km\, s^{-1}}$) & `Ty
  \caption{Parameters used to generate the simulated LSST kilonovae observations.}\label{tab: sim_params}
 \end{table}
 
-\subsubsection{Simulations}
-With the number of events and their redshift distribution calculated, we place the KNe randomly, with a uniform prior in right ascension and declination within the declination band that covers the entire LSST sky footprint for a given cadence. Additionally, the time of explosion for each event is randomly chosen with a uniform prior over the survey lifetime. This includes some buffer at the start of the survey to include events that would only overlap at the end of their evolution. Then, given a choice of KNe model, we generate a time-series SED for each event. Depending on the pairing of redshift, right ascension, and declination that it has been assigned, the SED is redshifted, dimmed, and modified with dust extinction according to the extinction map $E(B-V)$ and LSST per-band-filter corrections from \citet{Schlafly2011}. Each object is also assigned a peculiar velocity which Doppler-shifts the SED in the event rest frame, such that $1 + z_{\mathrm{obs}} = (1+z_{\mathrm{cosmo}})(1+z_{\mathrm{pec}})$. A summary of these parameter choices is presented in Table \ref{tab: sim_params}.
-
-With this transient distribution in place, the cadence specified by an OpSim database is applied as a filter to make mock observations of each event. For a given transient, all pointings that overlap with the event's spatial location and lifetime are found. Using OpSim information such as the magnitude five-sigma limiting depth for the band of the simulated LSST pointing and assuming a circular field-of-view geometry, the instrument-measured flux and many other properties of the observations are computed. This set of simulated observations is filtered through a second stage given by a set of criteria for detection below.
+With this transient distribution in place, the cadence specified by an OpSim database is applied as a filter to make mock observations of each event. For a given transient, all pointings that overlap with the event's spatial location and lifetime are found. Using OpSim information such as the magnitude five-sigma limiting depth for the band of the simulated LSST pointing and assuming a circular field-of-view geometry, the instrument-measured flux and many other properties of the observations are computed. This set of simulations is filtered through a second stage given by a set of detection criteria below.
 
 \subsubsection{Metric}
 The metric we have chosen for evaluation of a cadence is the number of KNe that are detected given the simulations of observations described above. The criteria that we use to determine detections is that of \citet{Scolnic2017a}. These criteria are the following:
