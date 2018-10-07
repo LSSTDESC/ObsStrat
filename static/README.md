@@ -209,7 +209,9 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 | 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 | 0.270, 0.274, 0.278 | 0.912, 0.907, 0.903 | 20.3, 23.5, 26.9 | 0.181, 0.179, 0.176 | 0.814, 0.800, 0.786 |
 | 10 | 10, 15, 20 | 26.3, 26.5, 26.7  | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 | 26.9, 30.8, 35.0 | 0.176, 0.174, 0.171 | 0.786, 0.772, 0.759 |
 
-* Effects not included: variations in typical seeing, variations in photo-z uncertainty (their values and the priors on them).
+* We will increase from 5 to 10 tomographic bins for the LSS sample gradually: 5, 7, 9, 10 in Y1, Y3, Y6, and Y10.
+
+* Effects not included: variations in typical seeing, variations in photo-z uncertainty (their values and the priors on them), changes in numbers of WL tomo bins.
 
 ## Depth optimization for a given strategy
 
