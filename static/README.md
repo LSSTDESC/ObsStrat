@@ -209,7 +209,7 @@ In order to actually forecast for a given depth, we need to say how to map a giv
 | 6 | 10, 15, 20 | 25.9, 26.1, 26.3 | 24.9, 25.1, 25.3 | 35, 41, 48 | 0.270, 0.274, 0.278 | 0.912, 0.907, 0.903 | 20.3, 23.5, 26.9 | 0.181, 0.179, 0.176 | 0.814, 0.800, 0.786 |
 | 10 | 10, 15, 20 | 26.3, 26.5, 26.7  | 25.3, 25.5, 25.7 | 48, 57, 67 | 0.278, 0.283, 0.288 | 0.903, 0.900, 0.898 | 26.9, 30.8, 35.0 | 0.176, 0.174, 0.171 | 0.786, 0.772, 0.759 |
 
-* We will increase from 5 to 10 tomographic bins for the LSS sample gradually: 5, 7, 9, 10 in Y1, Y3, Y6, and Y10.
+* We will increase from 5 to 10 tomographic bins for the LSS sample gradually: 5, 7, 9, 10 in Y1, Y3, Y6, and Y10.  The CL analysis in Y3 will follow that in Y1, while the CL analysis in Y6 will follow that in Y10.
 
 * Effects not included: variations in typical seeing, variations in photo-z uncertainty (their values and the priors on them), changes in numbers of WL tomo bins.
 
@@ -221,7 +221,15 @@ The above calculations assume the same fixed depth cuts for all strategies, with
 
 * The cuts take the form of requiring E(B-V)<X, depth>Y.  We will keep X fixed, but vary Y in steps of 0.1 magnitude in either direction.  As we vary Y to become deeper, the median depth will get deeper but area will go down; we can stop moving in that direction once the area decreases by say 25% compared to our current value of Y.  As we vary Y to become shallower, the median depth will get shallower and the area will go up until it plateaus (at the point where the depth>Y cut does nothing and only E(B-V)<X is relevant).  So we can stop once it plateaus.
 
-* For each strategy, we can use the process in step (2) to build up a curve in the 2D space of median depth vs. area.  A given point on the curve is determined by the value of Y that produced it.
+* For each strategy, we can use the process in step (2) to build up a curve in the 2D space of median depth vs. area.  A given point on the curve is determined by the value of Y that produced it.  Husni did this for baseline2018a and pontus2002, with the following results for median depth as a function of area:
+  * baseline2018a Y1: median depth = -2.33e-5*area + 25.39 up to a maximum area of ?.
+  * baseline2018a Y3: median depth = -1.22e-5*area + 26.03 up to a maximum area of ?.
+  * baseline2018a Y6: median depth = -1.03e-05*area + 26.42 up to a maximum area of ?.
+  * baseline2018a Y10: median depth = -0.922e-05*area + 26.71 up to a maximum area of ?.
+  * pontus2002 Y1: median depth = -2.11e-05*area + 25.24 up to a maximum area of ?.
+  * pontus2002 Y3: median depth = -1.16e-05*area + 25.89 up to a maximum area of ?.
+  * pontus2002 Y6: median depth = -1.05e-05*area + 26.28 up to a maximum area of ?.
+  * pontus2002 Y10: median depth = -0.973e-05*area + 26.58 up to a maximum area of ?.
 
 * We can use the FoM emulator, once we have it, to evaluate the FoM along that curve.  This can be used to provide a 1st order correction to our current 0th order plan to calculate FoMs for a fixed value of Y, and can tell us whether we need to more seriously explore optimization of Y before making conclusions (plus inform the step size in Y, etc.).
 
