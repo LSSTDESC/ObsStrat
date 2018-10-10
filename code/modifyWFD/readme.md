@@ -7,6 +7,8 @@ The goal here to construct a modified WFD footprint that is optimized for extrag
 
 `WFD_extragalactic_footprint_optimized.ipynb` then takes the EBV<0.2 area and implements a declination cut such that we only have about 18,000 deg2 in the proposed WFD region (and then removes two small patches for continuity).
 
+`check_WFD_footprint_from_undithfieldID.ipynb` re-creates the WFD footprint based on the undithered fieldIDs and compare the result from the HEALPix-pixels based footprint.
+
 #### Outputs
 All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
 - `WFDfootprint_nside256_HEALPixels.csv` with the HEALPix pixels that constitute the proposed WFD.
