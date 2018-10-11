@@ -7,7 +7,7 @@ Still to do:
 - Check file read-in for consistency with area, depth.
 - Inspect plots.
 - Set up actual emulation.
-- Look at outputs.
+- Look at outputs; plot along with grid values, output in more convenient format.
 - Do the depth optimization.
 """
 import numpy as np
