@@ -1,4 +1,4 @@
-# Goal here is to produce seeing maps for baseline2018a and
+# Goal here is to produce maps for specified quantities baseline2018a and
 # pontus_2002 (wider footprint) after 1yr or 10-yrs.
 #
 # Humna Awan: humna.awan@rutgers.edu
@@ -37,6 +37,9 @@ parser.add_option('--specific_db', dest='specific_db',
 parser.add_option('--baseline_and_wide_only',
                   action='store_true', dest='baseline_and_wide_only', default=False,
                   help= 'baseline_and_wide_only')
+parser.add_option('--quantity', dest='quantity',
+                  help='Mean of the quantity to plot in each HEALPix pixel.: seeingFwhmEff, fiveSigmaDepth.',
+                  default='seeingFwhmEff')
 
 (options, args) = parser.parse_args()
 one_yr = options.one_yr
@@ -45,6 +48,7 @@ outDir = options.outDir
 specific_db = options.specific_db
 baseline_and_wide_only = options.baseline_and_wide_only
 nside = options.nside
+quantity = options.quantity
 
 ########################################################################
 dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
@@ -87,7 +91,7 @@ for dbfile in dbfiles:
     stackerList = [mafStackers.RandomDitherPerNightStacker(degrees=opsdb.raDecInDeg, randomSeed=1000)]
     slicer= slicers.HealpixSlicer(lonCol='randomDitherPerNightRa', latCol='randomDitherPerNightDec',
                                   latLonDeg=opsdb.raDecInDeg, nside=nside, useCache=False)
-    meanMetric= metrics.MeanMetric(col='seeingFwhmEff')   # for avgSeeing per HEALpix pixel
+    meanMetric= metrics.MeanMetric(col=quantity)   # for avg quantity per HEALpix pixel
 
     db_key = dbfile.split('.db')[0]
     avgSeeingBundle[db_key] = {}
@@ -118,13 +122,17 @@ for band in bands:
             db_tag += '_%s'%db_key
 
             if (i==0): # define the color range
-                #inSurveyIndex = np.where(avgSeeingBundle[db_key][band].metricValues.mask == False)[0]
-                #median = np.median(avgSeeingBundle[db_key][band].metricValues.data[inSurveyIndex])
-                #stddev = np.std(avgSeeingBundle[db_key][band].metricValues.data[inSurveyIndex])
+                inSurveyIndex = np.where(avgSeeingBundle[db_key][band].metricValues.mask == False)[0]
+                median = np.median(avgSeeingBundle[db_key][band].metricValues.data[inSurveyIndex])
+                stddev = np.std(avgSeeingBundle[db_key][band].metricValues.data[inSurveyIndex])
 
                 nTicks = 5
-                colorMin = 0.8 #median-2.5*stddev
-                colorMax = 1.4 #median+2.5*stddev
+                if quantity=='seeingFwhmEff':
+                    colorMin = 0.8
+                    colorMax = 1.4
+                else:
+                    colorMin = median-2.5*stddev
+                    colorMax = median+2.5*stddev
 
                 increment = (colorMax-colorMin)/float(nTicks)
                 ticks = np.arange(colorMin+increment, colorMax, increment)
@@ -140,11 +148,11 @@ for band in bands:
         cbaxes = fig.add_axes([0.25, 0.38, 0.5, 0.01]) # [left, bottom, width, height]
         cb = plt.colorbar(im, orientation='horizontal',
                           ticks=ticks, format='%.2f', cax=cbaxes)
-        cb.set_label('%s-band: seeingFwhmEff after %s'%(band, year_tag), fontsize=14)
+        cb.set_label('%s-band: %s after %s'%(band, quantity, year_tag), fontsize=14)
         cb.ax.tick_params(labelsize=14)
 
         fig.set_size_inches(15,15)
-        filename = 'seeingFwhmEff%s_%s_nside%s_%sband.png'%(db_tag, year_tag, nside, band)
+        filename = '%s%s_%s_nside%s_%sband.png'%(quantity, db_tag, year_tag, nside, band)
         plt.savefig('%s/%s'%(outDir, filename), format='png',  bbox_inches='tight')
         print('## Saved %s in outDir.\n'%filename)
         #plt.show()
