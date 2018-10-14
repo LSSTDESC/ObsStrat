@@ -34,6 +34,9 @@ parser.add_option('--outDir', dest='outDir',
 parser.add_option('--specific_db', dest='specific_db',
                   help='Specific db to run the analysis for.',
                   default=None)
+parser.add_option('--slair',
+                  action='store_true', dest='slair', default=False,
+                  help= 'Use the tag to specify a slair run.')
 
 (options, args) = parser.parse_args()
 nside = options.nside
@@ -44,10 +47,13 @@ outDir = options.outDir
 includeDustExtinction = not options.noMWdust
 baseline_and_wide_only = options.baseline_and_wide_only
 specific_db = options.specific_db
+slair = options.slair
 
 ########################################################################################################################
 # set some things up
 bands = ['u', 'g', 'r', 'i', 'z', 'y']
+
+if yr_cut==10: yr_cut=None
 
 dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
 if baseline_and_wide_only:
@@ -72,7 +78,7 @@ for dbfile in dbfiles:
         startTime = time.time()
         print('filter= %s\n'%filterBand)
         out = coaddM5Analysis.coaddM5Analysis(path=outDir, dbfile='%s/%s'%(dbs_path, dbfile),
-                                              runName=runName, WFDandDDFs=False,
+                                              runName=runName, WFDandDDFs=False, slair=slair,
                                               specifiedDith = dith,
                                               nside=nside, filterBand=filterBand,
                                               includeDustExtinction=includeDustExtinction, saveunMaskedCoaddData=True,
