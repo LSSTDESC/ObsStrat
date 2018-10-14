@@ -61,7 +61,8 @@ if specific_db is not None:
 if baseline_and_wide_only:
     dbfiles = [f for f in dbfiles if ((f.__contains__('baseline2018a') \
                                        or (f.__contains__('pontus_2002'))))]
-    print('Running over %s'%dbfiles)
+dbfiles = sorted(dbfiles)
+print('Running over %s'%dbfiles)
 
 # set up
 resultsDb = db.ResultsDb(outDir=outDir)
@@ -130,6 +131,21 @@ for band in bands:
                 if quantity=='seeingFwhmEff':
                     colorMin = 0.8
                     colorMax = 1.4
+                elif quantity=='fiveSigmaDepth':
+                    if band=='u':
+                        colorMin, colorMax = 22.7, 23.4
+                    elif band=='g':
+                        colorMin, colorMax = 24.1, 24.75
+                    elif band=='r':
+                        colorMin, colorMax = 23.5, 24.5
+                    elif band=='i':
+                        colorMin, colorMax = 23.25, 23.75
+                    elif band=='z':
+                        colorMin, colorMax = 22.4, 23.0
+                    elif band=='y':
+                        colorMin, colorMax = 21.5, 22.2
+                    else:
+                        raise ValueError('Somethings wrong.')
                 else:
                     colorMin = median-2.5*stddev
                     colorMax = median+2.5*stddev
