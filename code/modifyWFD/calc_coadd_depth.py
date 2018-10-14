@@ -51,7 +51,7 @@ bands = ['u', 'g', 'r', 'i', 'z', 'y']
 
 dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
 if baseline_and_wide_only:
-    dbfiles = [f for f in dbfiles if ((f=='baseline2018a.db') or (f=='pontus_2002.db'))]
+    dbfiles = [f for f in dbfiles if ((f.__contains__('baseline2018a') or (f.__contains__('pontus_2002'))))]
     print('Running over %s'%dbfiles)
 
 if specific_db is not None:
