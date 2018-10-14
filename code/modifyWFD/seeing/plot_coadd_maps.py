@@ -143,3 +143,27 @@ for band in orderBand:
     filename = 'fiveSigCoaddDepth_%s%s_%s_nside%s_%sband.png'%(dust_tag, db_tag, plt_yearTag, nside, band)
     plt.savefig('%s/%s'%(outDir, filename), format='png',  bbox_inches='tight')
     print('## Saved %s in outDir.\n'%filename)
+
+# plot histograms
+colors = ['g', 'r', 'k', 'b', 'm', 'c']
+plt.clf()
+for i, band in enumerate(orderBand):
+    db_tag = ''  q   # for the filename
+    bins = np.arange(22, 28, 0.01)
+    for db_key in dbs:
+        key = '%s_%s'%(db_key, band)
+        db_tag += '_%s'%db_key
+        if db_key.__contains__('baseline'):
+            sty = 'solid'
+        else:
+            sty = 'dashed'
+        plt.hist(data_bundle[key].metricValues.filled(data_bundle[key].slicer.badval),
+                 bins=bins, label='%s-band: %s'%(band, db_key),
+                 histtype='step', color=colors[i], linestyle=sty)
+plt.ylabel('Counts')
+plt.xlabel(r'%s 5$\sigma$ coadded depth; %s'%(plt_yearTag, dust_tag))
+plt.legend(bbox_to_anchor=(1,1))
+plt.gcf().set_size_inches(10,5)
+filename = 'fiveSigCoaddDepth_histogram_%s%s_%s_nside%s.png'%(dust_tag, db_tag, plt_yearTag, nside)
+plt.savefig('%s/%s'%(outDir, filename), format='png',  bbox_inches='tight')
+print('## Saved %s in outDir.\n'%filename)

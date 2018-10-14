@@ -172,3 +172,35 @@ for band in bands:
         plt.savefig('%s/%s'%(outDir, filename), format='png',  bbox_inches='tight')
         print('## Saved %s in outDir.\n'%filename)
         #plt.show()
+
+# plot histograms
+colors = ['g', 'r', 'k', 'b', 'm', 'c']
+plt.clf()
+for i, band in enumerate(bands):
+    db_tag = ''
+    for db_key in avgSeeingBundle.keys():
+        db_tag += '_%s'%db_key
+
+        if quantity=='seeingFwhmEff':
+            bins = np.arange(0.5, 2, 0.01)
+        elif quantity=='fiveSigmaDepth':
+            bins = np.arange(20, 25, 0.01)
+        else:
+            bins = None
+
+        # set the linestyle
+        if db_key.__contains__('baseline'):
+            sty = 'solid'
+        else:
+            sty = 'dashed'
+
+        plt.hist(avgSeeingBundle[db_key][band].metricValues.filled(avgSeeingBundle[db_key][band].slicer.badval),
+                 bins=bins, label='%s-band: %s'%(band, db_key),
+                 histtype='step', color=colors[i], linestyle=sty)
+plt.ylabel('Counts')
+plt.xlabel('%s %s'%(year_tag, quantity))
+plt.legend(bbox_to_anchor=(1,1))
+plt.gcf().set_size_inches(10,5)
+filename = '%s%s_histogram_%s_nside%s.png'%(quantity, db_tag, year_tag, nside)
+plt.savefig('%s/%s'%(outDir, filename), format='png',  bbox_inches='tight')
+print('## Saved %s in outDir.\n'%filename)
