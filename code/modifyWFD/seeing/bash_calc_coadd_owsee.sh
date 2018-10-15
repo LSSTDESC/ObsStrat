@@ -17,12 +17,24 @@ setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 #done
 
 # run the script for Y1,3,6,10 for all cadences for ow6 only.
-for tag  in ow6
+#for tag  in ow6
+#do
+#    for yr_cut in 1 3 6 10
+#    do
+#        python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/modifyWFD/calc_coadd_depth.py --nside=256 \
+#                                                    --yr_cut=$yr_cut \
+#                                                    --dbs_path=/global/cscratch1/sd/awan/owsee_dbs/${tag} \
+#                                                    --outDir='/global/cscratch1/sd/awan/lsst_output/coadd_output_owsee/' &
+#    done
+#done
+
+# run the script for Y1,3,6,10 for all cadences for ow7, i-band only
+for tag  in ow7
 do
     for yr_cut in 1 3 6 10
     do
         python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/modifyWFD/calc_coadd_depth.py --nside=256 \
-                                                    --yr_cut=$yr_cut \
+                                                    --yr_cut=$yr_cut --bands='i' \
                                                     --dbs_path=/global/cscratch1/sd/awan/owsee_dbs/${tag} \
                                                     --outDir='/global/cscratch1/sd/awan/lsst_output/coadd_output_owsee/' &
     done
