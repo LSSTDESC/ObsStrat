@@ -11,13 +11,13 @@ coadd_data_dir=/global/cscratch1/sd/awan/lsst_output/coadd_output_owsee
 for yr_cut in 1yearCut 3yearCut 6yearCut fullSurveyPeriod
 do
     # loop over bands
-    for band in u g r i z y
+    for band in i #u g r i z y
     do
         # loop over different cadences
         for db in baseline2018a kraken_2026 kraken_2035 colossus_2665 \
           colossus_2664 colossus_2667 pontus_2002 pontus_2489 pontus_2502 mothra_2045
         do
-            path=coaddM5Analysis_nside256_withDustExtinction_0pixelRadiusForMasking_${band}Band_ow6_${db}_${yr_cut}_directory
+            path=coaddM5Analysis_nside256_withDustExtinction_0pixelRadiusForMasking_${band}Band_ow7_${db}_${yr_cut}_directory
             #echo ${coadd_data_dir}/${path}/unmaskedCoaddData/*.npz
             count=`ls -1 ${coadd_data_dir}/${path}/unmaskedCoaddData/*.npz 2>/dev/null | wc -l`
             #echo $count
