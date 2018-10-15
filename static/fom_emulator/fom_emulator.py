@@ -17,7 +17,7 @@ import os
 cm = plt.cm.get_cmap('RdYlBu')
 
 # Set some defaults.
-year_vals = ['Y1']#, 'Y3', 'Y6', 'Y10']
+year_vals = ['Y1', 'Y3', 'Y6', 'Y10']
 
 areas = np.zeros((3,4)) # 3 grid values, 4 years
 areas[:,0] = np.array([7.5, 13., 16.]) * 1000.0 # deg^2 for Y1
@@ -98,14 +98,20 @@ def load_strategy_table(year_str = 'Y1'):
     strat_name = []
     area = []
     median_depth = []
+    niexp = []
+    
     for line in lines:
         tmp_vals = line.split("|")
         strat_name.append(tmp_vals[1].strip())
         area.append(float(tmp_vals[3].strip()))
         median_depth.append(float(tmp_vals[4].strip()))
+        if len(tmp_vals) == 14 and tmp_vals[13]!='':
+            niexp.append(int(tmp_vals[13].strip()))
+        else:
+            niexp.append(0)
     print('Strategy table loaded: %d lines in %s for year %s!'%\
           (len(strat_name), infile, year_str))
-    return strat_name, area, median_depth
+    return np.array(strat_name), np.array(area), np.array(median_depth), np.array(niexp)
 
 def area_depth_func(x, a, b, c):
     """ a * (area / area_0)^b * (depth - depth_0)^c """
@@ -115,7 +121,8 @@ def area_depth_func(x, a, b, c):
     depth_renorm = depths / depths[4]
     return (a + b*depth_renorm)*(area_renorm**c)   
 
-def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom_vals, figpref=None):
+def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom_vals,
+                niexp, figpref=None):
     """Try various things here."""
     print('Starting emulator')
     from scipy import interpolate
@@ -141,13 +148,32 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
         ax = fig.add_subplot(111)
         sc = ax.scatter(finer_area_grid, finer_depth_grid, c=test_emulator/np.max(test_emulator),
                         cmap=cm, s=80, edgecolors='none')
-        ax.scatter(area_vals, depth_vals, color='k', marker='x')
+        use_niexp = np.where(niexp > 0)[0]
+        no_niexp = np.where(niexp==0)[0]
+        mean_niexp = np.mean(niexp[use_niexp])
+        ax.scatter(area_vals[no_niexp], depth_vals[no_niexp], color='k', marker='x')
+        ax.scatter(area_vals[use_niexp], depth_vals[use_niexp], color='k', marker='o', s=20*(niexp[use_niexp]/mean_niexp)**3)
         plt.colorbar(sc)
         plt.title('Emulated FoM / max')
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
         plt.savefig('figs/%s_finer.pdf'%figpref)
-        
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        plt.contour(finer_area_grid, finer_depth_grid, test_emulator, 15, linewidths=1, colors='k')
+        plt.pcolormesh(finer_area_grid, finer_depth_grid, test_emulator, cmap=cm)
+        ax.scatter(area_vals[no_niexp], depth_vals[no_niexp], color='k', marker='x')
+        ax.scatter(area_vals[use_niexp], depth_vals[use_niexp], color='k', marker='o', s=20*(niexp[use_niexp]/mean_niexp)**3)
+        m1 = np.array(area_vals) < 15.2e3
+        m2 = np.array(area_vals) < 20.5e3
+        #plt.plot(np.array(area_vals)[m1], -2.33e-5*np.array(area_vals)[m1]+25.39, 'm-')
+        #plt.plot(np.array(area_vals)[m2], -2.11e-5*np.array(area_vals)[m2]+25.24, 'm-')
+        plt.colorbar()
+        plt.title('Emulated FoM')
+        plt.xlabel('Area [sq. deg.]')
+        plt.ylabel('Median i-band depth')
+        plt.savefig('figs/%s_contour.pdf'%figpref)        
         
     fom_vals = []
     for ind in range(len(area_vals)):
@@ -221,12 +247,12 @@ for year_ind in range(len(year_vals)):
     # Evaluate various strategies using emulator as needed.
 
     # Load strategy tables:
-    tmp_strat, tmp_area, tmp_depth = load_strategy_table(year_vals[year_ind])
+    tmp_strat, tmp_area, tmp_depth, tmp_niexp = load_strategy_table(year_vals[year_ind])
     emulated_fom_prior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
-                                     foms_prior[:,:,year_ind],
+                                     foms_prior[:,:,year_ind], tmp_niexp,
                                      figpref='test_prior_%s'%year_vals[year_ind])
     emulated_fom_noprior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
-                                       foms_noprior[:,:,year_ind],
+                                       foms_noprior[:,:,year_ind], tmp_niexp,
                                        figpref='test_noprior_%s'%year_vals[year_ind])
     inds = emulated_fom_noprior.argsort()[::-1]
     print('')
