@@ -65,7 +65,9 @@ parser.add_option('--debug',
 parser.add_option('--slair',
                   action='store_true', dest='slair', default=False,
                   help= 'Use the tag to specify a slair run.')
-
+parser.add_option('--bands', dest='bands',
+                  help='Bands to consider.',
+                  default= 'u, g, r, i, z, y')
 ########################################################################################################################
 startTime = time.time()
 (options, args) = parser.parse_args()
@@ -84,6 +86,7 @@ dont_show_plots = options.dont_show_plots
 outDir = options.outDir
 outDir_md = options.outDir_md
 slair = options.slair
+bands = options.bands
 
 # format the mag cuts
 mag_cuts = [float(f) for f in list(mag_cuts.split(','))]
@@ -105,15 +108,19 @@ for i, yr_cut in enumerate(yr_cuts):
 print('\nFinal depth cuts to be implemented: %s'%(chosen_cuts))
 # figure out the outDir for md files.
 if outDir_md is None: outDir_md = outDir
-# set up for debuggin
+# set up for debugging
 debug = options.debug
 if debug:
     dbpath = '/global/cscratch1/sd/awan/dbs_old_unzipped/minion_1016_sqlite_new_dithers.db'
     data_dir = '/global/homes/a/awan/LSST/output/coadd_output_minion1016/'
 
+# figure out the band
+if bands.__contains__(','):
+    orderBand = list(bands.split(','))
+else:
+    orderBand = bands
 ########################################################################
 # set some things up
-orderBand = ['u', 'g', 'r', 'i', 'z', 'y']
 dbname = dbpath.split('/')[-1].split('.db')[0]
 
 print('\ndata_dir: %s'%data_dir)
