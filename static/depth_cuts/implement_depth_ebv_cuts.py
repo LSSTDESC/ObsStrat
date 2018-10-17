@@ -116,7 +116,7 @@ if debug:
 
 # figure out the band
 if bands.__contains__(','):
-    orderBand = list(bands.split(','))
+    orderBand = [f.strip() for f in list(bands.split(','))]
 else:
     orderBand = bands
 ########################################################################
