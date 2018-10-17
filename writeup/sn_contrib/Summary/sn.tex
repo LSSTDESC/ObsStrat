@@ -69,7 +69,7 @@
 \newcommand{\phasemax}{$ph_{max}$}
 \newcommand{\tgapcosmos}{$T_{gap}^{\cosmos}$}
 \newcommand{\tgapothers}{$T_{gap}^{others}$}
-\newcommand{\zlimit}{$z_{\mathrm{limit}}\ $}
+\newcommand{\zlimit}{$z_{\mathrm{limit}}$}
 \newcommand{\zfaint}{$z_{\mathrm{faint}}\ $}
 \newcommand{\nsnfaint}{$N_{z<z_{\mathrm{faint}}}\ $}
 \newcommand{\zmed}{$z_{\mathrm{med}}\ $}
@@ -149,7 +149,7 @@ Metric  & \multicolumn{1}{c|}{Top 5} & \multicolumn{1}{c}{Worst 5} \\
 WFD                            & 3. Rolling mix                           & 2. blobs same zmask\\
                                & 4. colossus\_2667                        &  3. blob same\\
                                & 5. feature\_rolling\_2/3                 & 4. pontus\_2002 \\
-                               &                                          &  5. pontus\_2502 \\
+                               &                                          &  5. pontus\_2002 \\
 \hline
                                & 1. kraken\_2035/feature\_baseline\_10yrs &  1. kraken\_2036\\
 DDF                            & 3. colossus\_2665                        &  2. mothra\_2045 \\
@@ -158,11 +158,11 @@ DDF                            & 3. colossus\_2665                        &  2. 
                                &                                          &  5. baseline\_2018a  \\
 \hline
 %%%%% w0wa
-{\bf w0wa FoM}                 & 1. kraken\_2035                          &  1. pontus\_2502\\
-                               & 2. colossus\_2667                        &  2. nexus\_2097\\
-WFD+DDF                        & 3. pontus\_2489                          &  3. mothra\_2049\\
-                               & 4. colossus\_2026                        &  4. mothra\_2045\\
-                               & 5. kraken\_2042                          &  5. kraken\_2036\\
+{\bf w0wa FoM}                 & 1. kraken\_2035                          &  1. nexus\_2097\\
+                               & 2. colossus\_2667                        &  2. mothra\_2049\\
+WFD+DDF                        & 3. pontus\_2489                          &  3. pontus\_2002\\
+                               & 4. colossus\_2026                        &  4. kraken\_2044 \\
+                               & 5. kraken\_2042                          &  5. colossus\_2664\\
 \hline
 %%%%% photometric classification
 {\bf Photometric}              & 1. pontus\_2489/kraken\_2042             &  1. kraken\_2044 \\
@@ -179,19 +179,17 @@ WFD+DDF                        & 3. pontus\_2489                          &  3. 
                                &                                          &  5.  minion\_1016\\
       \hline
 %%% peculiar velocity 
-{\bf Peculiar velocity II}     & 1. kraken\_2044                          &  1. mothra\_2045 \\
-                               & 2. colossus\_2667                        &  2. kraken\_2036 \\
-      WFD                      & 3. pontus\_2489                          &  3. nexus\_2097 \\
-                               & 4. pontus\_2002                          &  4. mothra\_2049 \\
-                               & 5. kraken\_2042                           &  5.  pontus\_2502 \\
+{\bf Peculiar velocity II}     & 1. kraken\_2044                          &  1. nexus\_2097\\
+                               & 2. colossus\_2667                        &  2. mothra\_2049 \\
+      WFD                      & 3. pontus\_2489                          &  3. colossus\_2665 \\
+                               & 4. pontus\_2002                          &  4. kraken\_2026 \\
+                               & 5. kraken\_2042                           &  5. colossus\_2664 \\
       \hline
 %%%%% Overlap 4MOST
 
- {\bf Overlap with 4MOST}      & 1. pontus\_2002                          &  1. mothra\_2045\\
-                               & 2. colossus\_2667                        & 2. colossus\_2667, kraken\_2026,\\
-   WFD                         & 3. colossus\_2664                        &  kraken\_2036,pontus\_2489 \\
-                               & 4. pontus\_2502                          &  \\
-                               & 5. pontus\_2489                          &  \\
+ {\bf Overlap with 4MOST}      & 1. pontus\_2002                          &  1. colossus\_2667, kraken\_2026, pontus\_2489\\
+                               & 2. colossus\_2665                        &  \\
+   WFD                         & 3. colossus\_2664                        &   \\
      \hline
 \end{tabular}
 \end{center}
@@ -201,10 +199,10 @@ WFD+DDF                        & 3. pontus\_2489                          &  3. 
 
 \paragraph{Primary metric} 
 
-Among the set of metrics considered in this study one of the most sensitive to the features of observing strategies (ie the key facets cadence, season length, depth, spatial coverage and uniformity) is probably the number of well-measured \sne~in combination with the redshift limit of the survey \zlimit. In fact all other metrics (except the one related to synergy with 4MOST) rely on a high-quality\sne sample. The w0-wa Figure of Merit is usually used to assess the quality of observing strategies because it can easily be compared and/or combined with other Dark Energy probes. But this metric is not as sensitive as the number of well-measured \sne. We thus think that the primary metric to assess the quality of observing strategies should be the number of well-measured supernovae combined with the redshift corresponding to the completeness of the survey.
+Among the set of metrics considered in this study one of the most sensitive to the features of observing strategies (ie the key facets cadence, season length, depth, spatial coverage and uniformity) is probably the number of well-measured \sne~in combination with the redshift limit of the survey \zlimit. In fact all other metrics (except the one related to synergy with 4MOST) rely on a high-quality \sne~sample. The w0-wa Figure of Merit is usually used to assess the quality of observing strategies because it can easily be compared and/or combined with other Dark Energy probes. But this metric is not as sensitive as the number of well-measured \sne. We thus think that the primary metric to assess the quality of observing strategies should be the number of well-measured supernovae combined with the redshift corresponding to the completeness of the survey.
 
 \paragraph{Observing strategy and scheduler}
-The results presented below tend to show that the main features related to simulated strategies (the key points mentioned above) may be quite different from one simulation to another. In particular \altsched~scheduler tend to propose WFD surveys that lead to very good performance in terms of number of well-measured \sne~and \zlimit. We have made further studies to understand the reason of this result by comparing some of the outputs of \opsim and \altsched(Table \ref{tab:opsim_vs_altsched}). It is very likely that the differences found between the two schedulers have as origin the methods used to observed the sky:\opsim~relies on a greedy algorithm that minimizes slew times and optimizes observing conditions; \altsched~performs a systematic scan at the meridian of a predefined (Ra,Dec) area with a larger number of filter changes every night. The method used by \altsched~seems to lead to very interesting cadences for SN science. Additional studies are nonetheless necessary to evaluate the impact of e.g. uncovered areas or observations when the Moon is up on \altsched~performance.
+The results presented below tend to show that the main features related to simulated strategies (the key points mentioned above) may be quite different from one simulation to another. In particular \altsched scheduler tend to propose WFD surveys that lead to very good performance in terms of number of well-measured \sne~and \zlimit. We have made further studies to understand the reason of this result by comparing some of the outputs of \opsim and \altsched(Table \ref{tab:opsim_vs_altsched}). It is very likely that the differences found between the two schedulers have as origin the methods used to observed the sky: \opsim relies on a greedy algorithm that minimizes slew times and optimizes observing conditions; \altsched performs a systematic scan at the meridian of a predefined (Ra,Dec) area with a larger number of filter changes every night. The method used by \altsched seems to lead to very interesting cadences for SN science. Additional studies are nonetheless necessary to evaluate the impact of e.g. uncovered areas or observations when the Moon is up on \altsched performance.
 
 \begin{table}[!htbp]
   \begin{center}
@@ -214,7 +212,7 @@ The results presented below tend to show that the main features related to simul
   \hline
  & \altsched & \opsim \\
  \hline
- Season length [days] & \~ 150 & 130 to 180 \\
+ Season length [days] & $\sim$ 150 & 130 to 180 \\
  \hline
  Effective cadence [days]   &        & \\
  				           g &  14  & 23 \\
@@ -248,7 +246,7 @@ The results presented below tend to show that the main features related to simul
 \end{center}
 \end{table}
 
-\paragraph{Parameters for close-to-optimal cadences} The metrics considered in this study allowed up to rank the proposed observing strategies and thus to outline what the parameters of a close-to-optimal cadence would be for SN science. The list of the key points is given in Table \ref{tab:optimal_strategy}
+\paragraph{Parameters for close-to-optimal cadences} The metrics considered in this study allowed us to rank the proposed observing strategies and thus to outline what the parameters of a close-to-optimal cadence would be for SN science. The list of the key points is given in Table \ref{tab:optimal_strategy}
 
 \begin{table}[!htbp]
   \begin{center}
@@ -259,12 +257,13 @@ The results presented below tend to show that the main features related to simul
  Key facet & WFD & DDF \\
  \hline
 a) Cadence                      & 10(g),5(r),6(i),6(z) days & 1 to 2 days (filter sequence splitting) \\
-b) Season length                & \~ 150 days               & 180 to 200 days \\
+b) Season length                & $\sim$ 150 days               & 180 to 200 days \\
 c) Filter allocation            & mostly g,r,i,z            & mostly g,r,i,z (y to be quantified) \\
 d) Coverage                     & $\geq$ 18000 $deg^2$ provided a), b) and c) & 5 DDF - 1 ultra-deep \\
 e) Rolling cadence              & if necessary for a), b) and c) to happen & \\
 f) Revisit same band same night & no & \\
 g) Uniformity                   & yes & \\
+\hline
  \end{tabular}
 \end{center}
 \end{table}
@@ -277,20 +276,18 @@ g) Uniformity                   & yes & \\
 %% Number of well-measured SN - WFD
 \mybox(Number of well-measured supernovae/Survey completeness,WFD)
 
-We propose to use as a primary metric the size and depth of a the subset of well-sampled \sne using the redshift limit \zfaint (\zmed) as the limit beyon which the faintest\footnote{A faint \sne~is defined by (\strech = -2.0,\sncolor = 2.0) and a medium one by (\strech=0.0,\sncolor=0.0) where \strech~and \sncolor~are the stretch and color, respectively} (medium) no longer passes light curve requirements\footnote{Main light curve requirements: good quality measurements in at least three bands;  phases in [-10;+30]; 5 (10) visits before (after) peak; $\sigma_C<$ 0.04 where $\sigma_C$ is the error on the color; all observations satisfying 380 nm $~<~\bar{\lambda}_{obs}/(1+z)~<$ 700 nm.} and \nsnfaint (\nsnmed), the number of well-sampled supernovae below this redshift. The former give an assessment of the size and depth of the redshift limited sample, i.e. the sample of supernovae usable for cosmology, and whose selection function is extremely easy to determine.  The latter gives an assessment of the size and depth of the sample of SNe
+We propose to use as a primary metric the size and depth of a the subset of well-sampled \sne using the redshift limit \zfaint (\zmed) as the limit beyond which the faintest\footnote{A faint \sne~is defined by (\strech = -2.0,\sncolor = 2.0) and a medium one by (\strech=0.0,\sncolor=0.0) where \strech~and \sncolor~are the stretch and color, respectively} (medium) \sne~no longer passes light curve requirements\footnote{Main light curve requirements: good quality measurements in at least three bands;  phases in [-10;+30]; 5 (10) visits before (after) peak; $\sigma_C<$ 0.04 where $\sigma_C$ is the error on the color; all observations satisfying 380 nm $~<~\bar{\lambda}_{obs}/(1+z)~<$ 700 nm.} and \nsnfaint (\nsnmed), the number of well-sampled supernovae below this redshift. The former give an assessment of the size and depth of the redshift limited sample, i.e. the sample of supernovae usable for cosmology, and whose selection function is extremely easy to determine.  The latter gives an assessment of the size and depth of the sample of SNe
 that will have precise distances.
 
 WFD observations involve a large number of fields.  The observations
 are dithered, and the size and depth of the final sample depends
 heavily on the details of the observing strategy (in particular, the
-filter allocation strategy and the field selection function \ldots)
-For this reason, we opted for a slightly different approach, which we
-describe below.
+filter allocation strategy and the field selection function \ldots). Instead of performing full (time-consuming) simulations, we opted for a slightly different approach, which we describe below.
 
 The celestial sphere is pixellized in Healpix superpixels\footnote{we
   choose nside=64, which corresponds to 0.8 deg$^2$ healpixels.  We
   have verified that (1) larger pixels (nside=32) leads to
-  underestimating the number of SNe by \~15\% and
+  underestimating the number of SNe by $\sim$ 15\% and
   that smaller pixels (nside=128 and above) give exactly the same
   results.}.  The directions / healpixel affected by a Galactic extinction $E(B-V)$ larger than 0.25
 are masked and not included in our assessment. We consider only the $griz$ observations which are the ones
@@ -301,15 +298,14 @@ given exposure. This allows us to build a log which reports the mjd,
 band, and observing conditions of each healpixel observation.
 
 We can then analyze this log, using as a probe, a fiducial SN~Ia,
-e.g. the faint or medium \sne.For each mjd and each pixel, we determine:
+e.g. the faint or medium \sne. For each mjd and each pixel, we determine:
 \begin{eqnarray}
   z_{\mathrm{lim}} & = & \mathrm{max}\left(z | \mathrm{LC(z)\ fulfill\ requirements}\right) \\
   N_{z<z_{\mathrm{lim}}} &= & \delta\Omega_{\mathrm{pix}} \int_0^{z_\mathrm{lim}} \frac{\Delta T_{\mathrm{step}}}{1+z}\ {\mathcal{R}}(z)\ dV(z)
 \end{eqnarray}
 where $\delta\Omega_{\mathrm{pix}}$ is the solid angle subtended by
 one pixel, $\Delta T_{\mathrm{step}}$ is the simulation time step (in
-observer frame days) and $\mathcal{R}(z)$ is the SN~Ia volumetric rate
-(we adopt the rate published in \cite{perrett}.  We also
+observer frame days) and $\mathcal{R}(z)$ is the SN~Ia volumetric rate \cite{perrett}.  We also
 compute the average cadence (in day$^{-1}$), i.e. the number of $g, r,
 i$ or $z$ visits in a fiducial restframe interval.
 
@@ -325,8 +321,7 @@ depth) of the SN sample vary significantly as a function of the sky
 direction. Some of these effects are related to seasonality (better
 seeing allows to go deeper, for example) and depend on how realistic
 the \opsim weather and seeing logs are. Others are clearly artefacts
-of the observing cadence and can be corrected. For example, the on the
-{\tt Mothra} and {\tt SLAIR} rolling cadences, are lines clearly
+of the observing cadence and can be corrected. For example, {\tt Mothra} and {\tt SLAIR} rolling cadences show lines clearly
 visible which correspond to depleted regions at the boundary between
 the areas observed each year. The same is true on altsched rolling,
 which also displays a strongly depleted region, at the region where
@@ -335,7 +330,11 @@ the scheduler switches between the upper and lower declination area.
 Our primary metrics, ($z_{\mathrm{faint|median}}$, $N_{\mathrm{faint|median}}$) can be derived from these
 maps.  Figure \ref{fig:nsn_zmax_med}
 gives a synthetic presentation of our cadence evaluation, in the planes
-(\zfaint, \nsnfaint) and (\zmed, \nsnmed), respectively.
+(\zfaint, \nsnfaint) and (\zmed, \nsnmed), respectively. The rolling version of \altsched is the best performing cadence.  It will allow us to build a
+very deep sample \zmed $\sim 0.45$ of more than well sampled 300,000
+SNe.  {\tt altsched} covers more area, at the expense of a lower
+cadence.  As a consequence, it is not as deep, but allows to obtain a
+larger number of well-sampled SNe.
 
 \begin{figure}[htbp]
   \begin{center}
@@ -347,18 +346,11 @@ gives a synthetic presentation of our cadence evaluation, in the planes
   \end{center}
 \end{figure}
 
-Again, we recover our previous ranking.  The rolling version of
-\altsched is the best performing cadence.  It will allow us to build a
-very deep sample \zmed $\sim 0.45$ of more than well sampled 300,000
-SNe.  {\tt altsched} covers more area, at the expense of a lower
-cadence.  As a consequence, it is not as deep, but allows to obtain a
-larger number of well-sampled SNe.
-
 Most of the cadences released for the white paper call do not allow to
 go as deep, no to secure as many well sampled SNe. The best \opsim and
 \slair rolling cadences allow to reach redshift limits that are
 similar to the non-rolling version of \altsched and yield samples that
-are about 40\% smaller. Why simulations with the feature-based scheduler ( {\tt rolling mix}and {\tt tms roll}) do not reach the
+are about 40\% smaller. Why simulations with the feature-based scheduler ( {\tt rolling mix} and {\tt tms roll}) do not reach the
 performance of {\tt altsched rolling} is unclear at this point and is
 being investigated.
 
@@ -397,7 +389,7 @@ SNe. The list of simulated DDF is given in table
 
 DDF observations are composed of sequences of 96 visits\footnote{u band visits are also available but were not considered.}  (in a row) in r,g,i,z,y bands (namely 20, 10, 20, 26, 20 visits). This corresponds to a total observing time of about one hour and few minutes if filter changes, slew times and telescope overheads are taken into account.
 
-The strategy to estimate the number of well-measured type Ia supernovae may be summarized in four steps: (1) light curves are simulated\footnote{Simulator: SNCosmo ; simulation parameters: stretch $\in$ [-2.0, 0.0, 2.0], Color $\in$ [-0.2, 0.0, 0.2], Daymax $\in$ [$T_{obs}^{min},T_{obs}^{max}$] - step: 0.1 day, $z$ $\in$ [0.01,1.4]- step 0.025} and fitted using observations of a given cadence; (2) selection criteria are applied to get high-quality supernovae; (3) the resulting observing efficiency curves are then convolved with a production rate \cite{perrett} so as to estimate the number of well-measured type Ia supernovae that may be collected by LSST given an observing strategy. 
+The strategy to estimate the number of well-measured type Ia supernovae may be summarized in four steps: (1) light curves are simulated\footnote{Simulator: SNCosmo ; simulation parameters: \strech~$\in$ [-2.0, 0.0, 2.0], \sncolor~$\in$ [-0.2, 0.0, 0.2], Daymax $\in$ [$T_{obs}^{min},T_{obs}^{max}$] - step: 0.1 day, $z$ $\in$ [0.01,1.4]- step 0.025} and fitted using observations of a given cadence; (2) selection criteria are applied to get high-quality supernovae; (3) the resulting observing efficiency curves are then convolved with a production rate \cite{perrett} so as to estimate the number of well-measured type Ia supernovae that may be collected by LSST given an observing strategy. 
 
  The selection of a sample of well-measured type Ia supernovae is done in two steps. A sample of observable supernovae is selected by requiring light curves to have \phasemin $\leq$ -5 and \phasemax $\geq$ 20 (where \phasemin~ and \phasemax~ are the minimal and maximum phases of the LC points, respectively). For each supernovae in this reference sample, additional selection criteria are applied (the number of points before and after the maximum is higher than 4 and 10, and $\sigma_c$, the error on the \sncolor~parameter estimated from the fit of the light curve, is lower than 0.04). The season length which depends on the redshift is estimated using the supernovae of the reference sample.
 
@@ -463,7 +455,7 @@ The supernova sample is simulated following roughly the same prescription as tha
 
 
 
-The largest difference in the Figure of Merit \ref{fig:snfom} we find is a factor of two between the highest FoM (kraken\_2035) and the lowest FoM (pontus\_2502). The lowest-performing strategy has two alternating bands in declination, switching in alternate years, which is expect to perform poorly. 
+The largest difference in the Figure of Merit \ref{fig:snfom} we find is a factor of two between the highest FoM (kraken\_2035) and the lowest FoM (nexus\_2097). The lowest-performing strategy has two alternating bands in declination, switching in alternate years, which is expect to perform poorly. 
 
 
 The highest performing strategy...
@@ -516,9 +508,7 @@ sampling of a light curve is important. It is even crucial for early classificat
 
 Figure \ref{fig:rocs} (top) ~shows the comparative classification performance between 13 cadences for the Deep
 Drilling Fields of Year 1 whereas Figure \ref{fig:rocs} (bottom) ~compares the same
-cadences for the Deep Drilling Fields over the entire survey.
-
-The area under the Receiver Operating Characteristic (auROC) curves were chosen as the metric
+cadences for the Deep Drilling Fields over the entire survey. The area under the Receiver Operating Characteristic (auROC) curves were chosen as the metric
 to evaluate the performance. It was felt this single scalar would be most useful
 for being able to differentiate the ability of the various cadence strategies
 to perform photometric classification.
@@ -597,15 +587,15 @@ blobs\_same\_zmask10yrs & 0.048 & 0.859 & 0.453  \\
 blobs\_same\_10yrs & 0.064 & 0.859 & 0.462  \\
 feature\_rolling\_half\_mask\_10yrs & 0.175 & 0.987 & 0.581  \\
 minion\_1016 & 0.093 & 1.109 & 0.601  \\
-pontus\_2502 & 0.132 & 1.107 & 0.62  \\
+%pontus\_2502 & 0.132 & 1.107 & 0.62  \\
 feature\_rolling\_twoThird\_10yrs & 0.187 & 1.104 & 0.645  \\
-mothra\_2045 & 0.226 & 1.134 & 0.68  \\
+%mothra\_2045 & 0.226 & 1.134 & 0.68  \\
 pontus\_2002 & 0.224 & 1.157 & 0.691  \\
 rolling\_10yrs & 0.581 & 0.838 & 0.709  \\
 nexus\_2097 & 0.28 & 1.166 & 0.723  \\
 kraken\_2035 & 0.705 & 0.823 & 0.764  \\
 tms\_roll\_10yrs & 0.424 & 1.119 & 0.771  \\
-kraken\_2036 & 0.437 & 1.141 & 0.789  \\
+%kraken\_2036 & 0.437 & 1.141 & 0.789  \\
 baseline2018a & 0.779 & 0.834 & 0.807  \\
 kraken\_2042 & 0.794 & 0.858 & 0.826  \\
 colossus\_2665 & 0.797 & 0.861 & 0.829  \\
@@ -638,7 +628,7 @@ altsched\_good\_weather & 2.914 & 0.91 & 1.912  \\
 \mybox(Peculiar velocity (II),)
 
 
-Upcoming wide field surveys will find a large number of supernovae, and will have the ability to trace large scale structure. The best methods to do so need to be explored. In particular, the interesting methods will probably use both the distance  scales measured by supernovae using their standard candle properties and their properties as tracers of large scale structure simultaneously for the same supernova. One such probe is a probe of peculiar velocity correlations using SNIa, where the standard candle property is used to derive the distance scale, while the measured redshift (spectroscopic or photometric) is used simultaneously to gauge the peculiar velocity of the SNIa (which is potentially the peculiar velocity of the host galaxy). The spatial correlation of such peculiar velocities is related to the matter over-density at the location through the Poisson Equations, and thus can be used to constrain the over-densities and the growth function. This can be used to constrain the cosmology (for example, see \cite{2011PhRvD..83d3004B}). For other computational approaches to similar science cases, such as \cite{howlett}.
+Upcoming wide field surveys will find a large number of supernovae, and will have the ability to trace large scale structure. The best methods to do so need to be explored. In particular, the interesting methods will probably use both the distance  scales measured by supernovae using their standard candle properties and their properties as tracers of large scale structure simultaneously for the same supernova. One such probe is a probe of peculiar velocity correlations using SNIa, where the standard candle property is used to derive the distance scale, while the measured redshift (spectroscopic or photometric) is used simultaneously to gauge the peculiar velocity of the SNIa (which is potentially the peculiar velocity of the host galaxy). The spatial correlation of such peculiar velocities is related to the matter over-density at the location through the Poisson Equations, and thus can be used to constrain the over-densities and the growth function. This can be used to constrain the cosmology (for example, see \cite{2011PhRvD..83d3004B}).
 
 In what follows, we heavily rely on \cite{2011PhRvD..83d3004B} to estimate the uncertainties in the estimate of pairwise velocities as a function of the comoving separation in bins of redshift. The expected signal is largest at low redshift, where the signal of the peculiar velocity is large compared to the recession velocity of the Hubble flow.  The uncertainty on the estimated pair-wise radial velocities of tracers separated by a comoving distance $r$ Mpc is given by
 \begin{equation}
@@ -646,9 +636,9 @@ v_{\rm{est}} \approx 2 \times \sigma_{v_{\rm{los}}} / N^{1/2}(r, z_{\rm{cosmo}})
 \end{equation}
 where $N(r,z_{cosmo})$ is the number of pairs of SNIa separated by a comoving distance of $r~\rm{Mpc}$
 at a cosmological redshift of $z_{\rm{cosmo}},$ and $\sigma_{v_{\rm{los}}}$ is the uncertanty in the
-measurement of the line of sight velocity of SNIa. Thus, estimating the signal-to-noise ratio depends on the size of both $N(r, z_{cosmo})$ and $\sigma_{v_{\rm{los}}}.$. We have estimated these quantities for different cadences. 
+measurement of the line of sight velocity of SNIa. Thus, estimating the signal-to-noise ratio depends on the size of both $N(r, z_{cosmo})$ and $\sigma_{v_{\rm{los}}}$. We have estimated these quantities for different cadences. 
 
-To estimate the number of pairs of detected SNIa at a given comoving separation in redshift bins we need a realization of SNIa positions and velocities in the universe that are consistent with the underlying correlations in large scale structure. To obtain these correlations, we start from an extra-galactic catalog based on large-scale structure simulations. We add SNIa in the galaxies of the simulated extra-galactic catalog using a prescription based on some observed relationships of the SNIa - host galaxy connection. The SNIa-host galaxy connection is an area of active research from large SNIa surveys; consequently all the host galaxy properties observed are not found in the extra-galactic catalogs we can use. Consequently, we start with a simple realization prescription based on known aspects of the connection and easily observed properties of SNIa. This preserves two gross properties of SNIa distributions: the volumetric abundance rate as a function of redshift and the fact that SNIa are more abundant in galaxies with larger stellar mass. As a result of this work, we obtain a catalog of SNIa over a sky area of $A_{cat}.$
+To calculate the number of pairs of detected SNIa at a given comoving separation in redshift bins we need a realization of SNIa positions and velocities in the universe that are consistent with the underlying correlations in large scale structure. To obtain these correlations, we start from an extra-galactic catalog based on large-scale structure simulations. We add SNIa in the galaxies of the simulated extra-galactic catalog using a prescription based on some observed relationships of the SNIa - host galaxy connection. The SNIa-host galaxy connection is an area of active research from large SNIa surveys; consequently all the host galaxy properties observed are not found in the extra-galactic catalogs we can use. Consequently, we start with a simple realization prescription based on known aspects of the connection and easily observed properties of SNIa. This preserves two gross properties of SNIa distributions: the volumetric abundance rate as a function of redshift and the fact that SNIa are more abundant in galaxies with larger stellar mass. As a result of this work, we obtain a catalog of SNIa over a sky area of $A_{cat}.$
 
 We parametrize the system by a median efficiency of detection $\epsilon = N_{det}/N_{sim}$ from other comprehensive simulations being used for supernova cadence studies, which are in turn related to a footprint area $A_{survey}$ covered by the particular observing strategy. For our purposes, we choose the footprint area of the sky where the observing strategy has at least $500$ visits over ten years.\footnote{This is the region over which the SNANA simulations run.}
 Therefore, we work out how the number of detected pairs scale with $A_{survey}$ and $\epsilon$ and use this information to correct the theoretical values in $N_{pairs}$ counted in the extra-galactic catalog SN. The number of pairs of SNIa separated by a distance $r$ Mpc can be found by iterating through the SNIa ($\sim N_{SN}$), and finding the number of SNIa lying in a shell of radius $r$ Mpc with a thickness $dr$ Mpc around it, and dividing by two to avoid double counting. Using the number density of detected SN $n^{det}_{SN} \equiv N_{det}/Vol = \epsilon N_{SN}/Vol = \epsilon n_{SN},$ where $n_{SN}$ is the number density of the SNIa independent of survey parameters the number of pairs of detected SNIa with separation $r$ Mpc is:
@@ -670,11 +660,10 @@ If we were to get perfect light curves with lots of well observed points, as mig
 \begin{equation}
     m_{follow} \propto A_{survey} \times \epsilon^2,
 \end{equation}
-while if LSST is the only photometric instrument, the appropriate metric is
+while if LSST is the only photometric instrument, the appropriate metric (calculated in Table \ref{tab:cadence_metrics}) is
 \begin{equation}
     m_{LSST} \propto A_{survey} \epsilon^2 /(1.0 + \left(\sigma_{lc}/0.1\right)^2)^{1/2}
 \end{equation}
-We calculate these metrics in Tab.~\ref{tab:cadence_metrics}.
 
 
 
@@ -684,11 +673,11 @@ We calculate these metrics in Tab.~\ref{tab:cadence_metrics}.
     \hline
      cadence &  Metric (photo follow-up) &  metric (LSST Only) \\
      \hline
-    mothra\_2045 & 2.465604 & 1.495344  \\
-	kraken\_2036 & 2.696759 & 1.637113  \\
+    %mothra\_2045 & 2.465604 & 1.495344  \\
+	%kraken\_2036 & 2.696759 & 1.637113  \\
 	nexus\_2097 & 3.047014 & 1.832897  \\
 	mothra\_2049 & 3.119186 & 1.890817  \\
-	pontus\_2502 & 3.14715 & 1.910531  \\
+	%pontus\_2502 & 3.14715 & 1.910531  \\
 	colossus\_2665 & 3.558642 & 2.192984  \\
 	kraken\_2026 & 3.603123 & 2.231208  \\
 	colossus\_2664 & 3.617946 & 2.229529  \\	
@@ -801,12 +790,12 @@ Table~\ref{tab:4most_overlap}.
  \caption{Overlapping areas between LSST WFD and 4MOST extragalactic surveys}\label{tab:4most_overlap}
 \begin{tabular}{cc}\hline \hline
   LSST OpSim run & Overlapping area (sq deg) \cr\hline \hline
-  mothra\_2045   &	11702 \cr
+  %mothra\_2045   &	11702 \cr
   colossus\_2667 &	12644 \cr
 kraken\_2026   &	12644 \cr
-kraken\_2036   &        12644 \cr
+%kraken\_2036   &        12644 \cr
 pontus\_2489   &	12644 \cr  
-pontus\_2502   &	12644 \cr
+%pontus\_2502   &	12644 \cr
 colossus\_2664 &        12805 \cr
 colossus\_2665 &	13096 \cr
 pontus\_2002   &	15000 \cr
