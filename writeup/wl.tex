@@ -1,5 +1,7 @@
 \section{Weak Lensing}\label{sec:wl}
 
+\subsection{Systematics in the WFD survey}
+
 The LSST provides an opportunity to mitigate WL systematics using the observing strategy. This opportunity was not possible in previous surveys because the LSST will be the first survey to dither at large scales (relative to the field of view) with a large number of exposures.
 
 We analyzed how different OpSim runs perform with respect to the point-spread function (PSF) modeling errors and similar WL systematics as follows: (a) We create 50 million stars uniformly in the WFD areas of each survey, with cuts based on the coadded depth and dust extinction, consistently the LSS WG. (b) we model the PSF modeling errors at each star in each exposure as a 6\% radial error in the outer 20\% of field of view (and no error). We assume an average relative size error of 0.001 on the PSF model. This model is realistically motivated by recent surveys (e.g. \cite{bosche2018}) (c) We average down the modeling errors across exposures via their second moments, where this operation is linear. You can read more about this process on GitHub \footnote{\url{https://github.com/hsnee/lsstpsf/blob/master/methodology.ipynb}} (d) Propagate the averaged errors into bias on the cosmic shear using the $\rho$-statistics formulation (\cite{rowe2010}; \cite{jarvis2016}). The code to recreate this analysis is available on GitHub \footnote{\url{https://github.com/hsnee/lsstpsf/blob/master/ModelErrorsNew.ipynb}}. 
@@ -47,4 +49,23 @@ pontus\_2489   & {\color{green}1}  & {\color{green}1}   & 306
 
 There are several metrics that contain similar information to that in our analysis in MAF: the distribution of angles pointing to the center of the field of view in each observation \footnote{\url{https://github.com/LSST-nonproject/sims\_maf\_contrib/blob/5fd4ad762509cab0b4e403d84f2e65ed1ad08c06/science/static/WeakLensing\_Focal\_Angle.ipynb}} from Peter Yoachim which returns the Kolmogorov-Smirnov test's D-statistic for this distribution of angles against a uniform distribution, the distribution of coadded-depth (high values and narrow distribution is best) the distribution of airmass (low values and narrow distribution is best), the distribution of seeing values (also low values and narrow distribution is best). The reason these metrics provide similar results to our analysis is that survey uniformity is one of the crucial things that averages down WL systematics, and all these metrics are, in one way or another, a measure of uniformity.
 
+
+\subsection{WL needs for DDFs}
+
+For the DDFs to serve as a ``noise free'' training sample for shear estimation methods that need
+such a training sample, the DDFs should ideally be 40 deg$^2$ or larger, contiguous, all filters,
+different weather conditions, dithered.
+
+Overlap with external deep drilling fields from e.g. WFIRST and Euclid will be used to improve
+photometric redshifts, test shear calibration, and improve and test deblending. Overlap with CMB
+data can be used for cross-calibration of systematics in LSST weak lensing. 
+
+The current 4 deep fields work well for WL.  For additional fields, priority should be given to
+those with NIR (Euclid deep, WFIRST, JWST), other deep multi-band photometry, very deep
+spectroscopy (JWST or 30m class telescopes), or deep high-resolution CMB data.
+
+Euclid NIR is too shallow to solve LSST photo-z calibration; overlap with Euclid deep fields is
+highly desirable (especially since Euclid wide will help with blending but not to the depths of the
+samples we can use for LSST). WFIRST overlap with DDFs is critical; it does not need to be cadenced.  Ideally it would also overlap with
+deep X-ray data and deep high-resolution CMB data.
 
