@@ -231,7 +231,7 @@ smaller than 5 percent in equation \ref{eq: accuracy and precission}. The accura
 requirement is needed for measuring $H_0$ with 1\% uncertainty, and
 the precision requirement ensures that the delay uncertainty does not
 dominate the overall uncertainty on $H_0$ given typical mass modeling
-uncertainties of $\sim 5\%$ \citep[e.g.,][]{Suyu2018}.  A quad system is counted as successful if one of the 6 delays fulfills this requirement. We have investigated two different cases, first using LSST data only to measure time delays and second, using LSST as a discovering machine in combination with follow-up observations to measure delays. For just using LSST data we have investigated 202 mock LSNe Ia and for using LSST in combination with follow-up 100 mock systems have been investigated, where for each case 50 \% are doubles and 50 \% are quads. We assume follow-up observation would start 2 days after the second LSST data point in any filter exceeds the 5-$\sigma$ depth, where the follow-up is done in 3 filters (g,r,i) every second night. We also consider a more conservative scenario where follow-up observations would start 2 days after the \textit{third} LSST data point, and find that the results remain approximately the same as the case where follow-ups start after the second data point.
+uncertainties of $\sim 5\%$ \citep[e.g.,][]{Suyu2018}.  A quad system is counted as successful if one of the 6 delays fulfills this requirement. We have investigated two different cases, first using LSST data only to measure time delays and second, using LSST as a discovering machine in combination with follow-up observations to measure delays. For just using LSST data we have investigated 202 mock LSNe Ia and for using LSST in combination with follow-up 100 mock systems have been investigated, where for each case 50 \% are doubles and 50 \% are quads. We assume follow-up observation would start 2 days after the third LSST data point in any filter exceeds the 5-$\sigma$ depth, where the follow-up is done in 3 filters (g,r,i) every second night.
  
 The fraction of systems for which the time-delay measurement fulfills the above defined requirement is summarized in columns 3 and 5 of Table \ref{tab: quantify different observing strategies}. These numbers have to be combined with the total number of LSNe Ia we expect to detect for different strategies. We approximate the total number of LSNe Ia as
 
@@ -247,7 +247,7 @@ Columns 2 and 4 in Table \ref{tab: quantify different observing strategies} cont
 a few systems where time-delay measurements are possible. Follow-up observations are therefore necessary to
 increase the number of LSNe Ia with delays as visible in column 2 of Table \ref{tab: quantify different observing strategies}. These results are also more qualitatively summarized in Table \ref{tab: favoured strategies}
 
-To summarize, for our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore we are perfectly fine with the current baseline cadence. To improve on this cadence longer cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$, bigger survey areas $\Omega_\mathrm{cad}$ and a more frequent sampling are helpful. The most important result from our investigation is that rolling cadences are clearly disfavored, because their shortened cumulative season lengths $\bar{t}_\mathrm{eff,cad}$ lead to overall a more negative impact on the number of LSNe Ia with delays, compared to the gain from the increased sampling frequency.
+To summarize, for our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore we are fine with the current baseline cadence. To improve on this cadence longer cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$, bigger survey areas $\Omega_\mathrm{cad}$ and a more frequent sampling are helpful. The most important result from our investigation is that rolling cadences are clearly disfavored, because their shortened cumulative season lengths $\bar{t}_\mathrm{eff,cad}$ lead to overall a more negative impact on the number of LSNe Ia with delays, compared to the gain from the increased sampling frequency.
 %of their shorter cumulative season lengths $\bar{t}_\mathrm{eff,cad}$ although they improve the sampling. Therefore we reject to improve on one of the 3 parameters our science case is mostly sensitive to, by worsen at the same time one of the others significantly. 
 
 Further \cite{Goldstein:2018bue} performed detailed simulations of the gLSN population using a completely independent technique and pipeline and reached similar conclusions to the ones presented here: rolling cadences are strongly disfavored, and wide-area, long-season surveys with well sampled light curves are optimal.
@@ -262,46 +262,48 @@ Further \cite{Goldstein:2018bue} performed detailed simulations of the gLSN popu
 &  with & with & with& with & of\\
 & good delays & good delays& good delays& good delays&LSNe Ia\\
 \hline
-kraken\_2044 & 32.3 & 29.8 \% & 6.3 & 5.8 \% & 108.4 \\
+kraken\_2044 & 29.5 & 27.2 \% & 6.3 & 5.8 \% & 108.4 \\
 \hline
-pontus\_2002 & 28.6 & 28.6 \% & 1.4 & 1.4 \% & 100.0\\
+colossus\_2667 & 28.2 & 32.7 \% & 7.3 & 8.4 \% & 86.2 \\
 \hline
-colossus\_2667 & 28.1 & 32.6 \% & 7.3 & 8.4 \% & 86.2 \\
+alt\_sched & 23.7 & 35.3 \% & 8.6 & 12.8 \% & 67.0 \\
 \hline
-alt\_sched & 25.0 & 37.3 \% & 8.6 & 12.8 \% & 67.0 \\
+pontus\_2506 & 21.1 & 27.8 \% & 6.4 & 8.4 \% & 75.9 \\
 \hline
-kraken\_2042 & 23.7 &  29.8 \% & 4.6 & 5.8 \% & 79.3 \\
+pontus\_2002 & 21.1 & 21.0 \% & 1.4 & 1.4 \% & 100.0\\
 \hline
-pontus\_2489 & 23.6 &  28.6 \% & 6.1 & 7.4 \% & 82.4 \\
+kraken\_2042 & 20.0 &  25.2 \% & 4.6 & 5.8 \% & 79.3 \\
 \hline
-pontus\_2506 & 23.2 & 30.6 \% & 6.4 & 8.4 \% & 75.9 \\
+kraken\_2026 & 19.9 &  25.8 \% & 3.7 & 4.8 \% & 77.1 \\
 \hline
-kraken\_2026 & 22.5 &  29.2 \% & 3.7 & 4.8 \% & 77.1 \\
+pontus\_2489 & 19.6 &  23.8 \% & 6.1 & 7.4 \% & 82.4 \\
 \hline
-baseline2018a & 22.2 &  28.6 \% & 2.9 & 3.7 \% & 77.6  \\
+baseline2018a & 17.4 &  22.4 \% & 2.9 & 3.7 \% & 77.6  \\
 \hline
-colossus\_2665 & 22.1 & 28.6 \% & 2.9 & 3.7 \% & 77.2  \\
+colossus\_2665 & 17.3 & 22.4 \% & 2.9 & 3.7 \% & 77.2  \\
 \hline
-colossus\_2664 & 21.5 & 28.6 \% & 2.7 & 4.1 \% & 75.2  \\
+kraken\_2035 & 16.2 &  21.0 \% & 2.1 & 2.7 \% & 77.0 \\
 \hline
-kraken\_2035 & 19.9 &  25.8 \% & 2.1 & 2.7 \% & 77.0 \\
+colossus\_2664 & 15.8 & 21.0 \% & 2.7 & 4.1 \% & 75.2  \\
 \hline
-mothra\_2049 & 17.8&  30.6 \% & 2.7 & 4.7 \% & 58.1\\
+nexus\_2097 & 15.7&  23.8 \% & 3.2 & 4.8 \% & 65.9 \\
 \hline
-nexus\_2097 & 17.5&  26.6 \% & 3.2 & 4.8 \% & 65.9 \\
+mothra\_2049 & 13.9&  23.8 \% & 2.7 & 4.7 \% & 58.1\\
 \hline
-pontus\_2502 & 15.0 &  23.2 \% & 0.9 & 1.4 \% & 64.4 \\
+alt\_sched\_rolling & 35.9 &  38.7 \% & 5.8 & 16.5 \% & 35.3 \\
 \hline
-alt\_sched\_rolling & 13.7 &  38.7 \% & 5.8 & 16.5 \% & 35.3 \\
+pontus\_2502 & 11.4 &  17.7 \% & 0.9 & 1.4 \% & 64.4 \\
 \hline
-kraken\_2036 & 12.4 &  27.8 \% & 2.1 & 4.7 \% & 44.5 \\
+mothra\_2045 & 11.3& 27.9 \% & 2.5 & 6.1 \% & 40.4\\
 \hline
-mothra\_2045 & 11.8& 29.2 \% & 2.5 & 6.1 \% & 40.4\\
+kraken\_2036 & 11.2 &  25.2 \% & 2.1 & 4.7 \% & 44.5 \\
+
 
 \end{tabular}
-\caption{This table quantifies 18 different cadence strategies for measuring time delays in LSNe Ia. The second and third column consider LSST as a discovery machine in combination with follow-up observations in 3 filters (g,r,i) every second night. We assume follow-up observation would start 2 days after the second LSST data point in any filter exceeding the 5-$\sigma$ depth. In the fourth and fifth column only LSST data is used to measure time delays. The sixth column shows the total amount of LSNe Ia (69 \% doubles and 31 \% quads) calculated via \eqref{eq: total number of LSNe Ia from modified OM 10}. The columns ``total fraction with good delays'' contain the fraction of the  investigated mock LSNe Ia where the time delay could be measured with accuracy better than 1 percent and precision better than 5 percent. We have investigated 100 mock systems for LSST + follow-up and 202 mock systems for the case where only LSST data is used. The columns ``total number with good delays'' combine the columns ``total fraction with good delays'' with the column ``total number of LSNe Ia''. Since for LSST only, the total numbers with good delays are very low, we advocate using LSST as a discovering machine with observational follow up. Therefore the second column is the relevant one to quantify different cadences. For more qualitative conclusions see Table \ref{tab: favoured strategies}}
+\caption{This table quantifies 18 different cadence strategies for measuring time delays in LSNe Ia. The second and third column consider LSST as a discovery machine in combination with follow-up observations in 3 filters (g,r,i) every second night. We assume follow-up observation would start 2 days after the third LSST data point in any filter exceeding the 5-$\sigma$ depth. In the fourth and fifth column only LSST data is used to measure time delays. The sixth column shows the total amount of LSNe Ia (69 \% doubles and 31 \% quads) calculated via \eqref{eq: total number of LSNe Ia from modified OM 10}. The columns "total fraction with good delays" contain the fraction of the  investigated mock LSNe Ia where the time delay could be measured with accuracy better than 1 percent and precision better than 5 percent. We have investigated 100 mock systems for LSST + follow-up and 202 mock systems for the case where only LSST data is used. The columns "total number with good delays" combine the columns "total fraction with good delays" with the column "total number of LSNe Ia". Since for LSST only, the total numbers with good delays are very low, we advocate using LSST as a discovering machine with observational follow up. Therefore the second column is the relevant one to quantify different cadences. For more qualitative conclusions see Table \ref{tab: favoured strategies}}
 \label{tab: quantify different observing strategies}
 \end{table}
+%
 \begin{table}
 \centering
 \begin{tabular}{c|c|c|c}
@@ -310,41 +312,41 @@ mothra\_2045 & 11.8& 29.2 \% & 2.5 & 6.1 \% & 40.4\\
 \hline
 kraken\_2044 & x & x  \\
 \hline
-pontus\_2002 & x &    \\
-\hline
 colossus\_2667 & x & x   \\
 \hline
 alt\_sched & x & x    \\
 \hline
-kraken\_2042  & x &   \\
-\hline
-pontus\_2489 & x & x  \\
-\hline
 pontus\_2506 & x & x \\
 \hline
+pontus\_2002 & x &    \\
+\hline
+kraken\_2042  & x &   \\
+\hline
 kraken\_2026 & x &   \\
+\hline
+pontus\_2489 & x & x  \\
 \hline
 baseline2018a & x &      \\
 \hline
 colossus\_2665 & x &    \\
 \hline
-colossus\_2664 & x &     \\
-\hline
 kraken\_2035 &  &     \\
 \hline
-mothra\_2049 & &   \\
+colossus\_2664 & &     \\
 \hline
 nexus\_2097 &  &   \\
 \hline
-pontus\_2502 &&    \\
+mothra\_2049 & &   \\
 \hline
 alt\_sched\_rolling & &x    \\
 \hline
-kraken\_2036 & &   \\
+pontus\_2502 &&    \\
 \hline
 mothra\_2045 & &   \\
+\hline
+kraken\_2036 & &   \\
 \end{tabular}
-\caption{This table ranks 18 different cadences for the scenarios combining LSST with follow-up and using LSST data only. Cadences marked with a ``x'' are good for the given scenario, where unmarked ones are disfavored. For our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore we are perfectly fine with a ``baseline2018a'' like cadence. To improve on this cadence longer cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$, bigger survey areas $\Omega_\mathrm{cad}$ and a better cadence are helpful. To improve one of these parameters and worsen at the same time one of the others significantly is to be rejected, as in the case of rolling cadences where $\bar{t}_\mathrm{eff,cad}$ is significantly reduced for a better cadence. The key massage is that most of the cadences are ok for our science case, where rolling cadences are clearly disfavored.}
+\caption{This table ranks 18 different cadences for the scenarios combining LSST with follow-up and using LSST data only. Cadences marked with a "x" are good for the given scenario, where unmarked ones are disfavored. For our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore we are fine with a "baseline2018a" like cadence. To improve on this cadence longer cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$, bigger survey areas $\Omega_\mathrm{cad}$ and a better cadence are helpful. To improve one of these parameters and worsen at the same time one of the others significantly is to be rejected, as in the case of rolling cadences where $\bar{t}_\mathrm{eff,cad}$ is significantly reduced for a better cadence. The key massage is that most of the cadences are ok for our science case, where rolling cadences are clearly disfavored.}
 \label{tab: favoured strategies}
 \end{table}
 %
