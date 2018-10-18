@@ -83,8 +83,6 @@
 \newcommand{\sne}{{SNe Ia}}
 
 
-
-
 \def\mybox(#1,#2){\begin{center}
 \fbox{
 {\bf
@@ -149,7 +147,7 @@ Metric  & \multicolumn{1}{c|}{Top 5} & \multicolumn{1}{c}{Worst 5} \\
 WFD                            & 3. Rolling mix                           & 2. blobs same zmask\\
                                & 4. colossus\_2667                        &  3. blob same\\
                                & 5. feature\_rolling\_2/3                 & 4. pontus\_2002 \\
-                               &                                          &  5. pontus\_2002 \\
+                               &                                          &  5. minion\_1016 \\
 \hline
                                & 1. kraken\_2035/feature\_baseline\_10yrs &  1. kraken\_2036\\
 DDF                            & 3. colossus\_2665                        &  2. mothra\_2045 \\
@@ -172,11 +170,11 @@ WFD+DDF                        & 3. pontus\_2489                          &  3. 
       \hline
 
 %%% peculiar velocity 
-{\bf Peculiar velocity I}      & 1. altsched/altsched wide                &  1. feature\_baseline\_10yrs \\
-                               & 3. kraken\_2044                          &  2. blobs same zmask\\
-      WFD                      & 4. colossus\_2667                        & 3. blob same \\
-                               & 5. pontus\_2489                          & 4. feature\_rolling\_1/2\\
-                               &                                          &  5.  minion\_1016\\
+{\bf Peculiar velocity I}      & 1. altsched                              &  1. feature\_baseline\_10yrs \\
+                               & 2. altsched\_twilight                     &  2. blobs same zmask\\
+      WFD                      & 3. kraken\_2044                           &  3. blob same\_10yrs \\
+                               & 4. colossus\_2667                        &  4. minion\_1016\\
+                               & 5. pontus\_2489                          &  5. feature\_rolling\_1/2\\
       \hline
 %%% peculiar velocity 
 {\bf Peculiar velocity II}     & 1. kraken\_2044                          &  1. nexus\_2097\\
@@ -201,7 +199,20 @@ WFD+DDF                        & 3. pontus\_2489                          &  3. 
 
 Among the set of metrics considered in this study one of the most sensitive to the features of observing strategies (ie the key facets cadence, season length, depth, spatial coverage and uniformity) is probably the number of well-measured \sne~in combination with the redshift limit of the survey \zlimit. In fact all other metrics (except the one related to synergy with 4MOST) rely on a high-quality \sne~sample. The w0-wa Figure of Merit is usually used to assess the quality of observing strategies because it can easily be compared and/or combined with other Dark Energy probes. But this metric is not as sensitive as the number of well-measured \sne. We thus think that the primary metric to assess the quality of observing strategies should be the number of well-measured supernovae combined with the redshift corresponding to the completeness of the survey.
 
+
+\paragraph{Conclusion about proposed observing strategies}
+
+Table \ref{tab:summary} is a ranking of the best and worst observing strategies according to metric scores. One may notice that some of the metrics did not consider all the possible available cadences: $w0-wa$ FoMs and Peculiar velocity (II) were not evaluated with \altsched simulations and the photometric classification did not consider \feature\footnote{Some of these cadences are beeing processed.}. Nonetheless the conclusion that may be drawn from Table \ref{tab:summary} is that the best cadences for SN science among the proposal are:
+\begin{itemize}
+\item WFD: \altsched-like simulations corresponding to surveys with high cadences in the $griz$ bands (at the level of few days), with low inter-night gap variations, over a large area (at least 18000 $deg^2$) 
+
+\item DDF: \feature-like simulations corresponding to Deep Drilling Fields observed with a regular cadence of 3 days with low inter-night gap variations, and with long seasons (typically 160 to 180 days). 
+\end{itemize}
+
+Two key points are thus very important for SN science: a high and regular cadence. This is what drives the results in the WFD survey. The season length is also important in the DD mini-survey to collect a larger sample of well-measured \sne. 
+
 \paragraph{Observing strategy and scheduler}
+
 The results presented below tend to show that the main features related to simulated strategies (the key points mentioned above) may be quite different from one simulation to another. In particular \altsched scheduler tend to propose WFD surveys that lead to very good performance in terms of number of well-measured \sne~and \zlimit. We have made further studies to understand the reason of this result by comparing some of the outputs of \opsim and \altsched(Table \ref{tab:opsim_vs_altsched}). It is very likely that the differences found between the two schedulers have as origin the methods used to observed the sky: \opsim relies on a greedy algorithm that minimizes slew times and optimizes observing conditions; \altsched performs a systematic scan at the meridian of a predefined (Ra,Dec) area with a larger number of filter changes every night. The method used by \altsched seems to lead to very interesting cadences for SN science. Additional studies are nonetheless necessary to evaluate the impact of e.g. uncovered areas or observations when the Moon is up on \altsched performance.
 
 \begin{table}[!htbp]
@@ -433,32 +444,25 @@ Another way to assess the quality of an observing strategy is to estimate the re
 \mybox(w0-wa Figure of Merit,)
 
 
-
-We compute the Dark Energy Task force figure of merit in the dark energy parameters $w_0-w_a.$
-The supernova sample is simulated following roughly the same prescription as that outlined in the recent Science Requirements Document \cite{descsrd}, with a few differences:
-\begin{itemize}
-\item host redshift selection function: for the SRD we adjusted the survey size simulated to ensure roughly 112 000 SNe after host selection cuts from a 4MOST-like ground based telescope. This is the largest determinant of the final size, and so in order to test for differences in the survey strategy we increased the survey size simulated (so that the host-$z$ follow up was not the most important characteristic).
-\item colour cuts: in concert with the above, we impose a most restrictive cut on the fitted colour in the SAL2T fit from $\sigma(c) < 0.08$ to $\sigma(c) < 0.05.$ Insodoing we are forcing that the supernovae that survive are of higher quality than in the SRD.
-\item including only statistical errors: for speed of computation we have neglected the astrophysical systematics; this will be relaxed in future versions
-\end{itemize}
+In order to assess the impact of the cadence on the cosmological analysis possible with supernovae, we compute the Dark Energy Task force figure of merit in the dark energy parameters $w_0-w_a,$ for a few scenarios.
+In the first instance, the supernova sample is simulated following roughly the same prescription as that outlined in the recent Science Requirements Document \cite{descsrd}, with small changes to the host redshift selection. For the SRD we adjusted the survey size simulated to ensure roughly 112 000 SNe after host selection cuts from a 4MOST-like ground based telescope. This is the largest determinant of the final size, and so in order to test for differences in the survey strategy we initially doubled the survey size simulated, and then tested a few cadences without requiring any spectrosopic host redshift. This was to ensure that the host-$z$ follow up was not the most important characteristic.
+In addition, we imposed a more restrictive cut on the fitted colour in the SAL2T fit from $\sigma(c) < 0.08$ to $\sigma(c) < 0.05.$ Insodoing we are forcing that the supernovae that survive are of higher quality than in the DESC SRD.
+Finally, we include only statistical errors: for speed of computation we have neglected the astrophysical systematics; this will be relaxed in future versions
 
 
 \begin{figure}[htbp]
   \begin{center}
-    \includegraphics[width=0.7\linewidth]{FM_plot_cadence_updated.png}
-    \includegraphics[width=0.7\linewidth]{FoM_cadence_updated.png}
-    \caption{Cosmology constraints across cadence types: the ellipses in the $w_0-w_a$ plane (top) and the dark energy figure of merit is shown (bottom) are shown.}
-    \label{fig:snfom}
+    \includegraphics[width=0.7\textwidth]{FM_plot_cadence_updated.png}
+    \includegraphics[width=0.7\textwidth]{FoM_cadence_updated.png}
+    \caption{Cosmology constraints across cadence types: the ellipses in the $w_0-w_a$ plane (a) and the dark energy figure of merit is shown (b) are shown. \textbf{[RH: plot to be changed once NSERC comes back online 10/18]}}
+    \label{fig:w0wa}
   \end{center}
 \end{figure}
 
 
+In the figure above, we see that the largest difference in the Figure of Merit \ref{fig:w0wa} we find is a factor of two between the highest FoM (kraken\_2035) and the lowest FoM (nexus\_2097). The lowest-performing strategy has two alternating bands in declination, switching in alternate years, which is expect to perform poorly. 
 
-
-The largest difference in the Figure of Merit \ref{fig:snfom} we find is a factor of two between the highest FoM (kraken\_2035) and the lowest FoM (nexus\_2097). The lowest-performing strategy has two alternating bands in declination, switching in alternate years, which is expect to perform poorly. 
-
-
-The highest performing strategy...
+In order to test more strongly the impact of the wide field cadence on the overall cosmology, we ran simulations including \textit{only the WFD survey} in addition to a low-$z$ (e.g. Foundation-like) data set. We compared the cosmology results from the WFD+Foundation surveys for the {\tt kraken\_2026, kraken\_2035} and {\tt altsched, altsched\_rolling} cadences. Finally we show the results with and without spectroscopic host redshift selection for the baseline {\tt kraken\_2026} survey. \textbf{[RH: these cosmosis runs will proceed on NSERC on 10/18 after cori comes back up]}
 
 \newpage
 
@@ -544,11 +548,12 @@ strategy affect classification.
 %% Peculiar velocity (I)
 
 \mybox(Peculiar velocity (I),)
-Peculiar velocities provide a measure of $f\sigma_8$, which in turn probes gravity.  As precise distance indicators Type~Ia supernovae (SNe~Ia)
-can provide precise peculiar velocities of their host galaxies \cite{hui,davis}.
 
-\cite{howlett} calculated the  expected precision of $f\sigma_8$ using LSST-discovered SNe~Ia.
-The Fisher information matrix of a random Gaussian field with mean zero and covariance $C(k)$ parameterized by $\lambda$ is
+Peculiar velocities provide a measure of $f\sigma_8$, which in turn probes gravity.  As precise distance indicators Type~Ia supernovae (SNe~Ia)
+can provide precise peculiar velocities of their host galaxies.
+
+The  expected precision of $f\sigma_8$ using LSST-discovered SNe~Ia is estimated using
+the Fisher information matrix of a random Gaussian field with mean zero and covariance $C(k)$ parameterized by $\lambda$ is
 \begin{equation}
 F_{ij} = \frac{V}{2}\int \frac{d^3k}{(2\pi)^3} \text{Tr}\left[ C^{-1} \frac{\partial C}{\partial \lambda_i} C^{-1}
 \frac{\partial C}{\partial \lambda_j} \right].
@@ -563,65 +568,77 @@ is thus inversely proportional to the survey solid-angle $\Omega$, whereas
 in the shot-noise limit the variance is inversely proportional to $\Omega n^2 \propto N^2/\Omega$, where $n$ is the number density,
 and $N$ is the total number of supernovae.  
 
-The assessment of the number and solid-angle of $z<0.2$ supernova pre-maximum discoveries 
-for the survey candidates provided by the metric "Number of well-measured supernovae" (WFD)  has been used to calculate the Figures of Merit in the two regimes 
-(normalized with respect to the average of all the surveys),
-with our results shown in 
-Table~\ref{table:ref}.  The results of \cite{howlett}  indicate that after 10 years,
+We consider a maximum redshift of $z=0.2$ because over ten years the noise is not shot-noise dominated, meaning that the differential improvement
+in the precision of
+$f\sigma_8$ due to a lower-redshift supernova is greater than that due to a high-redshift supernova.  Following all LSST SNe~Ia below this redshift 
+likely saturate available follow-up resources.
+Our calculations are thus based on the number and solid-angle of $z<0.2$ supernova pre-maximum discoveries 
+for the survey candidates provided by the Project.  Based on these numbers we calculate the Figures of Merit in
+both sample and shot-noise limits, normalized to ``baseline2018a''.
+After 10 years,
 LSST supernovae are at neither extreme; we thus adopt the average of the two FoM's as what we advocate for the survey.
-
+These averages for a select set of surveys are shown in Figure~\ref{fig:fom}.
 
 \begin{table}
 \caption{SN~Ia Figures of Merit of Project survey candidates
 in  the shot-noise and the survey-variance limits.  The final column is the average
 of the two Figures of the Merit.\label{table:ref}}
 \centering
-\begin{tabular}{crrr}
-  \hline
-  \hline
+\begin{tabular}{|c|rrr|}
+\hline
 Survey & FoM (shot) & FoM (survey) & FoM (avg)\\
 \hline
-\hline
-feature\_baseline\_10yrs & 0.025 & 0.642 & 0.334  \\
-blobs\_same\_zmask10yrs & 0.048 & 0.859 & 0.453  \\
-blobs\_same\_10yrs & 0.064 & 0.859 & 0.462  \\
-feature\_rolling\_half\_mask\_10yrs & 0.175 & 0.987 & 0.581  \\
-minion\_1016 & 0.093 & 1.109 & 0.601  \\
-%pontus\_2502 & 0.132 & 1.107 & 0.62  \\
-feature\_rolling\_twoThird\_10yrs & 0.187 & 1.104 & 0.645  \\
+altsched\_good\_weather & 2.914 & 0.91 & 1.912  \\
+alt\_sched\_twi & 2.816 & 0.927 & 1.871  \\
+alt\_sched & 2.788 & 0.91 & 1.849  \\
+altsched\_18\_\_90\_40 & 2.594 & 1.187 & 1.89  \\
+altsched\_18\_\_90\_30 & 2.581 & 1.187 & 1.884  \\
+kraken\_2044 & 2.565 & 1.162 & 1.863  \\
+colossus\_2667 & 2.365 & 1.004 & 1.684  \\
+pontus\_2489 & 2.052 & 0.97 & 1.511  \\
+blobs\_mix\_zmask10yrs & 1.432 & 1.008 & 1.22  \\
+cadence\_mix\_10yrs & 1.012 & 1.012 & 1.012  \\
+rolling\_mix\_10yrs & 0.958 & 1.011 & 0.984  \\
+kraken\_2026 & 0.947 & 0.838 & 0.892  \\
+rolling\_mix\_75\_10yrs & 0.85 & 1.007 & 0.928  \\
+altsched\_rolling\_good\_weather & 0.815 & 0.92 & 0.868  \\
+colossus\_2664 & 0.814 & 0.884 & 0.849  \\
+tms\_drive\_10yrs & 0.806 & 1.09 & 0.948  \\
+alt\_sched\_rolling & 0.804 & 0.92 & 0.862  \\
+colossus\_2665 & 0.797 & 0.861 & 0.829  \\
+kraken\_2042 & 0.794 & 0.858 & 0.826  \\
+baseline2018a & 0.779 & 0.834 & 0.807  \\
+kraken\_2035 & 0.705 & 0.823 & 0.764  \\
+mothra\_2049 & 0.671 & 1.161 & 0.916  \\
+tight\_mask\_10yrs & 0.646 & 1.155 & 0.901  \\
+tight\_mask\_simple\_10yrs & 0.6 & 1.141 & 0.871  \\
+rolling\_10yrs & 0.581 & 0.838 & 0.709  \\
+%kraken\_2036 & 0.437 & 1.141 & 0.789  \\
+tms\_roll\_10yrs & 0.424 & 1.119 & 0.771  \\
+nexus\_2097 & 0.28 & 1.166 & 0.723  \\
 %mothra\_2045 & 0.226 & 1.134 & 0.68  \\
 pontus\_2002 & 0.224 & 1.157 & 0.691  \\
-rolling\_10yrs & 0.581 & 0.838 & 0.709  \\
-nexus\_2097 & 0.28 & 1.166 & 0.723  \\
-kraken\_2035 & 0.705 & 0.823 & 0.764  \\
-tms\_roll\_10yrs & 0.424 & 1.119 & 0.771  \\
-%kraken\_2036 & 0.437 & 1.141 & 0.789  \\
-baseline2018a & 0.779 & 0.834 & 0.807  \\
-kraken\_2042 & 0.794 & 0.858 & 0.826  \\
-colossus\_2665 & 0.797 & 0.861 & 0.829  \\
-colossus\_2664 & 0.814 & 0.884 & 0.849  \\
-alt\_sched\_rolling & 0.804 & 0.92 & 0.862  \\
-altsched\_rolling\_good\_weather & 0.815 & 0.92 & 0.868  \\
-tight\_mask\_simple\_10yrs & 0.6 & 1.141 & 0.871  \\
-kraken\_2026 & 0.947 & 0.838 & 0.892  \\
-tight\_mask\_10yrs & 0.646 & 1.155 & 0.901  \\
-mothra\_2049 & 0.671 & 1.161 & 0.916  \\
-rolling\_mix\_75\_10yrs & 0.85 & 1.007 & 0.928  \\
-tms\_drive\_10yrs & 0.806 & 1.09 & 0.948  \\
-rolling\_mix\_10yrs & 0.958 & 1.011 & 0.984  \\
-cadence\_mix\_10yrs & 1.012 & 1.012 & 1.012  \\
-blobs\_mix\_zmask10yrs & 1.432 & 1.008 & 1.22  \\
-pontus\_2489 & 2.052 & 0.97 & 1.511  \\
-colossus\_2667 & 2.365 & 1.004 & 1.684  \\
-alt\_sched & 2.788 & 0.91 & 1.849  \\
-kraken\_2044 & 2.565 & 1.162 & 1.863  \\
-alt\_sched\_twi & 2.816 & 0.927 & 1.871  \\
-altsched\_18\_\_90\_30 & 2.581 & 1.187 & 1.884  \\
-altsched\_18\_\_90\_40 & 2.594 & 1.187 & 1.89  \\
-altsched\_good\_weather & 2.914 & 0.91 & 1.912  \\
+feature\_rolling\_twoThird\_10yrs & 0.187 & 1.104 & 0.645  \\
+feature\_rolling\_half\_mask\_10yrs & 0.175 & 0.987 & 0.581  \\
+%pontus\_2502 & 0.132 & 1.107 & 0.62  \\
+minion\_1016 & 0.093 & 1.109 & 0.601  \\
+blobs\_same\_10yrs & 0.064 & 0.859 & 0.462  \\
+blobs\_same\_zmask10yrs & 0.048 & 0.859 & 0.453  \\
+feature\_baseline\_10yrs & 0.025 & 0.642 & 0.334  \\
 \hline
 \end{tabular}
 \end{table}
+
+\begin{figure}[htbp]
+   \begin{center}
+   \includegraphics[scale=0.5]{chart.png} % requires the graphicx package
+   \caption{Figure of Merits of Select Surveys}
+   \label{fig:fom}
+   \end{center}
+\end{figure}
+
+We are in the course of refining the Figure or Merit, taking into account survey geometry, combining both survey variance and shot noise.
+Any significant changes in our findings will lead to an update of our relative ranking of the surveys.
 
 \newpage
 %% Peculiar velocity (II)
