@@ -18,6 +18,9 @@ cm = plt.cm.get_cmap('RdYlBu')
 
 # Set some defaults.
 year_vals = ['Y1', 'Y3', 'Y6', 'Y10']
+# Should we fake the area scaling of the covariances?  For now this is necessary, since the inputs
+# have issues off of the diagonal.
+fake_area = False
 
 areas = np.zeros((3,4)) # 3 grid values, 4 years
 areas[:,0] = np.array([7.5, 13., 16.]) * 1000.0 # deg^2 for Y1
@@ -33,7 +36,7 @@ depths[:,3] = np.array([26.3, 26.5, 26.7])
 
 area_mid = areas[1,1] # arbitrary area for rescaling
 
-def load_foms(dir='FoM', prior=False):
+def load_foms(dir='FoM', prior=False, fake_area=False):
     """Script to load some FoM values on a 3x3 grid in (area, depth)."""
 
     # Get list of files in directory.
@@ -77,14 +80,30 @@ def load_foms(dir='FoM', prior=False):
             grep_str = 'excl'
 
 
+        year_ind = year_vals.index(year_str)
         n_found = 0
         for line in lines:
             if grep_str in line:
                 tmp_fom = float(line.split('=')[1])
-                fom_arr[n_found % 3, int(n_found / 3), year_vals.index(year_str)] = tmp_fom
+                fom_arr[int(n_found / 3), n_found % 3, year_ind] = tmp_fom
                 n_found += 1
         print('%s relevant lines found'%n_found)
 
+        if fake_area:
+            print('Faking FoM area scaling so as to only use diagonals!')
+            # In [:,0] -> shallowest -> force the FoMs for the larger areas to be rescaled from the
+            # smaller areas.
+            fom_arr[1,0,year_ind] = fom_arr[0,0,year_ind]*areas[1,year_ind]/areas[0,year_ind]
+            fom_arr[2,0,year_ind] = fom_arr[0,0,year_ind]*areas[2,year_ind]/areas[0,year_ind]
+            # In [:,1] -> middle depth -> rescale FoMs for larger and smaller area based on middle
+            # area.
+            fom_arr[0,1,year_ind] = fom_arr[1,1,year_ind]*areas[0,year_ind]/areas[1,year_ind]
+            fom_arr[2,1,year_ind] = fom_arr[1,1,year_ind]*areas[2,year_ind]/areas[1,year_ind]
+            # In [:,2] -> deepest -> rescale FoMs for smaller and middle area based on largest
+            # area.
+            fom_arr[0,2,year_ind] = fom_arr[2,2,year_ind]*areas[0,year_ind]/areas[2,year_ind]
+            fom_arr[1,2,year_ind] = fom_arr[2,2,year_ind]*areas[1,year_ind]/areas[2,year_ind]
+            
     return fom_arr
 
 def load_strategy_table(year_str = 'Y1'):
@@ -123,7 +142,6 @@ def area_depth_func(x, a, b, c):
 
 def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom_vals,
                 niexp, figpref=None):
-    """Try various things here."""
     print('Starting emulator')
     from scipy import interpolate
     f = interpolate.interp2d(grid_area_vals, grid_depth_vals, grid_fom_vals, bounds_error=False)
@@ -181,10 +199,10 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
     fom_vals = np.array(fom_vals)
     return fom_vals
 
-# Get FoM values.  
-foms_prior = load_foms(prior=True)
+# Get FoM values.
+foms_prior = load_foms(prior=True, fake_area=fake_area)
 print(foms_prior[:,:,0])
-foms_noprior = load_foms(prior=False)
+foms_noprior = load_foms(prior=False, fake_area=fake_area)
 print(foms_noprior[:,:,0])
 
 # Make some basic plots:
@@ -199,15 +217,16 @@ for year_ind in range(len(year_vals)):
     max_val = max(fom_max, fom_max_rescale)
 
     # No prior, no area rescaling.
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    sc = ax.scatter(plot_areas, plot_depths, c=foms_prior[:,:,year_ind]/max_val,
-                    cmap=cm, s=80, edgecolors='none')
-    plt.colorbar(sc)
-    plt.title('FoM/%d (with Stage III prior)'%max_val)
-    plt.xlabel('Area [sq. deg.]')
-    plt.ylabel('Median i-band depth')
-    plt.savefig('figs/fom_emulator_%s_prior.pdf'%year_vals[year_ind])
+    if not fake_area:
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        sc = ax.scatter(plot_areas, plot_depths, c=foms_prior[:,:,year_ind]/max_val,
+                        cmap=cm, s=80, edgecolors='none')
+        plt.colorbar(sc)
+        plt.title('FoM/%d (with Stage III prior)'%max_val)
+        plt.xlabel('Area [sq. deg.]')
+        plt.ylabel('Median i-band depth')
+        plt.savefig('figs/fom_emulator_%s_prior.pdf'%year_vals[year_ind])
 
     # Prior, no area rescaling.
     fig = plt.figure()
@@ -221,16 +240,17 @@ for year_ind in range(len(year_vals)):
     plt.savefig('figs/fom_emulator_%s_noprior.pdf'%year_vals[year_ind])
 
     # No prior, area rescaling.
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    sc = ax.scatter(plot_areas, plot_depths,
-                    c=foms_prior[:,:,year_ind]*area_mid/plot_areas/max_val,
-                    cmap=cm, s=80, edgecolors='none')
-    plt.colorbar(sc)
-    plt.title('(Rescaled FoM with Stage III prior)/%d'%max_val)
-    plt.xlabel('Area [sq. deg.]')
-    plt.ylabel('Median i-band depth')
-    plt.savefig('figs/fom_emulator_%s_prior_rescaled.pdf'%year_vals[year_ind])
+    if not fake_area:
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        sc = ax.scatter(plot_areas, plot_depths,
+                        c=foms_prior[:,:,year_ind]*area_mid/plot_areas/max_val,
+                        cmap=cm, s=80, edgecolors='none')
+        plt.colorbar(sc)
+        plt.title('(Rescaled FoM with Stage III prior)/%d'%max_val)
+        plt.xlabel('Area [sq. deg.]')
+        plt.ylabel('Median i-band depth')
+        plt.savefig('figs/fom_emulator_%s_prior_rescaled.pdf'%year_vals[year_ind])
 
     # Prior, area rescaling.
     fig = plt.figure()
@@ -248,18 +268,24 @@ for year_ind in range(len(year_vals)):
 
     # Load strategy tables:
     tmp_strat, tmp_area, tmp_depth, tmp_niexp = load_strategy_table(year_vals[year_ind])
-    emulated_fom_prior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
-                                     foms_prior[:,:,year_ind], tmp_niexp,
-                                     figpref='test_prior_%s'%year_vals[year_ind])
+    if not fake_area:
+        emulated_fom_prior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
+                                         foms_prior[:,:,year_ind], tmp_niexp,
+                                         figpref='test_prior_%s'%year_vals[year_ind])
     emulated_fom_noprior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
                                        foms_noprior[:,:,year_ind], tmp_niexp,
                                        figpref='test_noprior_%s'%year_vals[year_ind])
     inds = emulated_fom_noprior.argsort()[::-1]
     print('')
     print('Emulated from best to worst in year %s'%year_vals[year_ind])
-    print('Strategy, Area, median i-band depth, FoM without prior, FoM with prior')
-    for ind in inds:
-        print('%20s %d %.2f %d %d'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind], emulated_fom_noprior[ind], emulated_fom_prior[ind]))
+    if fake_area:
+        print('Strategy, Area, median i-band depth, FoM without prior')
+        for ind in inds:
+            print('%20s %d %.2f %d'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind], emulated_fom_noprior[ind]))
+    else:
+        print('Strategy, Area, median i-band depth, FoM without prior, FoM with prior')
+        for ind in inds:
+            print('%20s %d %.2f %d %d'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind], emulated_fom_noprior[ind], emulated_fom_prior[ind]))
     print('')
 
 # Depth optimization.
