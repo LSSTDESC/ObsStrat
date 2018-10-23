@@ -21,6 +21,10 @@ year_vals = ['Y1', 'Y3', 'Y6', 'Y10']
 # Should we fake the area scaling of the covariances?  For now this is necessary, since the inputs
 # have issues off of the diagonal.
 fake_area = False
+# Should we renormalize by some strategy at some year?  Use None if not.
+renorm_strategy = 'kraken_2026'
+
+renorm_value = -100.0
 
 areas = np.zeros((3,4)) # 3 grid values, 4 years
 areas[:,0] = np.array([7.5, 13., 16.]) * 1000.0 # deg^2 for Y1
@@ -141,11 +145,29 @@ def area_depth_func(x, a, b, c):
     return (a + b*depth_renorm)*(area_renorm**c)   
 
 def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom_vals,
-                niexp, figpref=None):
+                niexp, figpref=None, strategy_name=None):
     print('Starting emulator')
     from scipy import interpolate
     f = interpolate.interp2d(grid_area_vals, grid_depth_vals, grid_fom_vals, bounds_error=False)
     emulated_grid_fom_vals = f(grid_area_vals[:,0], grid_depth_vals[0,:])
+
+    if renorm_strategy is not None:
+        global renorm_value
+        print('Renormalizing by strategy %s'%renorm_strategy)
+        if renorm_value > 0:
+            print('Renormalizing by pre-existing value %f'%renorm_value)
+        else:
+            # Find the strategy in the list:
+            if strategy_name is None:
+                raise ValueError("No strategy list was passed in!")
+            else:
+                tmp_ind = list(strategy_name).index(renorm_strategy)
+                renorm_value = f(area_vals[tmp_ind], depth_vals[tmp_ind])[0]
+                print ('Renormalizing by newly-found value %f'%renorm_value)
+        tmp_renorm_value = renorm_value
+    else:
+        tmp_renorm_value = 1.0
+
 
     if figpref is not None:
         fig = plt.figure()
@@ -179,23 +201,26 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        plt.contour(finer_area_grid, finer_depth_grid, test_emulator, 15, linewidths=1, colors='k')
-        plt.pcolormesh(finer_area_grid, finer_depth_grid, test_emulator, cmap=cm)
+        plt.contour(finer_area_grid, finer_depth_grid, test_emulator/tmp_renorm_value, 15, linewidths=1, colors='k')
+        plt.pcolormesh(finer_area_grid, finer_depth_grid, test_emulator/tmp_renorm_value, cmap=cm)
         ax.scatter(area_vals[no_niexp], depth_vals[no_niexp], color='k', marker='x')
         ax.scatter(area_vals[use_niexp], depth_vals[use_niexp], color='k', marker='o', s=20*(niexp[use_niexp]/mean_niexp)**3)
-        m1 = np.array(area_vals) < 15.2e3
-        m2 = np.array(area_vals) < 20.5e3
+        #m1 = np.array(area_vals) < 15.2e3
+        #m2 = np.array(area_vals) < 20.5e3
         #plt.plot(np.array(area_vals)[m1], -2.33e-5*np.array(area_vals)[m1]+25.39, 'm-')
         #plt.plot(np.array(area_vals)[m2], -2.11e-5*np.array(area_vals)[m2]+25.24, 'm-')
         plt.colorbar()
-        plt.title('Emulated FoM')
+        if renorm_strategy is None:
+            plt.title('Emulated FoM')
+        else:
+            plt.title('Emulated FoM versus %s Y1'%renorm_strategy)
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
         plt.savefig('figs/%s_contour.pdf'%figpref)        
         
     fom_vals = []
     for ind in range(len(area_vals)):
-        fom_vals.append(f(area_vals[ind], depth_vals[ind])[0])
+        fom_vals.append(f(area_vals[ind], depth_vals[ind])[0] / tmp_renorm_value)
     fom_vals = np.array(fom_vals)
     return fom_vals
 
@@ -268,24 +293,36 @@ for year_ind in range(len(year_vals)):
 
     # Load strategy tables:
     tmp_strat, tmp_area, tmp_depth, tmp_niexp = load_strategy_table(year_vals[year_ind])
+    emulated_fom_noprior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
+                                       foms_noprior[:,:,year_ind], tmp_niexp,
+                                       figpref='test_noprior_%s'%year_vals[year_ind],
+                                       strategy_name=tmp_strat)
     if not fake_area:
         emulated_fom_prior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
                                          foms_prior[:,:,year_ind], tmp_niexp,
-                                         figpref='test_prior_%s'%year_vals[year_ind])
-    emulated_fom_noprior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
-                                       foms_noprior[:,:,year_ind], tmp_niexp,
-                                       figpref='test_noprior_%s'%year_vals[year_ind])
+                                         figpref='test_prior_%s'%year_vals[year_ind],
+                                         strategy_name=tmp_strat)
     inds = emulated_fom_noprior.argsort()[::-1]
     print('')
     print('Emulated from best to worst in year %s'%year_vals[year_ind])
     if fake_area:
         print('Strategy, Area, median i-band depth, FoM without prior')
         for ind in inds:
-            print('%20s %d %.2f %d'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind], emulated_fom_noprior[ind]))
+            if renorm_strategy is None:
+                print('%20s %d %.2f %d'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind],
+                                         emulated_fom_noprior[ind]))
+            else:
+                print('%20s %d %.2f %f'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind],
+                                         emulated_fom_noprior[ind]))
     else:
         print('Strategy, Area, median i-band depth, FoM without prior, FoM with prior')
         for ind in inds:
-            print('%20s %d %.2f %d %d'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind], emulated_fom_noprior[ind], emulated_fom_prior[ind]))
+            if renorm_strategy is None:
+                print('%20s %d %.2f %d %d'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind],
+                                            emulated_fom_noprior[ind], emulated_fom_prior[ind]))
+            else:
+                print('%20s %d %.2f %f %f'%(tmp_strat[ind], tmp_area[ind], tmp_depth[ind],
+                                            emulated_fom_noprior[ind], emulated_fom_prior[ind]))
     print('')
 
 # Depth optimization.
