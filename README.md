@@ -23,11 +23,11 @@ July 19, Task Force Meeting.  Presentation of additional information needed for 
 
 July 24, CMU ObsStrat XWG Session at 11:00.  July 26, CMU ObsStrat XWG Session at 09:00.
 
-* [ ] **July 25**, Settled list of additional information needed for appropriate response to call
+July 25, Settled list of additional information needed for appropriate response to call
 
 August 2, Task Force Meeting
 
-* [ ] **August 10**, First assessment of subset of WFD and mini-survey strategies, with metrics.  Slides from each WG.
+August 10, First assessment of subset of WFD and mini-survey strategies, with metrics.  Slides from each WG.
 
 August 13-16, LSST Community Workshop including multiple ObsStrat sessions
 
