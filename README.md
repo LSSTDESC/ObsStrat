@@ -6,7 +6,58 @@ To respond to the white paper call (https://www.lsst.org/call-whitepaper-2018) o
 ----
 
 ## Deliverables
-Two white papers, one focused on WFD and one focused on DDF and other mini-Surveys, to be led by Michelle Lochner and Dan Scolnic.
+-Two white papers, one focused on WFD and one focused on DDF and other mini-Surveys, to be led by Michelle Lochner and Dan Scolnic.  These white papers are due Nov. 30.  The overleaf for DDF is here: https://www.overleaf.com/read/xgpxqdmzydcc
+(publically viewable) and the overleaf for WFD is forthcoming.  
+
+-One journal article that details all the metrics established for the white papers.  Expectation for timeline to be roughly one month behind the white papers.  
+
+-While not a set deliverable, there is an expectation that individual contributions will form their own papers which can go into significant detail of the analysis that relates to observing strategy.
+
+
+----------------------------------
+
+
+## Calendar
+
+July 19, Task Force Meeting.  Presentation of additional information needed for call response.
+
+July 24, CMU ObsStrat XWG Session at 11:00.  July 26, CMU ObsStrat XWG Session at 09:00.
+
+* [ ] **July 25**, Settled list of additional information needed for appropriate response to call
+
+August 2, Task Force Meeting
+
+* [ ] **August 10**, First assessment of subset of WFD and mini-survey strategies, with metrics.  Slides from each WG.
+
+August 13-16, LSST Community Workshop including multiple ObsStrat sessions
+
+August 16, Task Force Meeting
+
+August 30, Task Force Meeting
+
+September 17-19, LSST Cadence Hackathon at Flatiron (https://www.lsstcorporation.org/node/193).  Need to apply.
+
+September 21, Full assessment of strategies and metrics due for task force
+
+Sep 27 - moved to weekly meetings every Thursday at 9am Central.
+
+Oct 11 - First drafts of white papers shared with Task Force.
+
+* [ ] **October 25**, Revised white papers sent out to DESC reviewers.
+
+* [ ] **October 30**, DESC Seminar presentation on White Papers.
+
+* [ ] **November 5**, Responses from DESC due.
+
+* [ ] **November 30, !!!!White Papers Due!!!**
+
+The key takeaways are a first take due August 10 before the community workshop so we can present to the Project any issues we might have, and a full assessment by September 15.  Than iterations over the next two months with white papers sent out to DESC reviewers on Oct 25.
+
+
+----------------------------------
+
+## White Paper Template
+
 
 The LSST Project wants to standardize responses to its call. The latex template provided is here: https://github.com/lsst-pst/survey_strategy_wp/blob/master/WP_submission_template.tex#L84.
 Its sections are as follows:
@@ -51,43 +102,6 @@ Add from each group a 2-3 page description:
   
 Add: Summary of how external (non-LSST) can be used, and what changes in terms of final rankings/preferences assuming external data
 
-----
-
-## Calendar
-
-July 19, Task Force Meeting.  Presentation of additional information needed for call response.
-
-July 24, CMU ObsStrat XWG Session at 11:00.  July 26, CMU ObsStrat XWG Session at 09:00.
-
-* [ ] **July 25**, Settled list of additional information needed for appropriate response to call
-
-August 2, Task Force Meeting
-
-* [ ] **August 10**, First assessment of subset of WFD and mini-survey strategies, with metrics.  Slides from each WG.
-
-August 13-16, LSST Community Workshop including multiple ObsStrat sessions
-
-August 16, Task Force Meeting
-
-August 30, Task Force Meeting
-
-[By September may change frequency/dates of meetings as semester starts]
-
-September 17-19, LSST Cadence Hackathon at Flatiron (https://www.lsstcorporation.org/node/193).  Need to apply.
-
-* [ ] **September 21**, Full assessment of strategies and metrics due for task force
-
-* [ ] **October 1**, Full white papers sent back to task force for response
-
-* [ ] **October 15**, Responses from task force due.
-
-* [ ] **October 25**, Revised white papers sent out to DESC.
-
-* [ ] **November 5**, Responses from DESC due.
-
-* [ ] **November 30, !!!!White Papers Due!!!**
-
-The key takeaways are a first take due August 10 before the community workshop so we can present to the Project any issues we might have, and a full assessment by September 15.  Than iterations over the next two months with white papers sent out to all of DESC on Oct 25.
 
 ----
 
