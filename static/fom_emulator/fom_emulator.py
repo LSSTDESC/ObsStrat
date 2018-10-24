@@ -40,6 +40,27 @@ depths[:,3] = np.array([26.3, 26.5, 26.7])
 
 area_mid = areas[1,1] # arbitrary area for rescaling
 
+husni_metric = \
+    {'rolling_10yrs_opsim': [19.17009607686149, 67.03196, 140.13828, 233.02816],
+     'rolling_mix_10yrs_opsim': [17.827055447412253, 62.7963, 133.4886, 223.60182],
+     'baseline2018a': [14.59823342079436, 65.08548, 147.00488, 258.2933],
+     'colossus_2664': [13.983119554695064, 64.04174, 143.77374, 252.1407],
+     'colossus_2665': [14.675119972692409, 65.4227, 145.51038, 257.6914],
+     'colossus_2667': [14.156289402581807, 67.01718, 150.84012, 267.87976],
+     'kraken_2026': [15.50727567502652, 67.57038, 150.43662, 267.03468],
+     'kraken_2035': [15.751901825752723, 67.16228, 147.68512, 262.56644],
+     'kraken_2036': [15.746321613278274, 54.3136, 111.16146, 216.34454],
+     'kraken_2042': [16.66430918416413, 72.25023000920037, 162.07506150123004, 283.98536],
+     'kraken_2044': [10.745318502725427, 49.68256, 114.5921, 201.4586],
+     'mothra_2045': [30.52469022205864, 57.79377338482163, 107.63368, 181.36768],
+     'nexus_2097': [11.600585597575709, 49.2615, 105.93476, 196.6197],
+     'pontus_2002': [11.785008704101049, 51.90274, 113.13634, 200.76312],
+     'pontus_2489': [24.132090956403378, 96.123, 208.12806, 369.85366],
+     'alt_sched': [19.97984, 56.72922, 112.04002, 185.9261],
+     'alt_sched_rolling': [37.47584628358029, 53.85072, 109.68314, 184.13812],
+     'pontus_2502': [15.488642770841723, 62.17139085035306, 129.36377275455092, 210.57829565913184],
+    'mothra_2049': [24.335122196054208, 45.69528, 103.20514, 188.75324]}
+
 def load_foms(dir='FoM', prior=False, fake_area=False):
     """Script to load some FoM values on a 3x3 grid in (area, depth)."""
 
@@ -122,7 +143,8 @@ def load_strategy_table(year_str = 'Y1'):
     area = []
     median_depth = []
     niexp = []
-    
+
+    year_ind = year_vals.index(year_str) 
     for line in lines:
         tmp_vals = line.split("|")
         strat_name.append(tmp_vals[1].strip())
@@ -131,7 +153,11 @@ def load_strategy_table(year_str = 'Y1'):
         if len(tmp_vals) == 14 and tmp_vals[13]!='':
             niexp.append(int(tmp_vals[13].strip()))
         else:
-            niexp.append(0)
+            # take from dict.
+            if tmp_vals[1].strip() in husni_metric.keys():
+                niexp.append(int(husni_metric[tmp_vals[1].strip()][year_ind]))
+            else:
+                niexp.append(0)
     print('Strategy table loaded: %d lines in %s for year %s!'%\
           (len(strat_name), infile, year_str))
     return np.array(strat_name), np.array(area), np.array(median_depth), np.array(niexp)
