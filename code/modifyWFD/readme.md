@@ -9,6 +9,8 @@ The goal here to construct a modified WFD footprint that is optimized for extrag
 
 `check_WFD_footprint_from_undithfieldID.ipynb` re-creates the WFD footprint based on the undithered fieldIDs and compare the result from the HEALPix-pixels based footprint.
 
+`modified_wfd_mollwiede.ipynb` re-creates the WFD footprint from the saved healpix pixels using the matplotlib `mollweide` project (to get ra, dec lines).
+
 #### Outputs
 All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
 - `WFDfootprint_nside256_HEALPixels.csv` with the HEALPix pixels that constitute the proposed WFD.
@@ -16,3 +18,5 @@ All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
 - Plots from `WFD_extragalactic_footprint_optimized.ipynb`:
     1. `WFDfootprint_nside256_intermediates_RandomDitherPerNight.png` shows the various intermediates steps (from EBV-limited region to the final footprint).
     2. `WFDfootprint_nside256.png` shows the mask based on the HEALPix pixel list.
+- Plot form `modified_wfd_mollwiede.pynb`:
+    1. `WFDfootprint_nside256_matplotlib.png`
