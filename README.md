@@ -9,6 +9,8 @@ To respond to the white paper call (https://www.lsst.org/call-whitepaper-2018) o
 -Two white papers, one focused on WFD and one focused on DDF and other mini-Surveys, to be led by Michelle Lochner and Dan Scolnic.  These white papers are due Nov. 30.  The overleaf for DDF is here: https://www.overleaf.com/read/xgpxqdmzydcc
 (publically viewable) and the overleaf for WFD is here: https://www.overleaf.com/read/ywbstqjtnctk.  
 
+-One internal DESC note that is a compendium of the large amount of work that has gone into the white paper studies.
+
 -One journal article that details all the metrics established for the white papers.  Expectation for timeline to be roughly one month behind the white papers.  
 
 -While not a set deliverable, there is an expectation that individual contributions will form their own papers which can go into significant detail of the analysis that relates to observing strategy.
