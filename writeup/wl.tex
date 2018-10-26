@@ -53,8 +53,12 @@ There are several metrics that contain similar information to that in our analys
 \subsection{WL needs for DDFs}
 
 For the DDFs to serve as a ``noise free'' training sample for shear estimation methods that need
-such a training sample, the DDFs should ideally be 40 deg$^2$ or larger, contiguous, all filters,
-different weather conditions, dithered.
+such a training sample, and to provide injection templates for Balrog or other injection methods,
+the DDFs should ideally be at least 40 deg$^2$ total across all DDFs, with a total exposure time
+exceeding that in the WFD survey by at least a factor of 10 in all bands.  While the DDFs by
+definition will meet this 10x criterion, in r and i bands there is the additional need for very good
+imaging conditions, so ideally the 10x factor would be met even for a subset with the best
+$\sim$20th percentile in seeing.
 
 Overlap with external deep drilling fields from e.g. WFIRST and Euclid will be used to improve
 photometric redshifts, test shear calibration, and improve and test deblending. Overlap with CMB
