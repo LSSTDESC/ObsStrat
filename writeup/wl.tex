@@ -53,8 +53,21 @@ There are several metrics that contain similar information to that in our analys
 \subsection{WL needs for DDFs}
 
 For the DDFs to serve as a ``noise free'' training sample for shear estimation methods that need
-such a training sample, the DDFs should ideally be 40 deg$^2$ or larger, contiguous, all filters,
-different weather conditions, dithered.
+such a training sample, and to provide injection templates for Balrog or other injection methods,
+the DDFs should ideally be at least 40 deg$^2$ total across all DDFs, with a total effective
+exposure time (``effective'' meaning open-shutter time factoring in transparency and sky brightness) 
+exceeding that in the WFD survey by at least a factor of 10 in all bands.  In addition it is
+important that the DDF effective exposure time should be >10x the WFD value for any chosen upper bound
+of seeing FWHM, at least in r and i bands but ideally all bands.  The science driver for this
+requirement for WL is as follows.  First, some state-of-the-art methods for inferring WL shear
+\citep{2014MNRAS.438.1880B,2014MNRAS.438.1880B} use a data-driven prior on the distribution of
+the first, second, and higher order moments of galaxy light profiles.  Second, characterizing and
+understanding the impact of blending on both shear and photometric redshifts will likely rely at
+least at some level on injection simulations -- i.e. the insertion of fake objects based on
+DDF-driven templates for galaxy morphologies and colors into real WFD data -- as illustrated in
+e.g. \citet{2016MNRAS.457..786S,2018PASJ...70S...6H}.  Injection simulations in particular require
+multi-band deep templates that have at least as good seeing as the WFD survey and at least 10x the
+effective exposure time.
 
 Overlap with external deep drilling fields from e.g. WFIRST and Euclid will be used to improve
 photometric redshifts, test shear calibration, and improve and test deblending. Overlap with CMB
