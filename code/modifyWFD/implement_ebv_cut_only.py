@@ -237,7 +237,7 @@ ebv_label = 'EBV<%s'%ebv_limit
     
 final_pixels = {}
 for yr in ['1yr', '10yr']:
-    good_ebv = np.where(ebv_map[allBandPixels[yr]] <= ebv_limit)[0]
+    good_ebv = np.where(ebv_map[allBandPixels[yr]] < ebv_limit)[0]
     final_pixels[yr] = allBandPixels[yr][good_ebv]
     
 # print final stats

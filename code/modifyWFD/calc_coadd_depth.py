@@ -37,6 +37,9 @@ parser.add_option('--specific_db', dest='specific_db',
 parser.add_option('--slair',
                   action='store_true', dest='slair', default=False,
                   help= 'Use the tag to specify a slair run.')
+parser.add_option('--bands', dest='bands',
+                  help='Bands to consider.',
+                  default= 'u, g, r, i, z, y')
 
 (options, args) = parser.parse_args()
 nside = options.nside
@@ -48,16 +51,20 @@ includeDustExtinction = not options.noMWdust
 baseline_and_wide_only = options.baseline_and_wide_only
 specific_db = options.specific_db
 slair = options.slair
+bands = options.bands
 
 ########################################################################################################################
 # set some things up
-bands = ['u', 'g', 'r', 'i', 'z', 'y']
+if bands.__contains__(','):
+    bands = list(bands.split(','))
+else:
+    bands = bands
 
 if yr_cut==10: yr_cut=None
 
 dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
 if baseline_and_wide_only:
-    dbfiles = [f for f in dbfiles if ((f=='baseline2018a.db') or (f=='pontus_2002.db'))]
+    dbfiles = [f for f in dbfiles if ((f.__contains__('baseline2018a') or (f.__contains__('pontus_2002'))))]
     print('Running over %s'%dbfiles)
 
 if specific_db is not None:
