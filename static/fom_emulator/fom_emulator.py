@@ -1,14 +1,6 @@
 """
 The goal of this script is to enable FoM emulation for WL+CL+LSS given a set of FoMs on a grid of
 (area, depth).
-
-Still to do:
-- Get files from Tim.
-- Check file read-in for consistency with area, depth.
-- Inspect plots.
-- Set up actual emulation.
-- Look at outputs; plot along with grid values, output in more convenient format.
-- Do the depth optimization.
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,6 +15,10 @@ year_vals = ['Y1', 'Y3', 'Y6', 'Y10']
 fake_area = False
 # Should we renormalize by some strategy at some year?  Use None if not.
 renorm_strategy = 'kraken_2026'
+# Where to put figures?  Make sure directory exists and if not, create it.
+fig_dir = 'figs'
+if not os.path.isdir(fig_dir):
+    os.mkdir(fig_dir)
 
 renorm_value = -100.0
 
@@ -205,7 +201,7 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
         plt.title('Emulator ratio - 0.5')
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig('figs/%s_ratio.pdf'%figpref)
+        plt.savefig(os.path.join(fig_dir, '%s_ratio.pdf'%figpref))
 
         finer_area = np.linspace(np.min(area_vals), np.max(area_vals), 20)
         finer_depth = np.linspace(np.min(depth_vals), np.max(depth_vals), 20)
@@ -224,7 +220,7 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
         plt.title('Emulated FoM / max')
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig('figs/%s_finer.pdf'%figpref)
+        plt.savefig(os.path.join(fig_dir, '%s_finer.pdf'%figpref))
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
@@ -243,7 +239,7 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
             plt.title('Emulated FoM versus %s Y1'%renorm_strategy)
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig('figs/%s_contour.pdf'%figpref)        
+        plt.savefig(os.path.join(fig_dir,'%s_contour.pdf'%figpref))       
         
     fom_vals = []
     for ind in range(len(area_vals)):
@@ -278,7 +274,7 @@ for year_ind in range(len(year_vals)):
         plt.title('FoM/%d (with Stage III prior)'%max_val)
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig('figs/fom_emulator_%s_prior.pdf'%year_vals[year_ind])
+        plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_prior.pdf'%year_vals[year_ind]))
 
     # Prior, no area rescaling.
     fig = plt.figure()
@@ -289,7 +285,7 @@ for year_ind in range(len(year_vals)):
     plt.title('FoM/%d (no prior)'%max_val)
     plt.xlabel('Area [sq. deg.]')
     plt.ylabel('Median i-band depth')
-    plt.savefig('figs/fom_emulator_%s_noprior.pdf'%year_vals[year_ind])
+    plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_noprior.pdf'%year_vals[year_ind]))
 
     # No prior, area rescaling.
     if not fake_area:
@@ -302,7 +298,7 @@ for year_ind in range(len(year_vals)):
         plt.title('(Rescaled FoM with Stage III prior)/%d'%max_val)
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig('figs/fom_emulator_%s_prior_rescaled.pdf'%year_vals[year_ind])
+        plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_prior_rescaled.pdf'%year_vals[year_ind]))
 
     # Prior, area rescaling.
     fig = plt.figure()
@@ -314,7 +310,7 @@ for year_ind in range(len(year_vals)):
     plt.title('(Rescaled FoM without prior)/%d'%max_val)
     plt.xlabel('Area [sq. deg.]')
     plt.ylabel('Median i-band depth')
-    plt.savefig('figs/fom_emulator_%s_noprior_rescaled.pdf'%year_vals[year_ind])
+    plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_noprior_rescaled.pdf'%year_vals[year_ind]))
 
     # Evaluate various strategies using emulator as needed.
 

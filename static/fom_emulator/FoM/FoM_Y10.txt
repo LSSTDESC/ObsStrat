@@ -1,0 +1,36 @@
+
+mode= LSST_Y10 1.000000e+04 2.690000e+01 4.800000e+01
+FoM(excl. S3 prior)=2.887266e+02
+FoM(incl. S3 prior)=3.914387e+02
+
+mode= LSST_Y10 1.000000e+04 3.080000e+01 5.700000e+01
+FoM(excl. S3 prior)=2.953230e+02
+FoM(incl. S3 prior)=4.076183e+02
+
+mode= LSST_Y10 1.000000e+04 3.500000e+01 6.700000e+01
+FoM(excl. S3 prior)=3.361616e+02
+FoM(incl. S3 prior)=4.482928e+02
+
+mode= LSST_Y10 1.500000e+04 2.690000e+01 4.800000e+01
+FoM(excl. S3 prior)=4.200093e+02
+FoM(incl. S3 prior)=5.288372e+02
+
+mode= LSST_Y10 1.500000e+04 3.080000e+01 5.700000e+01
+FoM(excl. S3 prior)=4.292111e+02
+FoM(incl. S3 prior)=5.485247e+02
+
+mode= LSST_Y10 1.500000e+04 3.500000e+01 6.700000e+01
+FoM(excl. S3 prior)=4.905306e+02
+FoM(incl. S3 prior)=6.090243e+02
+
+mode= LSST_Y10 2.000000e+04 2.690000e+01 4.800000e+01
+FoM(excl. S3 prior)=5.504419e+02
+FoM(incl. S3 prior)=6.633419e+02
+
+mode= LSST_Y10 2.000000e+04 3.080000e+01 5.700000e+01
+FoM(excl. S3 prior)=5.624697e+02
+FoM(incl. S3 prior)=6.862135e+02
+
+mode= LSST_Y10 2.000000e+04 3.500000e+01 6.700000e+01
+FoM(excl. S3 prior)=6.441837e+02
+FoM(incl. S3 prior)=7.667174e+02
