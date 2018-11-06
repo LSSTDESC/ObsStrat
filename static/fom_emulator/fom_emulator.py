@@ -159,14 +159,6 @@ def load_strategy_table(year_str = 'Y1'):
           (len(strat_name), infile, year_str))
     return np.array(strat_name), np.array(area), np.array(median_depth), np.array(niexp)
 
-def area_depth_func(x, a, b, c):
-    """ a * (area / area_0)^b * (depth - depth_0)^c """
-    areas = x[0,:]
-    depths = x[1,:]
-    area_renorm = areas / areas[4]
-    depth_renorm = depths / depths[4]
-    return (a + b*depth_renorm)*(area_renorm**c)   
-
 def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom_vals,
                 niexp, figpref=None, strategy_name=None):
     print('Starting emulator')
