@@ -19,6 +19,8 @@ renorm_strategy = 'kraken_2026'
 fig_dir = 'figs'
 if not os.path.isdir(fig_dir):
     os.mkdir(fig_dir)
+# How many evenly-spaced contours in FoM to put on contour plots?
+n_contour = 10
 
 renorm_value = -100.0
 
@@ -216,14 +218,12 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        plt.contour(finer_area_grid, finer_depth_grid, test_emulator/tmp_renorm_value, 15, linewidths=1, colors='k')
-        plt.pcolormesh(finer_area_grid, finer_depth_grid, test_emulator/tmp_renorm_value, cmap=cm)
+        plot_quantity = test_emulator/tmp_renorm_value
+        contour_levels = np.linspace(np.min(plot_quantity), np.max(plot_quantity), n_contour)
+        plt.contour(finer_area_grid, finer_depth_grid, plot_quantity, contour_levels, linewidths=1, colors='k')
+        plt.pcolormesh(finer_area_grid, finer_depth_grid, plot_quantity, cmap=cm)
         ax.scatter(area_vals[no_niexp], depth_vals[no_niexp], color='k', marker='x')
         ax.scatter(area_vals[use_niexp], depth_vals[use_niexp], color='k', marker='o', s=20*(niexp[use_niexp]/mean_niexp)**3)
-        #m1 = np.array(area_vals) < 15.2e3
-        #m2 = np.array(area_vals) < 20.5e3
-        #plt.plot(np.array(area_vals)[m1], -2.33e-5*np.array(area_vals)[m1]+25.39, 'm-')
-        #plt.plot(np.array(area_vals)[m2], -2.11e-5*np.array(area_vals)[m2]+25.24, 'm-')
         plt.colorbar()
         if renorm_strategy is None:
             plt.title('Emulated FoM')
