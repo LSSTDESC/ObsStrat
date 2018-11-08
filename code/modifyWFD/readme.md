@@ -18,6 +18,7 @@ All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
 - Plots from `WFD_extragalactic_footprint_optimized.ipynb`:
     1. `WFDfootprint_nside256_intermediates_RandomDitherPerNight.png` shows the various intermediates steps (from EBV-limited region to the final footprint).
     2. `WFDfootprint_nside256.png` shows the mask based on the HEALPix pixel list.
-- Plot from `modified_wfd_mollwiede.pynb`:
-    1. `WFDfootprint_proposed_vs_kraken_2026_nside256_matplotlib.png`
+- Plots from `modified_wfd_mollwiede.pynb`:
+    1. `WFDfootprint_proposed_vs_kraken_2026_nside256_matplotlib.png`: overplots proposed footprint with the baseline
+    2. `WFDfootprint_kraken_2026_nside256_matplotlib.png` and `WFDfootprint_proposed_nside256_matplotlib.png`: show footprint in 1. separately.
     (older versions of the notebook produced `WFDfootprint_nside256_matplotlib.png` and `WFDfootprint_proposed_vs_baseline2018a_nside256_matplotlib.png`)
