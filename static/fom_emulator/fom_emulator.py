@@ -57,7 +57,9 @@ husni_metric = \
      'pontus_2502': [14.59, 58.15, 121.10, 197.46],
      'mothra_2049': [23.92, 45.33, 101.55, 185.30],
      'alt_sched': [18.85, 53.51, 105.60, 175.14],
-     'alt_sched_rolling': [35.45, 50.82, 103.43, 173.58]}
+     'alt_sched_rolling': [35.45, 50.82, 103.43, 173.58],
+     'alt_sched_riswap': [27.17, 77.68, 156.62, 262.12],
+     'altsched_rolling_riswap': [52.94, 77.90, 155.94, 260.02]}
 
 def load_foms(dir='FoM', prior=False, fake_area=False):
     """Script to load some FoM values on a 3x3 grid in (area, depth)."""
@@ -133,6 +135,8 @@ def load_strategy_table(year_str = 'Y1'):
     infile = './strategy_table_%s.txt'%year_str
     if not os.path.exists(infile):
         raise ValueError("Cannot find file %s for year %s!"%(infile, year_str))
+    else:
+        print("Loading strategy table from %s for year %s!"%(infile, year_str))
 
     # Read it in
     lines = [line.rstrip('\n') for line in open(infile)]

@@ -20,3 +20,5 @@
 | tms_roll_10yrs | i>25.0 ; EBV<0.2 | 15376.44 | 25.59 | | | | | | | |
 | alt_sched | i>25.0 ; EBV<0.2 | 15675.33 | 25.61 | | | | | | | |
 | alt_sched_rolling | i>25.0 ; EBV<0.2 | 15260.98 | 25.50 | | | | | | | |
+| alt_sched_riswap | i>25.0 ; EBV<0.2 | 15855.62 | 25.82 | | | | | | | |
+| alt_sched_rolling_riswap | i>25.0 ; EBV<0.2 | 15820.58 | 25.72 | | | | | | | |
