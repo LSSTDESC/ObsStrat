@@ -59,7 +59,7 @@ husni_metric = \
      'alt_sched': [18.85, 53.51, 105.60, 175.14],
      'alt_sched_rolling': [35.45, 50.82, 103.43, 173.58],
      'alt_sched_riswap': [27.17, 77.68, 156.62, 262.12],
-     'altsched_rolling_riswap': [52.94, 77.90, 155.94, 260.02]}
+     'alt_sched_rolling_riswap': [52.94, 77.90, 155.94, 260.02]}
 
 def load_foms(dir='FoM', prior=False, fake_area=False):
     """Script to load some FoM values on a 3x3 grid in (area, depth)."""
