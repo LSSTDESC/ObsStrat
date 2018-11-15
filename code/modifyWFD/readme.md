@@ -22,5 +22,4 @@ All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
     1. `WFDfootprint_proposed_vs_kraken_2026_nside256_matplotlib.png`: overplots proposed footprint with the baseline
     2. `WFDfootprint_kraken_2026_nside256_matplotlib.png` and `WFDfootprint_proposed_nside256_matplotlib.png`: show footprint in 1. separately.
     3. `WFDfootprint_proposed_vs_kraken_2026_vs_4MOST+DESI_nside256_matplotlib.png`: overplots proposed footprint with the baseline, DESI, and 4MOST fotoprints.
-    4. ` WFDfootprint_proposed_vs_4MOST+DESI_nside256_matplotlib.png`: overplots proposed footprint with 4MOST and DESI footprints.
-    (older versions of the notebook produced `WFDfootprint_nside256_matplotlib.png` and `WFDfootprint_proposed_vs_baseline2018a_nside256_matplotlib.png`)
+    (older versions of the notebook produced `WFDfootprint_nside256_matplotlib.png`,  `WFDfootprint_proposed_vs_baseline2018a_nside256_matplotlib.png`, and ` WFDfootprint_proposed_vs_4MOST+DESI_nside256_matplotlib.png`)
