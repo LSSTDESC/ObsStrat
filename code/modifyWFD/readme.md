@@ -11,6 +11,8 @@ The goal here to construct a modified WFD footprint that is optimized for extrag
 
 `modified_wfd_mollwiede.ipynb` re-creates the WFD footprint from the saved healpix pixels using the matplotlib `mollweide` project (to get ra, dec lines).
 
+`modified_wfd_overlaps.ipynb` calculates the overlap between the new WFD footprint and DESI/4MOST.
+
 #### Outputs
 All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
 - `WFDfootprint_nside256_HEALPixels.csv` with the HEALPix pixels that constitute the proposed WFD.
@@ -23,3 +25,12 @@ All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
     2. `WFDfootprint_kraken_2026_nside256_matplotlib.png` and `WFDfootprint_proposed_nside256_matplotlib.png`: show footprint in 1. separately.
     3. `WFDfootprint_proposed_vs_kraken_2026_vs_4MOST+DESI_nside256_matplotlib.png`: overplots proposed footprint with the baseline, DESI, and 4MOST fotoprints.
     (older versions of the notebook produced `WFDfootprint_nside256_matplotlib.png`,  `WFDfootprint_proposed_vs_baseline2018a_nside256_matplotlib.png`, and ` WFDfootprint_proposed_vs_4MOST+DESI_nside256_matplotlib.png`)
+- Numbers from `modified_wfd_overlaps.ipynb`:
+
+    |  | New WFD | 4MOST | DESI |
+    | --- | --- | --- | --- |
+    | Total area (deg2) |  18074.29 | 15845.86 | 15011.87 |
+
+    | dbname | LSST+4MOST | LSST+DESI | LSST+4MOST/DESI | LSST+4MOST+DESI |
+    | --- | --- | --- | --- | --- |
+    | New WFD |  13763.58 | 5932.23 | 16407.61 | 3288.20 |
