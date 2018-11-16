@@ -393,4 +393,85 @@ number of visits to the same cluster fields.
 
 
 \subsection{Lensed Quasars}
-\textit{Contributors: TBD}
+\textit{Contributors: Phil Marshall, Timo Anguita, Lynne Jones}
+
+
+The goal of this section is to evaluate the precision we can achieve in measuring time delays in strongly lensed AGN, and as such, the precision on the measurement of the Hubble constant from all systems with measured time delays.
+
+Anticipating that the time delay accuracy would depend on night-to-night
+cadence, season length, and campaign length, we carried out a large
+scale simulation and measurement program that coarsely sampled these
+schedule properties. In \cite{Liao2015}, we simulated 5 different
+light curve datasets, each containing 1000 lenses, and presented them to
+the strong lensing community in a ``Time Delay Challenge.'' These 5
+challenge ``rungs'' differed by their schedule properties. Focusing on the best challenge
+submissions made by the community, we derived a simple power law model
+for the variation of each of the time delay accuracy, time delay
+precision, and useable sample fraction, with the schedule properties
+cadence, season length and campaign length. They are
+given by the following equations:
+
+\begin{align}
+|A|_{\rm model} &\approx 0.06\% \left(\frac{\rm cad} {\rm 3 days}  \right)^{0.0}
+\left(\frac{\rm sea}  {\rm 4 months}\right)^{-1.0}
+\left(\frac{\rm camp}{\rm 5 years} \right)^{-1.1}  \notag \\
+P_{\rm model} &\approx 4.0\% \left(\frac{\rm cad} {\rm 3 days}  \right)^{ 0.7}
+\left(\frac{\rm sea}  {\rm 4 months}\right)^{-0.3}
+\left(\frac{\rm camp}{\rm 5 years} \right)^{-0.6}  \notag \\
+f_{\rm model} &\approx 30\% \left(\frac{\rm cad} {\rm 3 days}  \right)^{-0.4}
+\left(\frac{\rm sea}  {\rm 4 months}\right)^{ 0.8}
+\left(\frac{\rm camp}{\rm 5 years} \right)^{-0.2} \notag 
+\end{align}
+
+All three of these diagnostic metrics would, in an ideal world, be
+optimized: this could be achieved by decreasing the night-to-night
+cadence (to better sample the light curves), extending the observing
+season length (to maximize the chances of capturing a strong variation
+and its echo), and extending the campaign length (to increase the number
+of effective time delay measurements).
+
+The quantity of greatest scientific interest is the {\it accuracy in
+	cosmological parameters}: this could be computed as follows. Setting a
+required accuracy threshold  defines the available number of lenses,
+which in turns gives us the mean precision per lens there. Combining the
+whole sample, we would get the error on the weighted mean time delay, as
+used by \cite{Coe2009}. This uncertainty, which scales as one
+over the square root of the number of available lenses,  can be roughly
+equated to the statistical uncertainty on the Hubble constant.
+
+Our Opsim analysis consists in selecting only the sky survey area that allows time delay measurements with accuracies of $<0.2\%$ \citep{Hojjati2014}. This high accuracy area can be used
+to define a ``Gold Sample'' of lenses, whose mean precision per lens we
+can compute. The TDC2 useable fraction averaged over this area gives us
+the approximate size of this sample: we simply re-scale the 400 lenses
+predicted by \cite{Liao2015} by this fraction over the 30\% found
+in TDC2. While these numbers are approximate, the ratios between
+different observing and analysis strategies provide a useful indication of relative merit.
+
+As described above, we follow \cite{Coe2009} and compute a
+very simple time delay distance Figure of Merit ``\texttt{DPrecision}''
+as follows. We first combine the fractional time delay precision in
+quadrature with an assumed 4\% ``modeling uncertainty,'' and then divide
+this by the square root of the number of Gold Sample lenses. This
+estimated ensemble distance precision can be straightforwardly related
+to cosmological parameter precision, as cite{Coe2009} show
+(it's very roughly the precision on the Hubble constant).
+
+Our calculations are performed using the full 10 years of LSST operations with both the single i-band observations and all bands merged together. Naturally, significantly better results are obtained making no distinctions between photometric bands, however, it is important to note that there is a rather large caveat: Even when AGN variability can show almost negligible difference between bands close in wavelength, the difference can be important between the bluest and reddest LSST bands. As such, the i-band results can be interpreted as a very conservative upper limit in the precision attainable and the "all-bands" result as a very optimistic lower limit.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/sl_QSO_Nlens.png}    
+		\caption{Number of ``golden lenses'' in sky areas with accuracies $<$0.2\%}   
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{sl_QSO_Precision.png}    
+		\caption{Mean precision per lens (percent) in  sky areas with accuracies $<$0.2\%}  
+\end{figure}
+\begin{figure}
+\centering
+		\includegraphics[width=\linewidth]{sl_QSO_Dprec.png}    
+		\caption{Time delay distance precision figure of merit (percent) in  sky areas with accuracies $<$0.2\%} 
+\end{figure}
+
