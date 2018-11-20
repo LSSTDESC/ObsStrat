@@ -1,4 +1,5 @@
 \batchmode
+%%\documentclass[onecolumn]{lsstdescnote}
 \documentclass[modern]{lsstdescnote}
 %%\documentclass[modern,skiphelvet]{lsstdescnote}
 \usepackage{lsstdesc_macros}
@@ -13,6 +14,7 @@
 \usepackage{natbib}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{xfrac}
 
 \hypersetup{urlcolor=blue, colorlinks=true} 
 \usepackage{float}
@@ -48,22 +50,60 @@
 % used in SL section
 \newcommand{\todo}[2]{\textcolor{red}{\textbf{TODO (#1): #2}}}
 
+\raggedbottom
+
+% Hack to keep ``modern'' style option from making the TOC with absurdly big line spacing
+\AtBeginDocument{\addtocontents{toc}{\protect\setlength{\parskip}{0pt}}}
+
 \begin{document}
 \title{LSST DESC Observing Strategy}
 \author{Members of the LSST DESC Observing Strategy Taskforce}
 \date{\today}
+
 \maketitle
 
+\begin{abstract}
+In 2018, the Large Synoptic Survey Telescope (LSST) project issued a
+call for whitepapers to inform observing cadence and strategy. In
+response to this call, the LSST Dark Energy Science Collaboration
+(DESC) constituted an Observing Strategy Task-Force (OSTF) which
+developed metrics by which observing strategies could be evaluated for
+use studying dark energy using a variety of techniques, and applied
+these metrics to a variety of sample simulations of different
+strategies. Except for the studies by the photo-z and supernova
+cosmology groups (which are maintained separately), internal
+documentation of these studies by the different subgroups of the OSTF
+are collected here.
+\end{abstract}
+
+\pagebreak
+\tableofcontents
+
+\pagebreak
+\input{preface}
+
+\pagebreak
+\input{intro}
+
+\pagebreak
 \input{dm}
+\pagebreak
 \input{gw}
-\input{gw_too}
+\pagebreak
 \input{lss}
+\pagebreak
 \input{pz}
+\pagebreak
 \input{sl}
-\input{sn}
+% \pagebreak
+% \input{sn}
+\pagebreak
 \input{wl}
+\pagebreak
 \input{static}
+\pagebreak
 \input{joint}
+\pagebreak
 
 \bibliographystyle{unsrt}
 \bibliography{refs}
