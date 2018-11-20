@@ -1,0 +1,184 @@
+\RequirePackage{docswitch}
+% \flag is set by the user, through the makefile:
+%    make note
+%    make apj
+% etc.
+\setjournal{\flag}
+
+\documentclass[\docopts]{\docclass}
+
+% You could also define the document class directly
+%\documentclass[]{emulateapj}
+
+% Custom commands from LSST DESC, see texmf/styles/lsstdesc_macros.sty
+\usepackage{lsstdesc_macros}
+%\usepackage{natbib}
+\usepackage{graphicx,subfigure}
+\bibliographystyle{apj}
+\usepackage{verbatim}
+\usepackage[titletoc]{appendix}
+\usepackage{longtable}
+\usepackage{rotating}
+\usepackage{setspace}
+%\usepackage{titletoc}
+
+% Add your own macros here:
+
+\newcommand{\cosmos}{COSMOS}
+\newcommand{\xmmlss}{XMM-LSS}
+\newcommand{\cdfs}{CDFS}
+\newcommand{\elais}{ELAIS-S1}
+\newcommand{\spt}{SPT DEEP}
+\newcommand{\ddfa}{DDF\_820}
+\newcommand{\ddfb}{DDF\_858}
+\newcommand{\ddfc}{DDF\_1200}
+\newcommand{\ddfd}{DDF\_2689}
+\newcommand{\feature}{feature\_baseline\_10yrs}
+\newcommand{\strech}{$X_1$}
+\newcommand{\sncolor}{$c$}
+\newcommand{\daymax}{$T_0$}
+\newcommand{\redshift}{$z$}
+\newcommand{\tmin}{$T_{min}$}
+\newcommand{\tmax}{$T_{max}$}
+\newcommand{\phasemin}{$ph_{min}$}
+\newcommand{\phasemax}{$ph_{max}$}
+\newcommand{\tgapcosmos}{$T_{gap}^{\cosmos}$}
+\newcommand{\tgapothers}{$T_{gap}^{others}$}
+\newcommand{\zfaint}{$z_{\mathrm{faint}}\ $}
+\newcommand{\nsnfaint}{$N_{z<z_{\mathrm{faint}}}\ $}
+\newcommand{\zmed}{$z_{\mathrm{med}}\ $}
+\newcommand{\nsnmed}{$N_{z<z_{\mathrm{med}}}\ $}
+\newcommand{\FixMe}[1]{{\color{red} \bf \large #1}}
+\newcommand{\opsim}{{\tt OpSim\ }}
+\newcommand{\slair}{{\tt SLAIR\ }}
+\newcommand{\altschedsched}{{\tt AltSched\ }}
+\newcommand{\altsched}{{\tt altsched\ }}
+\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
+\newcommand{\sne}{{SNe Ia }}
+
+\graphicspath{{sn_figure/}}
+\addtocontents{toc}{\vspace{0.2cm}}
+
+% ======================================================================
+\maxdeadcycles=200
+
+\begin{document}
+
+\begin{comment}
+\renewcommand\appendix{\par
+  \setcounter{section}{0}
+  \setcounter{subsection}{0}
+  \setcounter{figure}{0}
+  \setcounter{table}{0}
+  \renewcommand\thesection{Appendix} %\Alph{section}}
+  \renewcommand\thefigure{\Alph{section}\arabic{figure}}
+  \renewcommand\thetable{\Alph{section}\arabic{table}}
+}
+\end{comment}
+
+\title{Supernovae cadence studies}
+
+\maketitlepre
+
+
+\begin{abstract}
+
+  Write abstract here.
+
+\end{abstract}
+
+% Keywords are ignored in the LSST DESC Note style:
+\dockeys{}
+
+\maketitlepost
+
+% ----------------------------------------------------------------------
+% {% raw %}
+\clearpage
+\tableofcontents
+
+\section{Introduction}
+\label{sec:intro}
+\input{sn_tex/key_design}
+
+% ----------------------------------------------------------------------
+
+\section{Overview of observing strategies}
+\label{sec:overview}
+\input{sn_tex/overview_strategy}
+
+% ----------------------------------------------------------------------
+
+\section{Metrics}
+\label{sec:metricsmain}
+
+\input{sn_tex/nsn}
+
+\input{sn_tex/overlap_4MOST}
+
+\input{sn_tex/peculiar_velocity}
+
+\input{sn_tex/peculiar_velocity_2}
+
+\input{sn_tex/classification}
+
+\input{sn_tex/w0wa}
+
+
+
+
+\section{Metrics and proposed observing strategies: summary}
+\label{sec:summary}
+\input{sn_tex/metrics_summary}
+% ----------------------------------------------------------------------
+
+\section{New proposals}
+\label{sec:proposals}
+\input{sn_tex/new_proposals}
+
+
+% ----------------------------------------------------------------------
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+% ----------------------------------------------------------------------
+
+\subsection*{Acknowledgments}
+
+%%% Here is where you should add your specific acknowledgments, remembering that some standard thanks will be added via the \code{desc-tex/ack/*.tex} and \code{contributions.tex} files.
+
+%This paper has undergone internal review in the LSST Dark Energy Science Collaboration. % REQUIRED if true
+
+\input{contributions} % Standard papers only: author contribution statements. For examples, see http://blogs.nature.com/nautilus/2007/11/post_12.html
+
+% This work used TBD kindly provided by Not-A-DESC Member and benefitted from comments by Another Non-DESC person.
+
+% Standard papers only: A.B.C. acknowledges support from grant 1234 from ...
+
+\input{desc-tex/ack/standard} % also available: key standard_short
+
+% This work used some telescope which is operated/funded by some agency or consortium or foundation ...
+
+% We acknowledge the use of An-External-Tool-like-NED-or-ADS.
+
+%{\it Facilities:} \facility{LSST}
+\clearpage
+% Include both collaboration papers and external citations:
+\addcontentsline{toc}{chapter}{bibliography}
+\bibliography{main}{}
+\bibliographystyle{plain}
+
+\clearpage
+
+\appendix
+
+\input{sn_tex/appendix}
+
+
+
+
+
+\end{document}
+
+% ======================================================================

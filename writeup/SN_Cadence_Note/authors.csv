@@ -1,0 +1,45 @@
+# ======================================================================
+# authors.csv
+#
+# While we wait for the LSST DESC publications system to generate files
+# like this from its database, we'll need to edit authors.csv by hand.
+# Below are some example entries.
+#
+# Notes:
+#   - If someone has two affiliations, they get two rows, and the last
+#     row is is used for their contribution.
+#   - Try to make your one-sentence contribution statement as
+#     informative as possible, so that it's clear who did what.
+#   - The contribution statement is a _summary of your impact on the
+#     project_, not a _timecard_. So, if you spent 90% of your time
+#     debugging, but 10% of your time designing and implementing the
+#     framework that then needed debugging, your statement should
+#     emphasize the design and implementation rather than the debugging.
+#   - BUG: mkauthlist cannot deal with empty rows, so please avoid them!
+#   - BUG: contributions are re-formatted by mkauthlist into Title case,
+#     removing all other capitalizations. Sorry about this!
+#
+# Example rows for you to adapt:
+#
+# Drlica-Wagner,Alex,A.~Drlica-Wagner,Contact,"Fermi National Accelerator Laboratory, P. O. Box 500, Batavia, IL 60510, USA","Developed algorithms for switching between document styles and generating author lists, implemented and tested software.",kadrlica@fnal.gov
+# Marshall,Phil,P.~Marshall,Contributor,"SLAC National Accelerator Laboratory, Menlo Park, CA 94025, USA","Initiated and led project.",dr.phil.marshall@gmail.com
+# Marshall,Phil,P.~Marshall,Contributor,"Kavli Institute for Particle Astrophysics \& Cosmology, P. O. Box 2450, Stanford University, Stanford, CA 94305, USA","Initiated and led project, designed templates, tested system.",dr.phil.marshall@gmail.com
+# Digel,Seth,S.~Digel,Builder,"SLAC National Accelerator Laboratory, Menlo Park, CA 94025, USA","Advised on LSST DESC publication system requirements.",digel@stanford.edu
+# Digel,Seth,S.~Digel,Builder,"Kavli Institute for Particle Astrophysics \& Cosmology, P. O. Box 2450, Stanford University, Stanford, CA 94305, USA","Advised on LSST DESC publication system requirements.",digel@stanford.edu
+#
+# ======================================================================
+Lastname,Firstname,Authorname,AuthorType,Affiliation,Contribution,Email
+"Allam Jr.","Tarek","T.~Allam Jr",Contributor,"University College London, Gower Street, London, United Kingdom","Photometric classification","tarek.allam.10@ucl.ac.uk"
+"Biswas","Rahul","R.~Biswas",Contributor,"Stockholms universitet, Fysikum 106 91 Stockholm, Sweden","FoM, peculiar velocity, photometric classification and overlap with 4MOST metrics","rbiswas4@gmail.com"
+"Carrick","Jon","J.~Carrick",Contributor,"Lancaster University, Lancaster, United Kingdom","Overlap with 4MOST metric","j.carrick@lancaster.ac.uk"
+"Gris","Philippe","Ph.~Gris",Contact,"Laboratoire de Physique de Clermont, IN2P3/CNRS, France","Number of well-measured supernovae ; DESC-SN group contact for cadence studies; editor of the note","philippe.gris@clermont.in2p3.fr"
+"Hlo\v{z}ek","Ren\'ee","R.~Hlo\v{z}ek",Contributor,"Dunlap Institute for Astronomy and Astrophysics, University of Toronto, 50 St. George Street, Toronto, Ontario, Canada","FoM, peculiar velocity and photometric classification metrics.","hlozek@dunlap.utoronto.ca"
+"Hook","Isobel","I.~Hook",Contributor,"Lancaster University, Lancaster, United Kingdom","Overlap with 4MOST metric","i.hook@lancaster.ac.uk"
+"Kim","Alex","A.~Kim",Contributor,"Lawrence Berkeley National Laboratory, 1 Cyclotron Road, Berkeley, CA, USA","Peculiar velocity metric","agkim@lbl.gov"
+"Lochner","Michelle","M.~Lochner",Contributor,"AIMS South Africa,6 Melrose Road, Muizenberg, 7945 Cape Town, South Africa","Observing Strategy Task Force co-convener (WFD), photometric classification metric.","dr.michelle.lochner@gmail.com"
+"McEwen","Jason D.","J.~MCEwen",Contributor,"Mullard Space Science Laboratory, University College London, Gower Street, London, United Kingdom","Photometric classification metric","Jason.McEwen@ucl.ac.uk"
+"Peiris","Hiranya","H.~Peiris",Contributor,"University College London, Gower Street, London, United Kingdom","Photometric classification metric","h.peiris@ucl.ac.uk"
+"Regnault","Nicolas","N.~Regnault",Contributor,"Laboratoire de Physique Nucléaire et des Hautes Energies, IN2P3/CNRS, France","Number of well-sampled supernovae metric","nicolas.regnault@lpnhe.in2p3.fr"
+"Schumann","Robert","R.~Schumann",Contributor,"Institute for Astronomy, University of Edinburgh, Royal Observatory, Blackford Hill, Edinburgh, United Kingdom","Photometric classification metric","roberts@roe.ac.uk "
+"Scolnic","Dan","D.~Scolnic",Contributor,"The University of Chicago, The Kavli Institute for Cosmological Physics, William Eckhardt Research Center, 5640 South Ellis Avenue, Chicago, IL, USA","Observing Strategy Task Force co-convener (DDF)","dscolnic@kicp.uchicago.edu" 
+"Setzer","Christian","C.~Setzer",Contributor,"Stockholms universitet, Fysikum 106 91 Stockholm, Sweden","Photometric classification metric","christian.setzer@fysik.su.se"

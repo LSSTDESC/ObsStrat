@@ -1,0 +1,137 @@
+\subsection{Peculiar velocity}
+
+\myparagraph{Method}
+
+Peculiar velocities provide a measure of $f\sigma_8$, which in turn probes gravity.  As precise distance indicators Type~Ia supernovae (SNe~Ia)
+can provide precise peculiar velocities of their host galaxies \cite{hui,davis}.
+
+\cite{howlett} calculated the  expected precision of $f\sigma_8$ using LSST-discovered SNe~Ia.
+The Fisher information matrix of a random Gaussian field with mean zero and covariance $C(k)$ parameterized by $\lambda$ is
+\begin{equation}
+F_{ij} = \frac{V}{2}\int \frac{d^3k}{(2\pi)^3} \text{Tr}\left[ C^{-1} \frac{\partial C}{\partial \lambda_i} C^{-1}
+\frac{\partial C}{\partial \lambda_j} \right].
+\end{equation}
+The covariance
+\begin{equation}
+C = P_{vv}(k) + \frac{\sigma^2}{n}
+\end{equation}
+has contributions from the power spectrum, noise in the velocity measurement, and the density of velocity probes.
+In the sample variance limit for a sample with fixed depth, the variance in $f\sigma_8$ (and other $\lambda$ parameters)
+is thus inversely proportional to the survey solid-angle $\Omega$, whereas
+in the shot-noise limit the variance is inversely proportional to $\Omega n^2 \propto N^2/\Omega$, where $n$ is the number density,
+and $N$ is the total number of supernovae.  
+
+
+\myparagraph{Results}
+
+The assessment of the number and solid-angle of $z<0.2$ supernova pre-maximum discoveries 
+for the survey candidates provided by the Project (\ref{sec:wide_fast_deep_analysis_method})  has been used to calculate the Figures of Merit in the two regimes 
+(normalized with respect to the average of all the surveys),
+with our results shown in 
+Table~\ref{table:ref}.  The results of \cite{howlett}  indicate that after 10 years,
+LSST supernovae are at neither extreme; we thus adopt the average of the two FoM's as what we advocate for the survey.
+
+
+\begin{table}
+\caption{SN~Ia Figures of Merit of Project survey candidates
+in  the shot-noise and the survey-variance limits.  The final column is the average
+of the two Figures of the Merit.\label{table:ref}}
+\centering
+\begin{tabular}{crrr}
+  \hline
+  \hline
+Survey & FoM (shot) & FoM (survey) & FoM (avg)\\
+\hline
+\hline
+feature\_baseline\_10yrs & 0.025 & 0.642 & 0.334  \\
+blobs\_same\_zmask10yrs & 0.048 & 0.859 & 0.453  \\
+blobs\_same\_10yrs & 0.064 & 0.859 & 0.462  \\
+feature\_rolling\_half\_mask\_10yrs & 0.175 & 0.987 & 0.581  \\
+minion\_1016 & 0.093 & 1.109 & 0.601  \\
+pontus\_2502 & 0.132 & 1.107 & 0.62  \\
+feature\_rolling\_twoThird\_10yrs & 0.187 & 1.104 & 0.645  \\
+mothra\_2045 & 0.226 & 1.134 & 0.68  \\
+pontus\_2002 & 0.224 & 1.157 & 0.691  \\
+rolling\_10yrs & 0.581 & 0.838 & 0.709  \\
+nexus\_2097 & 0.28 & 1.166 & 0.723  \\
+kraken\_2035 & 0.705 & 0.823 & 0.764  \\
+tms\_roll\_10yrs & 0.424 & 1.119 & 0.771  \\
+kraken\_2036 & 0.437 & 1.141 & 0.789  \\
+baseline2018a & 0.779 & 0.834 & 0.807  \\
+kraken\_2042 & 0.794 & 0.858 & 0.826  \\
+colossus\_2665 & 0.797 & 0.861 & 0.829  \\
+colossus\_2664 & 0.814 & 0.884 & 0.849  \\
+alt\_sched\_rolling & 0.804 & 0.92 & 0.862  \\
+altsched\_rolling\_good\_weather & 0.815 & 0.92 & 0.868  \\
+tight\_mask\_simple\_10yrs & 0.6 & 1.141 & 0.871  \\
+kraken\_2026 & 0.947 & 0.838 & 0.892  \\
+tight\_mask\_10yrs & 0.646 & 1.155 & 0.901  \\
+mothra\_2049 & 0.671 & 1.161 & 0.916  \\
+rolling\_mix\_75\_10yrs & 0.85 & 1.007 & 0.928  \\
+tms\_drive\_10yrs & 0.806 & 1.09 & 0.948  \\
+rolling\_mix\_10yrs & 0.958 & 1.011 & 0.984  \\
+cadence\_mix\_10yrs & 1.012 & 1.012 & 1.012  \\
+blobs\_mix\_zmask10yrs & 1.432 & 1.008 & 1.22  \\
+pontus\_2489 & 2.052 & 0.97 & 1.511  \\
+colossus\_2667 & 2.365 & 1.004 & 1.684  \\
+alt\_sched & 2.788 & 0.91 & 1.849  \\
+kraken\_2044 & 2.565 & 1.162 & 1.863  \\
+alt\_sched\_twi & 2.816 & 0.927 & 1.871  \\
+altsched\_18\_\_90\_30 & 2.581 & 1.187 & 1.884  \\
+altsched\_18\_\_90\_40 & 2.594 & 1.187 & 1.89  \\
+altsched\_good\_weather & 2.914 & 0.91 & 1.912  \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{comment}
+rolling\_10yrs  & 0.581 & 0.838 & 0.709  \\
+mothra\_2045  & 0.226 & 1.134 & 0.680  \\
+blobs\_same\_zmask10yrs  & 0.048 & 0.859 & 0.453  \\
+rolling\_mix\_75\_10yrs  & 0.850 & 1.007 & 0.928  \\
+alt\_sched\_twi  & 2.816 & 0.927 & 1.871  \\
+alt\_sched\_rolling  & 0.804 & 0.920 & 0.862  \\
+pontus\_2489  & 2.052 & 0.970 & 1.511  \\
+kraken\_2044  & 2.565 & 1.162 & 1.863  \\
+pontus\_2002  & 0.224 & 1.157 & 0.691  \\
+tms\_drive\_10yrs  & 0.806 & 1.090 & 0.948  \\
+tight\_mask\_simple\_10yrs  & 0.600 & 1.141 & 0.871  \\
+baseline2018a  & 0.779 & 0.834 & 0.807  \\
+altsched\_18\_\_90\_40  & 2.594 & 1.187 & 1.890  \\
+kraken\_2026  & 0.947 & 0.838 & 0.892  \\
+feature\_baseline\_10yrs  & 0.025 & 0.642 & 0.334  \\
+blobs\_same\_10yrs  & 0.064 & 0.859 & 0.462  \\
+cadence\_mix\_10yrs  & 1.012 & 1.012 & 1.012  \\
+feature\_rolling\_half\_mask\_10yrs  & 0.175 & 0.987 & 0.581  \\
+pontus\_2502  & 0.132 & 1.107 & 0.620  \\
+colossus\_2667  & 2.365 & 1.004 & 1.684  \\
+kraken\_2036  & 0.437 & 1.141 & 0.789  \\
+tms\_roll\_10yrs  & 0.424 & 1.119 & 0.771  \\
+rolling\_mix\_10yrs  & 0.958 & 1.011 & 0.984  \\
+altsched\_rolling\_good\_weather  & 0.815 & 0.920 & 0.868  \\
+altsched\_18\_\_90\_30  & 2.581 & 1.187 & 1.884  \\
+tight\_mask\_10yrs  & 0.646 & 1.155 & 0.901  \\
+alt\_sched  & 2.788 & 0.910 & 1.849  \\
+colossus\_2665  & 0.797 & 0.861 & 0.829  \\
+colossus\_2664  & 0.814 & 0.884 & 0.849  \\
+mothra\_2049  & 0.671 & 1.161 & 0.916  \\
+kraken\_2042  & 0.794 & 0.858 & 0.826  \\
+minion\_1016  & 0.093 & 1.109 & 0.601  \\
+kraken\_2035  & 0.705 & 0.823 & 0.764  \\
+nexus\_2097  & 0.280 & 1.166 & 0.723  \\
+blobs\_mix\_zmask10yrs  & 1.432 & 1.008 & 1.220  \\
+feature\_rolling\_twoThird\_10yrs  & 0.187 & 1.104 & 0.645  \\
+altsched\_good\_weather  & 2.914 & 0.910 & 1.912  \\
+\end{comment}
+
+\myparagraph{Conclusion}
+
+We are in the course of refining the Figure or Merit, taking into account survey geometry, combining both survey variance and shot noise.
+Any significant changes in our findings will lead to an update of our relative
+ranking of the surveys.
+
+
+
+
+
+
