@@ -12,3 +12,10 @@ git submodule update
 cd writeup
 make all
 ```
+
+`ditaa` was used to create the wedding-cake diagram. It can be
+regenerated thus:
+
+```
+java -jar ~/ditaa/ditaa0_9.jar -E -S wedding_cake.ditaa wedding_cake.png
+```
