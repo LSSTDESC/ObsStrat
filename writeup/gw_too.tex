@@ -1,6 +1,6 @@
-\section{Gravitational Wave Target of Opportunity Follow-up}
+\subsection{Gravitational Wave Target of Opportunity Follow-up}
 
-\subsection{Introduction}
+\subsubsection{Introduction}
 
 Gravitational wave detectors have begun detecting mergers of massive objects such as neutron stars and black holes. The signature of such events in gravitational waves provides information not only on their masses, but also an estimate of the distance to the merger. This estimate is independent of any optical photometry, or even detection, and as such can be used to estimate the local value of $H_0$ using a distance measurement independent of the traditional distance ladder. To complete the calculation of $H_0$, however, a redshift must also be measured, which in turn requires that the source be identified in optical images and a redshift measured. Identification of such optical counterparts is challenging: the ability of gravitational wave detectors measure the celestial coordinates of these mergers is limited. Provided the merger itself generates a distinctive electromagnetic signature, a survey that can quickly detect this signature over the whole GW localization area and distinguish it from other variable sources can provide the necessary coordinates for spectroscopic follow-up, either of the host galaxy or the event itself. Mergers between neutron stars (kilonovae) are examples of such events. One such event has been discovered so far. (TODO: REFERENCE) However, the precision on the measurement of $H_0$ from and individual event is limited, and the uncertainty encompasses the discrepant measurements of $H_0$ from other methods: a large sample of such events is required to fulfill the potential of such events for cosmology.
 
@@ -10,7 +10,7 @@ An astrophysical rate of $1500$ events $\mbox{Gpc}^{-3}$ $\mbox{yr}^{-1}$, a sen
 
 % Fig 3 from Chen & Holz 2016 for CDF of localization area
 
-\subsection{Follow-up strategy}
+\subsubsection{Follow-up strategy}
 
 The proposed follow-up strategy closely resembles that developed, extensively studied \todo{references}, and executed \todo{references} on DECam for GW followup\footnote{Simply scaling by telescope aperture, a 90 second exposure on DECam (the standard DES exposure time, and the exposure time used for GW follow-up) corresponds to 36 seconds of exposure time in LSST. An LSST WFD visit (pair of exposures totaling 30 seconds) will have roughly the same depth as a DECam GW followup exposure. LSST FWD pointings have a density of $\sim 1/7.8\square\degree$, while DES pointings have a density of $\sim 1/3.2\square\degree$, so LSST will be able to cover the same area of sky with 40\% of the visits required by DECam.  DECam also has a much longer readout time, such that exposures can only be taken at a rate of one every 120 seconds. So, use of LSST for GW followup (and many other projects) will be very similar to DECam, except that LSST can cover the same area of sky to the same depth in roughly 1/8th the time. In other words, the effective etendue of LSST is about 8 times that of DECam, and individual standard DES visits have roughly the same depth as individual standard LSST WFD visits.}. To identify optical sources corresponding to GW signals from kilonovae, we must detect the object in LSST images, identify it as variable, and distinguish it from other variable sources. Most objects can be rejected as kilonavae candidates either because they show no variation relative to previous exposures, or because they have been previously identified as other types of variable objects.
 
@@ -22,7 +22,7 @@ If it is not possible to detect the rising light curve (for example because the 
 
 % Maybe we should have a table with time for best localized, time for all, true detection rate, false detection rate
 
-\subsection{Impact on other LSST programs}
+\subsubsection{Impact on other LSST programs}
 
 If LSST uses these strategies to follow up GW detections with a mean localization of $60\square\degree$ at a rate of $\sim 37$ per year, then roughly $0.2\%$ of WFD exposures are affected. Because GW follow-up can use the same visit parameters as the WFD survey, these exposures are not removed from the WFD where the localization area overlaps the WFD footprint: the exposures are simply taken at a different time. Where the localization region falls outside of the FWD footprint, the time spent following up GW is entirely lost to the WFD. In FWD survey strategies that utilize a larger footprint, such as the LynneSim footprint introduced at the Flatiron cadence hackathon, GW followup will be less disruptive. 
 
@@ -36,7 +36,7 @@ GW followup may also affect the observing cadences of other programs. However, t
 % - The rate of 36/year results in a small fraction of time affected
 % If WFD is wider area, it makes GW less disruptive, and helps GW in other ways (templates)
 
-\subsection{Metrics}
+\subsubsection{Metrics}
 
 The definitive metric for GW follow-up is the final uncertainty on the derived value of $H_0$, which varies statistically as $\sqrt{n_{\mbox{kn}}}$. The number of kilonovae detected is a function of the time dedicated to triggered follow-up, but not linearly: if follow-up is constrained in time, we will follow up GW signals with the best constrained localization regions, so that the mean time used per kilonova increases as we can follow up less and less constrained signals.
 
@@ -47,7 +47,7 @@ The definitive metric for GW follow-up is the final uncertainty on the derived v
 %  - Number (area) of GW candidates followed up
 %    + corresponds to time used
 
-\subsection{The mini survey parameters}
+\subsubsection{The mini survey parameters}
 
 Total exposure time 2.5 nights per year in the most conservative case (37 events per year, 60 square degrees per event in average, 20 minutes per event). 
 Results of runs with the simulator: 3/4 of a night per year.
