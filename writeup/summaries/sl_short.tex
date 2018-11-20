@@ -23,8 +23,8 @@ calculated with ARTIS (Applied Radiative Transfer In Supernovae)
 \citep{Kromer:2009ce} in combination with magnifications maps from
 GERLUMPH \citep{Vernardos:2015wta} to include the effect of
 microlensing similar as in \citep{Goldstein:2017bny}. To simulate
-data points for the light curves,  we place the mock system randomly in one of 10 chosen
-fields in the WFD (wide fast deep survey), where we follow the observation pattern from 18 different cadence strategies.
+data points for the light curves, we place the mock systems randomly in one of 10 chosen
+fields in the WFD (wide fast deep) survey, where we follow the observation pattern from 20 different cadence strategies.
 From this we get simulated observations, where the error is calculated according to \cite[sec 3.5,
 p. 67]{2009:LSSTscience}.
 To evaluate the mock data and get a measured time delay we use the
@@ -32,13 +32,13 @@ free knot spline optimizer from PyCS (Python Curve Shifting)
 \citep{2013:Tewesb,Bonvin:2015jia}. Details of this
 work will be presented in Huber et al. (in preparation).
 
-We have investigated two different metrics, first using LSST data only to measure time delays and second, using LSST as a discovering machine in combination with follow-up observations to measure delays. We assume follow-up observations would start 2 days after the third LSST data point in any filter exceeds the 5-$\sigma$ depth, where the follow-up is done in 3 filters (g,r,i) every second night. 
+We have investigated two different metrics, first using LSST data only to measure time delays and second, using LSST as a discovering machine in combination with follow-up observations to measure delays. We assume follow-up observations would start 2 days after the third LSST data point in any filter exceeds the 5-$\sigma$ depth, where the follow-up is done in 3 filters (g, r, i) every second night. 
 
 To have sufficient statistics, we investigate for each cadence
 strategy 202 mock LSNe Ia for "LSST only", and 100 mock systems for "LSST + follow up". For each of the mock systems we draw 100 random starting
 configurations. A starting configuration corresponds to a random
-position in the microlensing map and a random field from the 10 chosen fields, where it is placed randomly in one of the
-observing seasons such that the detection requirement from OM 10 is
+position in the microlensing map and a random field of the 10 chosen fields, where it is placed randomly in one of the
+observing seasons such that the detection requirement of OM 10 is
 fulfilled. For each of these starting configurations we then draw 1000
 different noise realizations of light curves. For each realization we calculate the deviation from the true time delay as
 %
@@ -67,7 +67,7 @@ t_{\rm true}^{-1}$). Since the 6 time-delay deviations from the 6 filters are in
 \end{equation}
 per pair of images.
 
-From this we summarize the results and quantify the 18 investigated cadences. Given that $H_0 \propto \frac{1}{t}$, where $t$
+From this we summarize the results and quantify the 20 investigated cadences. Given that $H_0 \propto \frac{1}{t}$, where $t$
 is the time delay between two images, we aim for accuracy
 ($\tau_\mathrm{d,50}$) smaller than 1 percent and precision ($\delta$)
 smaller than 5 percent in equation \ref{eq: accuracy and precission}. The accuracy
@@ -83,23 +83,23 @@ From this investigation we get the fraction of systems with successful measured 
 N_\mathrm{LSNe Ia, cad} = N_\mathrm{LSNe Ia, OM 10} \frac{\Omega_\mathrm{cad}}{\Omega_\mathrm{OM 10}} \frac{\bar{t}_\mathrm{eff,cad}}{t_\mathrm{eff, OM 10}}
 \end{align}
 %
-where $N_\mathrm{LSNe Ia, OM 10} = 45.7$, $\Omega_\mathrm{OM 10} = \SI{20000}{\square\deg}$ and $t_\mathrm{eff, OM 10}=\SI{2.5}{\year}$ from \cite{Oguri:2010}. $\Omega_\mathrm{cad}$ is the survey area for a given cadence. We assume $\Omega_\mathrm{cad}=\SI{24700}{\square\deg}$ for pontus\_2002, kraken\_2044, mothra\_2049 and nexus\_2097, and for the other strategies $\Omega_\mathrm{cad}=\SI{18000}{\square\deg}$. $\bar{t}_\mathrm{eff,cad}$ is the cumulative seasonal length for a given cadence, where we have averaged over all LSST fields where observations are taken. 
+where $N_\mathrm{LSNe Ia, OM 10} = 45.7$, $\Omega_\mathrm{OM 10} = \SI{20000}{\square\deg}$ and $t_\mathrm{eff, OM 10}=\SI{2.5}{\year}$ from \cite{Oguri:2010}. $\Omega_\mathrm{cad}$ is the survey area for a given cadence and we calculate it by taking all fields into account with a cumulative season length, inter-night gap and 5-sigma depth similar to a WFD sub-sample\footnote{The sub-sample contains 719 WFD fields. The calculated areas are for most strategies within a few percent of the nominal values ($\Omega_\mathrm{cad}=\SI{18000}{\square\deg}$ or $\Omega_\mathrm{cad}=\SI{24700}{\square\deg}$). The maximum deviation is $17 \%$ for nexus\_2097. Details will be presented in Huber et al. (in preparation).}. $\bar{t}_\mathrm{eff,cad}$ is the cumulative seasonal length for a given cadence, where we have averaged over the WFD sub-sample. 
 
-Combining the fraction of systems with the total number of LSNe Ia we get the number of LSNe Ia over the 10 year survey, where the delay can be measured with accuracy $<$ 1 \% and precision $<$ 5 \% . The results are shown in figure \ref{fig:final results}.
+Combining the fraction of systems with the total number of LSNe Ia we get the number of LSNe Ia over the 10 year survey, where the delay can be measured with accuracy $<$ 1 \% and precision $<$ 5 \% . The results are shown in Figure \ref{fig:final results}. For a better interpretation we subdivide the strategies into three categories: (1) \textcolor{orange} {baseline like in terms of inter-night gap and cumulative season length} (mean values), (2) \textcolor{blue}{shorter inter-night gap, shorter cumulative season length} and (3) \textcolor{magenta}{shorter inter-night gap, baseline like cumulative season length}. In addition cadences with a large nominal WFD footprint start with a capital letter.
 
 %
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=1]{sl_MetricLSST.pdf}
-\caption{This plot quantifies 18 different cadence strategies for measuring time delays in LSNe Ia. The black bars consider LSST as a discovery machine in combination with follow-up observations in 3 filters (g,r,i) every second night. We assume follow-up observation would start 2 days after the third LSST data point in any filter exceeding the 5-$\sigma$ depth. For the grey bars only LSST data is used to measure time delays. Since for LSST only, the total numbers with good delays are very low, we advocate using LSST as a discovering machine with observational follow up. Therefore the black bars are the relevant ones to quantify different cadences. To summarize we are perfectly fine with a "baseline2018a" like cadence. To improve on this cadence longer cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$, bigger survey areas $\Omega_\mathrm{cad}$ and a better sampling are helpful. On the other hand, rolling cadences are clearly disfavored despite the better sampling due to the substantially shortened cumulative seasonal length. }
+\caption{This plot quantifies different cadence strategies for measuring time delays in LSNe Ia. The black bars consider LSST as a discovery machine in combination with follow-up observations in 3 filters (g,r,i) every second night. We assume follow-up observation would start 2 days after the third LSST data point in any filter exceeding the 5-$\sigma$ depth. For the grey bars only LSST data is used to measure time delays. Since for LSST only, the total numbers with good delays over the 10 year survey are very low, we advocate using LSST as a discovering machine with observational follow up. Therefore the black bars are the relevant ones to quantify different cadences.}
 \label{fig:final results}
 \end{figure}
 
 For the metric LSST data only we see that for the best strategies we will just have
 a few systems where time-delay measurements are possible. Follow-up observations are therefore necessary to
-increase the number of LSNe Ia with delays as visible which makes LSST + follow up the important metric to rank different observing strategies.
+increase the number of LSNe Ia with delays which makes LSST + follow up the important metric to rank different observing strategies.
 
-To summarize, for our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. Therefore we are fine with the current baseline cadence. To improve on this cadence longer cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$, bigger survey areas $\Omega_\mathrm{cad}$ and a more frequent sampling are helpful. The most important result from our investigation is that rolling cadences are clearly disfavored, because their shortened cumulative season lengths $\bar{t}_\mathrm{eff,cad}$ lead to overall a more negative impact on the number of LSNe Ia with delays, compared to the gain from the increased sampling frequency.
+To summarize, for our science case of measuring time delays from as many lensed SNe as possible, it would be more effective to use LSST as a discovering machine with additional follow-up, instead of relying on LSST completely for the delay measurements. From our investigations we find that long cumulative seasonal lengths $\bar{t}_\mathrm{eff,cad}$ and a more frequent sampling are important. To go more into detail, we request for 10 seasons with a season length of 170 days or longer. Rolling cadences are clearly disfavored, because their shortened cumulative season lengths lead to overall a more negative impact on the number of LSNe Ia with delays, compared to the gain from the increased sampling frequency\footnote{rolling\_mix\_10\_yrs\_opsim has a cumulative season length close to baseline2018a and does the revisit in different filters. It is therefore the only rolling cadence performing better than the baseline cadence.}. To improve the sampling, single visits per night would be helpful. Since this will make the science case of fast-moving transients impossible we suggest doing one revisit within a night but in a different band than the first visit. Further improvements are the replacement of $2 \times \SI{15}{\s}$ exposure by $1 \times \SI{30}{\s}$ for an increased efficiency and redistributing some of the visits in y band to g, r, i and z.
 %of their shorter cumulative season lengths $\bar{t}_\mathrm{eff,cad}$ although they improve the sampling. Therefore we reject to improve on one of the 3 parameters our science case is mostly sensitive to, by worsen at the same time one of the others significantly. 
 %
 
