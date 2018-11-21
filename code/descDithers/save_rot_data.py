@@ -1,7 +1,7 @@
 ##############################################################################################################
 # This scripts saves dithered and undithered rotTelPos and rotSkyPos for different dbs. The code was initially
-# run in an iPython notebook but its takes really long to load the dbs; its better to just save the data
-# for saving time and allowing quick reproducibility.
+# run in an iPython notebook but it takes a really long time to load the dbs; its better to just save the data
+# in one go to allow quick reproducibility.
 #
 # Humna Awan: humna.awan@rutgers.edu
 #
@@ -25,6 +25,7 @@ rot_rand_seed = 42
 dbs_path = '/global/cscratch1/sd/awan/dbs_wp_unzipped'
 outdir = '/global/homes/a/awan/desc/wp_descDithers_csvs/compare_rot_dith/'
 
+# figure out the path depending on whether we can alt_sched dbs or not
 if altsched:
     dbs_path = '%s/slair_altsched'%dbs_path
     dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db') and \
@@ -32,9 +33,10 @@ if altsched:
 else:
     dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
 
-# now read in the data
 time0 = time.time()
-for i, dbfile in enumerate(dbfiles): # loop over all the db files
+# loop over all the db files
+for i, dbfile in enumerate(dbfiles):
+    # ----------------------------------------------------------
     time1 = time.time()
     # connect to the database
     opsdb = db.OpsimDatabase('%s/%s'%(dbs_path, dbfile))
@@ -56,7 +58,7 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
 
     # ----------------------------------------------------------
     # add parallactic angle values to the stacker: added PA column
-    # needed to go from dithered rotTelPos to dithered rotSkyPos since rotSkyPos = rotTelPos - PA
+    # needed to go from dithered rotTelPos to dithered rotSkyPos; rotSkyPos = rotTelPos - PA
     s = stackers.ParallacticAngleStacker(degrees=opsdb.raDecInDeg)
     simdata = s.run(simdata)
 
@@ -66,6 +68,8 @@ for i, dbfile in enumerate(dbfiles): # loop over all the db files
     data_dict = {}
     for col in ['rotTelPos', 'randomDitherPerFilterChangeRotTelPos', 'rotSkyPos', 'PA']:
         data_dict[col] = simdata[col]
+
+    # ----------------------------------------------------------
     # save the output array
     filename = '%s_data.csv'%(dbname)
     df = pd.DataFrame(data_dict)
