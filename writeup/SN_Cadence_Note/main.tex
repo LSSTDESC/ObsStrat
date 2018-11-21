@@ -62,9 +62,6 @@
 % ======================================================================
 \maxdeadcycles=200
 
-\begin{document}
-
-\begin{comment}
 \renewcommand\appendix{\par
   \setcounter{section}{0}
   \setcounter{subsection}{0}
@@ -74,7 +71,17 @@
   \renewcommand\thefigure{\Alph{section}\arabic{figure}}
   \renewcommand\thetable{\Alph{section}\arabic{table}}
 }
-\end{comment}
+
+\newcommand*\appendixwithtoc{\%
+  \cleardoublepage
+  \appendix
+  \addtocontents{toc}{\protect\StartAppendixEntries}
+  \listofatoc
+}
+
+ \AtBeginDocument{\addtocontents{toc}{\protect\setlength{\parskip}{0pt}}}
+  
+\begin{document}
 
 \title{Supernovae cadence studies}
 
@@ -83,8 +90,7 @@
 
 \begin{abstract}
 
-  Write abstract here.
-
+ This note is a summary of cadence analysis performed within the DESC-SN working group.  A set of metrics has been developed to gauge impacts on supernovae science (in terms of number of well-measured and redshift depth) and Dark Energy constraints (inferred from the sample of well-measured supernovae) of observing strategies released with the ''Call for White Papers on LSST Cadence Optimization'' but also of simulations available prior to and after this call. 
 \end{abstract}
 
 % Keywords are ignored in the LSST DESC Note style:
@@ -114,7 +120,7 @@
 
 \input{sn_tex/nsn}
 
-\input{sn_tex/overlap_4MOST}
+\input{sn_tex/w0wa}
 
 \input{sn_tex/peculiar_velocity}
 
@@ -122,9 +128,7 @@
 
 \input{sn_tex/classification}
 
-\input{sn_tex/w0wa}
-
-
+\input{sn_tex/overlap_4MOST}
 
 
 \section{Metrics and proposed observing strategies: summary}
@@ -171,7 +175,7 @@
 
 \clearpage
 
-\appendix
+\appendixwithtoc
 
 \input{sn_tex/appendix}
 

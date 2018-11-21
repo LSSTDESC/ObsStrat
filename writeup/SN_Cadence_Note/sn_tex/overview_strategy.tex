@@ -258,6 +258,20 @@ note any significant correlation between season duration and cadence.
   \end{center}
 \end{figure}
 
+\paragraph{Inter-night gaps}This is another important metric to estimate the ``quality'' of observing strategies. Large gaps between consecutive observations of the same field degrade in a significant way the quality of the supernovae light curves. For each 'healpixel' the fraction of gaps larger than 15 days has been estimated (excluding the very large gaps when the direction is not observable). The conclusion (Figure \ref{fig:large_gaps}) is that \altsched-like cadences tend to have smaller fractions of 15-days gaps (including ''rolling cadences'' which seems quite surprising).
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.8\linewidth]{overview_strategy/cadence_large_gaps.png}
+    \caption{Fraction of gaps higher than 15 days (r band).\altsched cadences are show in red, \opsim WPC in blue,
+      \slair in orange, and early cadences in deep blue. The rolling
+      (resp. non-rolling) cadences are displayed with open
+      (resp. solid) markers. }
+    \label{fig:large_gaps}
+  \end{center}
+\end{figure}
+
+
 
 \paragraph{} To conclude: we note a very large gap (about a factor 7) between
 the best and the worst cadences delivered by the various strategies
@@ -274,7 +288,7 @@ tremendous improvements with respect to the previous experiments
 conducted with this scheduler.  However, the best \slair simulations
 are still behind \altschedsched regarding cadence.  On top of the elements
 discussed above, it seems that the core of the \altschedsched observing strategy ensures
-an extreme regularity of the cadence.
+an extreme regularity of the cadence. This may be explained by the method used by \atlsched~ to observe the sky (see Appendix \ref{sec:opsim_altsched} for more details about differences between \opsim~and \altsched).
 
 \begin{comment}
 nrl, 2018-09-27: we still need to estimate (1) the same-filter

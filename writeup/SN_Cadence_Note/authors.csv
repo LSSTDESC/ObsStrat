@@ -29,17 +29,19 @@
 #
 # ======================================================================
 Lastname,Firstname,Authorname,AuthorType,Affiliation,Contribution,Email
-"Allam Jr.","Tarek","T.~Allam Jr",Contributor,"University College London, Gower Street, London, United Kingdom","Photometric classification","tarek.allam.10@ucl.ac.uk"
-"Biswas","Rahul","R.~Biswas",Contributor,"Stockholms universitet, Fysikum 106 91 Stockholm, Sweden","FoM, peculiar velocity, photometric classification and overlap with 4MOST metrics","rbiswas4@gmail.com"
-"Carrick","Jon","J.~Carrick",Contributor,"Lancaster University, Lancaster, United Kingdom","Overlap with 4MOST metric","j.carrick@lancaster.ac.uk"
-"Gris","Philippe","Ph.~Gris",Contact,"Laboratoire de Physique de Clermont, IN2P3/CNRS, France","Number of well-measured supernovae ; DESC-SN group contact for cadence studies; editor of the note","philippe.gris@clermont.in2p3.fr"
-"Hlo\v{z}ek","Ren\'ee","R.~Hlo\v{z}ek",Contributor,"Dunlap Institute for Astronomy and Astrophysics, University of Toronto, 50 St. George Street, Toronto, Ontario, Canada","FoM, peculiar velocity and photometric classification metrics.","hlozek@dunlap.utoronto.ca"
-"Hook","Isobel","I.~Hook",Contributor,"Lancaster University, Lancaster, United Kingdom","Overlap with 4MOST metric","i.hook@lancaster.ac.uk"
-"Kim","Alex","A.~Kim",Contributor,"Lawrence Berkeley National Laboratory, 1 Cyclotron Road, Berkeley, CA, USA","Peculiar velocity metric","agkim@lbl.gov"
-"Lochner","Michelle","M.~Lochner",Contributor,"AIMS South Africa,6 Melrose Road, Muizenberg, 7945 Cape Town, South Africa","Observing Strategy Task Force co-convener (WFD), photometric classification metric.","dr.michelle.lochner@gmail.com"
-"McEwen","Jason D.","J.~MCEwen",Contributor,"Mullard Space Science Laboratory, University College London, Gower Street, London, United Kingdom","Photometric classification metric","Jason.McEwen@ucl.ac.uk"
-"Peiris","Hiranya","H.~Peiris",Contributor,"University College London, Gower Street, London, United Kingdom","Photometric classification metric","h.peiris@ucl.ac.uk"
-"Regnault","Nicolas","N.~Regnault",Contributor,"Laboratoire de Physique Nucléaire et des Hautes Energies, IN2P3/CNRS, France","Number of well-sampled supernovae metric","nicolas.regnault@lpnhe.in2p3.fr"
-"Schumann","Robert","R.~Schumann",Contributor,"Institute for Astronomy, University of Edinburgh, Royal Observatory, Blackford Hill, Edinburgh, United Kingdom","Photometric classification metric","roberts@roe.ac.uk "
-"Scolnic","Dan","D.~Scolnic",Contributor,"The University of Chicago, The Kavli Institute for Cosmological Physics, William Eckhardt Research Center, 5640 South Ellis Avenue, Chicago, IL, USA","Observing Strategy Task Force co-convener (DDF)","dscolnic@kicp.uchicago.edu" 
-"Setzer","Christian","C.~Setzer",Contributor,"Stockholms universitet, Fysikum 106 91 Stockholm, Sweden","Photometric classification metric","christian.setzer@fysik.su.se"
+Allam Jr.,Tarek,T.~Allam Jr,Contributor,"University College London, Gower Street, London, United Kingdom","Photometric classification",tarek.allam.10@ucl.ac.uk
+Biswas,Rahul,R.~Biswas,Contributor,"Stockholms universitet, Fysikum 106 91 Stockholm, Sweden","FoM, peculiar velocity, photometric classification and overlap with 4MOST metrics",rbiswas4@gmail.com
+Carrick,Jon,J.~Carrick,Contributor,"Lancaster University, Lancaster, United Kingdom","Overlap with 4MOST metric",j.carrick@lancaster.ac.uk
+Gris,Philippe,Ph.~Gris,Contact,"Laboratoire de Physique de Clermont, IN2P3/CNRS, France","Observing strategy analysis ; Number of well-measured supernovae metric; DESC-SN group contact for cadence studies; editor of the note",philippe.gris@clermont.in2p3.fr
+Hlo\v{z}ek,Ren\'ee,R.~Hlo\v{z}ek,Contributor,"Dunlap Institute for Astronomy and Astrophysics, University of Toronto, 50 St. George Street, Toronto, Ontario, Canada","FoM, peculiar velocity and photometric classification metrics.",hlozek@dunlap.utoronto.ca
+Hook,Isobel,I.~Hook,Contributor,"Lancaster University, Lancaster, United Kingdom","Overlap with 4MOST metric",i.hook@lancaster.ac.uk
+Kim,Alex,A.~Kim,Contributor,"Lawrence Berkeley National Laboratory, 1 Cyclotron Road, Berkeley, CA, USA","Peculiar velocity metric",agkim@lbl.gov
+Lochner,Michelle,M.~Lochner,Contact,"Department of Physics & Astronomy, University College London, Gower Street, London WC1E 6BT, UK","Co-Led LSST DESC ObsStrat",dr.michelle.lochner@gmail.com
+Lochner,Michelle,M.~Lochner,Contact,"3African Institute for Mathematical Sciences, 6 Melrose Road, Muizenberg, 7945, South Africa","Co-Led LSST DESC ObsStrat",dr.michelle.lochner@gmail.com
+Lochner,Michelle,M.~Lochner,Contact,"SKA SA, The Park, Park Road, Cape Town 7405, South Africa","Co-Led LSST DESC ObsStrat",dr.michelle.lochner@gmail.com
+McEwen,Jason D.,J.~MCEwen,Contributor,"Mullard Space Science Laboratory, University College London, Gower Street, London, United Kingdom","Photometric classification metric",Jason.McEwen@ucl.ac.uk
+Peiris,Hiranya,H.~Peiris,Contributor,"University College London, Gower Street, London, United Kingdom","Photometric classification metric",h.peiris@ucl.ac.uk
+Regnault,Nicolas,N.~Regnault,Contributor,"Laboratoire de Physique Nucléaire et des Hautes Energies, IN2P3/CNRS, France","Observing strategy analysis; Number of well-sampled supernovae metric",nicolas.regnault@lpnhe.in2p3.fr
+Schumann,Robert,R.~Schumann,Contributor,"Institute for Astronomy, University of Edinburgh, Royal Observatory, Blackford Hill, Edinburgh, United Kingdom","Photometric classification metric",roberts@roe.ac.uk
+Scolnic,Daniel,D.M.~Scolnic,Contact,"Kavli Institute for Cosmological Physics, University of Chicago, Chicago, IL 60637, USA","Co-Led LSST DESC ObsStrat",dan.scolnic@gmail.com
+Setzer,Christian,C.~Setzer,Contributor,"Stockholms universitet, Fysikum 106 91 Stockholm, Sweden","Photometric classification metric",christian.setzer@fysik.su.se
