@@ -9,7 +9,7 @@ The "median depth" mentioned here is i-band.  Studies that involve varying the t
 Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that we may or may not end up varying for the different scenarios.
 
 ## Y1
-| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area + 4MOST or DESI (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
+| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area & [4MOST/TiDES or DESI] (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | baseline2018a | i>24.5 ; EBV<0.2 | 13612.92 | 25.07 | 12302.37 | 2.01 | 5.11 | | | | | | |
 |  kraken_2026  | i>24.5 ; EBV<0.2 | 14075.69 | 25.06 | 12760.78 | 2.01 | 5.11 | | | | | | |
@@ -35,7 +35,7 @@ Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that 
 | alt_sched_rolling | i>24.5 ; EBV<0.2 | 7921.83 | 25.38 | 7530.51 | | | | | | | | |
 
 ## Y3
-| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area + 4MOST or DESI (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
+| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area & [4MOST/TiDES or DESI] (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | baseline2018a | i>25.0 ; EBV<0.2 | 14841.81 | 25.85 | 13490.28 | 1.51 | 3.27 | | | | | | |
 |  kraken_2026  | i>25.0 ; EBV<0.2 | 14850.25 | 25.84 | 13498.52 | 1.51 | 3.27 | | | | | | |
@@ -61,7 +61,7 @@ Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that 
 | alt_sched_rolling | i>25.0 ; EBV<0.2 | 15260.98 | 25.50 | 13932.48 | | | | | | | |
 
 ## Y6
-| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area + 4MOST or DESI (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
+| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area & [4MOST/TiDES or DESI] (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | baseline2018a | i>25.5 ; EBV<0.2 | 14836.09 | 26.27 | 13489.49 | 1.16 | 2.24 | | | | | | |
 |  kraken_2026  | i>25.5 ; EBV<0.2 | 14826.38 | 26.27 | 13477.53 | 1.16 | 2.24 | | | | | | |
@@ -87,7 +87,7 @@ Everything to the right of "Photo-z quality [1.5,3]" is an analysis choice that 
 | alt_sched_rolling | i>25.5 ; EBV<0.2 | 15064.38 | 25.97 | 13729.85 | | | | | | | |
 
 ## Y10
-| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area + 4MOST or DESI (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
+| Strategy | Depth cuts | Usable area (deg2) | Median depth |  Usable Area & [4MOST/TiDES or DESI] (deg2) | Photo-z quality [0.3,1.5] | Photo-z quality [1.5,3] | Galaxy bias | Intrinsic alignments | Baryonic physics | Cluster MOR | Shear calibration | Blending systematics |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | baseline2018a | i>26.0 ; EBV<0.2 | 14645.36 | 26.57 | 13312.88 | 1.00 | 1.89 | | | | | | |
 |  kraken_2026  | i>26.0 ; EBV<0.2 | 14663.61 | 26.58 | 13329.35 | 1.00 | 1.89 | | | | | | |
