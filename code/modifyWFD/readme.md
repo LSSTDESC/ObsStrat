@@ -23,14 +23,14 @@ All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
 - Plots from `modified_wfd_mollwiede.pynb`:
     1. `WFDfootprint_proposed_vs_kraken_2026_nside256_matplotlib.png`: overplots proposed footprint with the baseline
     2. `WFDfootprint_kraken_2026_nside256_matplotlib.png` and `WFDfootprint_proposed_nside256_matplotlib.png`: show footprint in 1. separately.
-    3. `WFDfootprint_proposed_vs_kraken_2026_vs_4MOST+DESI_nside256_matplotlib.png`: overplots proposed footprint with the baseline, DESI, and 4MOST fotoprints.
-    (older versions of the notebook produced `WFDfootprint_nside256_matplotlib.png`,  `WFDfootprint_proposed_vs_baseline2018a_nside256_matplotlib.png`, and ` WFDfootprint_proposed_vs_4MOST+DESI_nside256_matplotlib.png`)
+    3. `WFDfootprint_proposed_vs_kraken_2026_vs_4MOST+DESI_nside256_matplotlib.png`: overplots proposed footprint with the baseline, DESI, and 4MOST/TiDES fotoprints.
+    (older versions of the notebook produced `WFDfootprint_nside256_matplotlib.png`,  `WFDfootprint_proposed_vs_baseline2018a_nside256_matplotlib.png`, and ` WFDfootprint_proposed_vs_4MOST-TiDES+DESI_nside256_matplotlib.png`)
 - Numbers from `modified_wfd_overlaps.ipynb`:
 
-    |  | New WFD | 4MOST | DESI |
+    |  | New WFD | 4MOST-TiDES | DESI |
     | --- | --- | --- | --- |
     | Total area (deg2) |  18074.29 | 15845.86 | 15011.87 |
 
-    | dbname | LSST+4MOST | LSST+DESI | LSST+4MOST/DESI | LSST+4MOST+DESI |
+    | dbname | LSST+4MOST-TiDES (deg2) | LSST+DESI (deg2) | LSST+4MOST-TiDES/DESI (deg2) | LSST+4MOST-TiDES+DESI (deg2) |
     | --- | --- | --- | --- | --- |
     | New WFD |  13763.58 | 5932.23 | 16407.61 | 3288.20 |
