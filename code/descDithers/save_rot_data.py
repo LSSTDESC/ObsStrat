@@ -14,67 +14,60 @@ import time
 #######################################################################################
 from optparse import OptionParser
 parser = OptionParser()
-parser.add_option('--altsched',
-                  action='store_true', dest='altsched', default=False,
-                  help='Use the tag to consider alt_sched outputs.')
+parser.add_option('--dbfile', dest='dbfile',
+                  help='Path to the folder with the db to consider.',
+                  default='/global/cscratch1/sd/awan/dbs_wp_unzipped/baseline2018a.db')
+parser.add_option('--outdir', dest='outdir',
+                  help='Path to the folder with the db to consider.',
+                  default='/global/homes/a/awan/desc/wp_descDithers_csvs/compare_rot_dith/')
 
 (options, args) = parser.parse_args()
-altsched = options.altsched
+dbfile = options.dbfile
+outdir = options.outdir
 #######################################################################################
 rot_rand_seed = 42
-dbs_path = '/global/cscratch1/sd/awan/dbs_wp_unzipped'
-outdir = '/global/homes/a/awan/desc/wp_descDithers_csvs/compare_rot_dith/'
 
-# figure out the path depending on whether we can alt_sched dbs or not
-if altsched:
-    dbs_path = '%s/slair_altsched'%dbs_path
-    dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db') and \
-                                                   f.__contains__('alt')]
-else:
-    dbfiles = [f for f in os.listdir(dbs_path) if f.endswith('db')]
-
+dbname = dbfile.split('/')[-1].split('.db')[0]
+print('Running save_rot_data for %s'%(dbname))
 time0 = time.time()
-# loop over all the db files
-for i, dbfile in enumerate(dbfiles):
-    # ----------------------------------------------------------
-    time1 = time.time()
-    # connect to the database
-    opsdb = db.OpsimDatabase('%s/%s'%(dbs_path, dbfile))
-    # ----------------------------------------------------------
-    # WFD only
-    prop_ids, prop_tags = opsdb.fetchPropInfo()
-    wfd_constraint = opsdb.createSQLWhere('WFD', prop_tags)
+# ----------------------------------------------------------
+# connect to the database
+opsdb = db.OpsimDatabase(dbfile)
+# ----------------------------------------------------------
+# WFD only
+prop_ids, prop_tags = opsdb.fetchPropInfo()
+wfd_constraint = opsdb.createSQLWhere('WFD', prop_tags)
 
-    # fetch the data: columns need for the rotational dither and parallactic angle stacker
-    colnames=['fieldRA', 'fieldDec', 'rotTelPos', 'rotSkyPos', 'night', 'filter',
-              'observationStartMJD', 'observationStartLST']
-    simdata = opsdb.fetchMetricData(colnames=colnames, sqlconstraint=wfd_constraint)
+# fetch the data: columns need for the rotational dither and parallactic angle stacker
+colnames=['fieldRA', 'fieldDec', 'fieldId', 'observationId', \
+          'rotTelPos', 'rotSkyPos', 'night', 'filter', \
+          'observationStartMJD', 'observationStartLST']
+simdata = opsdb.fetchMetricData(colnames=colnames, sqlconstraint=wfd_constraint)
 
-    # ----------------------------------------------------------
-    # add rotational dithers: adds randomDitherPerFilterChangeRotTelPos column to simdata
-    s = stackers.RandomRotDitherPerFilterChangeStacker(degrees=opsdb.raDecInDeg,
-                                                       randomSeed=rot_rand_seed)
-    simdata = s.run(simdata)
+# ----------------------------------------------------------
+# add rotational dithers: adds randomDitherPerFilterChangeRotTelPos column to simdata
+s = stackers.RandomRotDitherPerFilterChangeStacker(degrees=opsdb.raDecInDeg,
+                                                   randomSeed=rot_rand_seed)
+simdata = s.run(simdata)
 
-    # ----------------------------------------------------------
-    # add parallactic angle values to the stacker: added PA column
-    # needed to go from dithered rotTelPos to dithered rotSkyPos; rotSkyPos = rotTelPos - PA
-    s = stackers.ParallacticAngleStacker(degrees=opsdb.raDecInDeg)
-    simdata = s.run(simdata)
+# ----------------------------------------------------------
+# add parallactic angle values to the stacker: added PA column
+# needed to go from dithered rotTelPos to dithered rotSkyPos; rotSkyPos = rotTelPos - PA
+s = stackers.ParallacticAngleStacker(degrees=opsdb.raDecInDeg)
+simdata = s.run(simdata)
 
-    # ----------------------------------------------------------
-    # store the data
-    dbname = dbfile.split('.db')[0]
-    data_dict = {}
-    for col in ['rotTelPos', 'randomDitherPerFilterChangeRotTelPos', 'rotSkyPos', 'PA']:
-        data_dict[col] = simdata[col]
+# ----------------------------------------------------------
+data_dict = {}
+for col in ['observationId', 'fieldId', 'rotTelPos', \
+            'randomDitherPerFilterChangeRotTelPos', \
+            'rotSkyPos', 'PA']:
+    data_dict[col] = simdata[col]
 
-    # ----------------------------------------------------------
-    # save the output array
-    filename = '%s_data.csv'%(dbname)
-    df = pd.DataFrame(data_dict)
-    df.to_csv('%s/%s'%(outdir, filename), index=False)
-    print('\nSaved %s'%filename)
-    print('Time taken for %s: %.2f min'%(dbfile, (time.time()-time1)/60.))
+# ----------------------------------------------------------
+# save the output array
+filename = '%s_data.csv'%(dbname)
+df = pd.DataFrame(data_dict)
+df.to_csv('%s/%s'%(outdir, filename), index=False)
+print('\nSaved %s'%filename)
 
 print('Total time taken: %.2f min'%((time.time()-time0)/60.))
