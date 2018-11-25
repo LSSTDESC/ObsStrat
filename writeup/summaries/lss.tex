@@ -5,7 +5,7 @@
 \usepackage{hyperref}
 \usepackage{nameref}
 \usepackage{fancyvrb}
-\hypersetup{urlcolor=red, colorlinks=true, linkcolor=blue}
+\hypersetup{urlcolor=cyan, colorlinks=true, linkcolor=blue}
 \usepackage{float}
 
 \textheight=25.5cm
@@ -56,17 +56,17 @@ This metric ensures that we are meeting the LSST SRD requirement that the median
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section*{Rotational Uniformity\label{rotational dithers}}
-This metric looks at the distributions of \ttt{rotTelPos} and \ttt{rotSkyPos} as we'd like them to be uniform. The nominal pointings leads a pile-up in \ttt{rotTelPos} distribution at +/-90, 0 degrees. We see that rotational dithers help achieve more uniform distributions (and we understand the pile-up at 0 deg in the dithered \ttt{rotTelPos} distribution: there are visits that do not get dithered under the current rotational dithering scheme).
+This metric looks at the distributions of \ttt{rotTelPos} and \ttt{rotSkyPos} for different fields as we'd like them to be uniform. The nominal pointings leads a pile-up in \ttt{rotTelPos} distribution at -90 and 0 degrees. We see that rotational dithers help achieve more uniform distributions for both rotational angles.
 
 \begin{minipage}{\columnwidth}
 \vspace*{2em}
 \centering
-\includegraphics[width=\columnwidth]{lss_compare_rotDiths_15dbs.png}
+\includegraphics[width=\columnwidth]{lss_compare_rot_angles_kraken_2026_perfield_nodith_wdith.png}
 \vspace*{2em}
 \end{minipage}
-The plot here shows the distributions for WFD visits. An analog analysis can be done for DDF ones.
+The plot here shows the distributions for WFD visits for \ttt{kraken\_2026}; similar plots for the \ttt{OpSim} dbs can be found \href{https://github.com/LSSTDESC/ObsStrat/blob/issue/3/desc-dithers/code/descDithers/compare_rot_distributions_perfield.ipynb}{here}. A similar analysis can be done for DDF ones.
 
-\cl{The right column will be updated once we have per night rotational dithers. Hopefully it'll fix the pile-up at zero in the dithered \ttt{rotTelPos} distribution (and consequently the \ttt{rotSkyPos} distribution). Also, the outputs from new schedulers need to be added.}
+\cl{The right column will be updated once we have rotational dithers such that we do not dither in between visit pairs. Also, the outputs from new schedulers need to be added but we need a Stacker for addiing \ttt{fields} to these outputs.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
