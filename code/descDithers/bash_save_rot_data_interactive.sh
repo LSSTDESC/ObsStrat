@@ -26,7 +26,13 @@ for db in baseline2018a pontus_2002 \
             kraken_2042 kraken_2044 mothra_2049 nexus_2097\
             pontus_2502 kraken_2036 mothra_2045
 do
-    python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/descDithers/save_rot_data.py \
+    # script for saving the data
+    #python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/descDithers/save_rot_data.py \
+    #                    --outdir=${outdir} \
+    #                    --dbfile='/global/cscratch1/sd/awan/dbs_wp_unzipped/'${db}'.db' &
+
+    # script for plotting the saved data
+    python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/descDithers/save_rot_plot.py \
                         --outdir=${outdir} \
-                        --dbfile='/global/cscratch1/sd/awan/dbs_wp_unzipped/'${db}'.db' &
+                        --dbname=${db} &
 done
