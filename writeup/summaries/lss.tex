@@ -133,17 +133,33 @@ This metric looks at the depth uniformity in the extragalactic footprint. Here, 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage 
-\section*{Impacts of Artificial Structure\label{OS systematics}}
-This metric looks at the effectiveness of each cadence in minimizing the uncertainties in the artificial structure that is induced the observing strategy. It is an implementation of Equation 9.4 in LSST Observing Strategy Community White Paper.
+\section*{Impacts of Artificial Structure on LSS studies\label{OS systematics}}
+This metric looks at the effectiveness of each cadence in minimizing the uncertainties in the artificial structure that is induced by the observing strategy. It implements a modified version of the FoM in Equation 9.4 in the LSST Observing Strategy Community White Paper (COSEP). Specifically, we have:
+\begin{equation}
+	\rm{FoM} \equ iv \sqrt{
+			\frac{
+				\sum\limits_\ell{ \left({\sqrt{ \frac{2}{f_{\rm{sky, max}} (2\ell + 1)} }
+									C_{\ell, \rm{LSS, \clB{Y10}}}} \right)
+				}^2
+				}{
+				\sum\limits_\ell \left[{\left( { \sqrt{\frac{2}{f_{\rm{sky}} (2\ell + 1)}}
+									\left\{{C_{\ell, \rm{LSS}} + \frac{1}{\bar{\eta}}} \right\}  } \right ) ^2
+									+ \sigma_{C_{\ell,\rm{OS}}}^2  }\right]
+				}
+			}
+\label{eq: LSS FoM COSEP modified}
+\end{equation}
+where the power spectrum in the numerator differs from that in COSEP as we now use the Y10 gold sample power spectrum to compare the uncertainty acheived with Y10 target sample.\\
 
-\cl{This figure should be ready by 10/21/18}.
+For $f_{\rm{fsky, max}}$, we use the Y10 sky coverage with \ttt{baseline2018a} achieved when using random per night dithers; the Y10 footprint is extinction limited (E(B-V)$<$0.2) and depth limited ($i>25.3$ where $i$-band depth is the 5$\sigma$ coadded depth) to achieve the target Y10 gold sample of galaxies.
 
 \begin{minipage}{\columnwidth}
 \vspace*{2em}
 \centering
-% \includegraphics[width=.75\columnwidth]{lss_compare_4MOSToverlap_22dbs.png}
+ \includegraphics[width=.75\columnwidth]{lss_compare_foms_egfootprint_22dbs_2018-11-24data_srdcuts_noisefom.png}
 \vspace*{2em}
 \end{minipage}
+This plot shows the FoM (Equation~\ref{eq:  LSS FoM COSEP modified}) for different dbs for different years. Note that the depth cuts in the legend are on the extended source coadded depth and (roughly) correspond to the point-source coadded depths in \nameref{area}. We'd like to maximize this FoM as much as possible.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
