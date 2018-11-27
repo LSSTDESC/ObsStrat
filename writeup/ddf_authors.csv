@@ -30,11 +30,8 @@
 # ======================================================================
 Lastname,Firstname,Authorname,AuthorType,Affiliation,Contribution,Email
 Scolnic,Daniel,D.M.~Scolnic,Contact,"Kavli Institute for Cosmological Physics, University of Chicago, Chicago, IL 60637, USA","Co-Led LSST DESC ObsStrat",dan.scolnic@gmail.com
-Lochner,Michelle,M.~Lochner,Contact,"Department of Physics & Astronomy, University College London, Gower Street, London WC1E 6BT, UK","Co-Led LSST DESC ObsStrat",dr.michelle.lochner@gmail.com
-Lochner,Michelle,M.~Lochner,Contact,"3African Institute for Mathematical Sciences, 6 Melrose Road, Muizenberg, 7945, South Africa","Co-Led LSST DESC ObsStrat",dr.michelle.lochner@gmail.com
-Lochner,Michelle,M.~Lochner,Contact,"SKA SA, The Park, Park Road, Cape Town 7405, South Africa","Co-Led LSST DESC ObsStrat",dr.michelle.lochner@gmail.com
 Hook,Isobel,I.M.~Hook,Contributor,"Physics Department, Lancaster University, LA1 4YB, U.K.","Contributed to SNIa science case, specifically considering overlap area with Euclid. Also reviewed full document",i.hook@lancaster.ac.uk
-Mandelbaum,Rachel,R.~Mandelbaum,Contributor,"McWilliams Center for Cosmology, Department of Physics, Carnegie Mellon University, Pittsburgh, PA 15213, USA","Contributed to WL DDF science case and overall word-smithing/message",rmandelb@andrew.cmu.edu
+Mandelbaum,Rachel,Rachel~Mandelbaum,Contributor,"McWilliams Center for Cosmology, Department of Physics, Carnegie Mellon University, Pittsburgh, PA 15213, USA","Contributed to WL DDF science case and overall word-smithing/message",rmandelb@andrew.cmu.edu
 Gris,Philippe,Ph.~Gris,Contributor,"Laboratoire de Physique de Clermont (LPC) , CNRS/IN2P3, F-63000 Clermont-Ferrand, France","Observing strategy analysis ; Number of well-measured supernovae metric; DESC-SN group contact for cadence studies.",philippe.gris@clermont.in2p3.fr
 Allam,Tarek,T.~Allam Jr,Contributor,"Mullard Space Science Laboratory, Department of Space and Climate Physics, University College London, Holmbury Hill Rd, Dorking RH5 6NT, UK","Photometric classification of Type Ia SN metric",tarek.allam.10@ucl.ac.uk
 Biswas,Rahul,Rahul~Biswas,Contributor,"The Oskar Klein Centre for CosmoParticle Physics, Department of Physics, Stockholm University, AlbaNova, Stockholm SE-10691","Contributed to connecting SN simulations to OpSim for FoM, planning discussion, review",rbiswas4@gmail.com
