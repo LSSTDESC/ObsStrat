@@ -1,4 +1,5 @@
 export TEXINPUTS:=./desc-tex/styles/:./desc-tex/logos/:
+export BSTINPUTS:=./desc-tex/bib/:./desc-tex/bst/:
 
 all:
 	[ -e .logos ] || { ln -s ./desc-tex/logos .logos >/dev/null 2>&1; }
