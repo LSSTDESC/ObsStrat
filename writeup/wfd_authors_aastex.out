@@ -1,0 +1,80 @@
+% Author list file generated with: mkauthlist 1.2.3+16.gfd56256 
+% mkauthlist -j aastex wfd_authors.csv 
+
+\def\andname{}
+
+\author{
+Michelle~Lochner\altaffilmark{1,2},
+D.M.~Scolnic\altaffilmark{3},
+Humna Awan\altaffilmark{4},
+Nicolas Regnault\altaffilmark{5},
+Ph.~Gris\altaffilmark{6},
+Rachel~Mandelbaum\altaffilmark{7},
+Eric~Gawiser\altaffilmark{4},
+H.~Almoubayyed\altaffilmark{7},
+C.N.~Setzer\altaffilmark{8,9},
+S.~Huber\altaffilmark{10,11},
+M.L.~Graham\altaffilmark{12},
+Ren\'ee~Hlo\v{z}ek\altaffilmark{13,14},
+Tim Eifler\altaffilmark{15},
+Daniel Rothchild\altaffilmark{16},
+T.~Allam Jr\altaffilmark{17},
+Rahul~Biswas\altaffilmark{18},
+Jonathan~Blazek\altaffilmark{19,20},
+Chihway Chang\altaffilmark{21},
+Thomas Collett\altaffilmark{22},
+Ariel Goobar\altaffilmark{23},
+I.M.~Hook\altaffilmark{24},
+Mike~Jarvis\altaffilmark{25},
+Saurabh~W.~Jha\altaffilmark{26},
+A.G.~Kim\altaffilmark{27},
+Phil~Marshall\altaffilmark{28},
+J.D.~McEwen\altaffilmark{17},
+M.~Moniez\altaffilmark{29},
+Jeffrey~A.~Newman\altaffilmark{30},
+Hiranya~V.~Peiris\altaffilmark{23,31},
+I.~Sevilla-Noarbe\altaffilmark{32},
+An\v{z}e~Slosar\altaffilmark{33},
+S.H.~Suyu\altaffilmark{10,11,34},
+J.~Anthony~Tyson\altaffilmark{35},
+and P.~Yoachim\altaffilmark{36}
+\\ \vspace{0.2cm} (The LSST Dark Energy Science Collaboration\\
+}
+
+\altaffiltext{1}{African Institute for Mathematical Sciences, 6 Melrose Road, Muizenberg, 7945, South Africa}
+\altaffiltext{2}{South African Radio Astronomy Observatory, The Park, Park Road, Pinelands, Cape Town 7405, South Africa}
+\altaffiltext{3}{Kavli Institute for Cosmological Physics, University of Chicago, Chicago, IL 60637, USA}
+\altaffiltext{4}{Department of Physics and Astronomy, Rutgers University, Piscataway, NJ 08854, USA}
+\altaffiltext{5}{LPNHE, IN2P3-CNRS, 4 place Jussieu, 75005 Paris, France}
+\altaffiltext{6}{Laboratoire de Physique de Clermont (LPC) , CNRS/IN2P3, F-63000 Clermont-Ferrand, France}
+\altaffiltext{7}{McWilliams Center for Cosmology, Department of Physics, Carnegie Mellon University, Pittsburgh, PA 15213, USA}
+\altaffiltext{8}{Department of Physics, Stockholm University, AlbaNova, SE-10691 Stockholm, Sweden}
+\altaffiltext{9}{The Oskar Klein Centre for Cosmoparticle Physics, Stockholm University, AlbaNova, SE-106 91, Stockholm, Sweden}
+\altaffiltext{10}{Max-Planck-Institut f\"{u}r Astrophysik, Karl-Schwarzschild-Str.~1, 85748 Garching, Germany}
+\altaffiltext{11}{Physik-Department, Technische Universit\"{a}t M\"{u}nchen, James-Franck-Stra\ss{}e~1, 85748 Garching, Germany}
+\altaffiltext{12}{Department of Astronomy, University of Washington, Box 351580, U.W., Seattle, WA 98195, USA}
+\altaffiltext{13}{Department of Astronomy \& Astrophysics, Dunlap Institute for Astronomy \& Astrophysics, University of Toronto}
+\altaffiltext{14}{Dunlap Institute for Astronomy \& Astrophysics, University of Toroto}
+\altaffiltext{15}{University of Arizona}
+\altaffiltext{16}{University of California, Berkeley }
+\altaffiltext{17}{Mullard Space Science Laboratory, Department of Space and Climate Physics, University College London, Holmbury Hill Rd, Dorking RH5 6NT, UK}
+\altaffiltext{18}{The Oskar Klein Centre for CosmoParticle Physics, Department of Physics, Stockholm University, AlbaNova, Stockholm SE-10691}
+\altaffiltext{19}{SNSF Ambizione, Laboratory of Astrophysics, \'{E}cole Polytechnique F\'{e}d\'{e}rale de Lausanne (EPFL)}
+\altaffiltext{20}{Center for Cosmology and Astroparticle Physics, Ohio State University}
+\altaffiltext{21}{University of Chicago}
+\altaffiltext{22}{Institute of Cosmology and Gravitation, University of Portsmouth, Portsmouth, PO1 3FX, UK}
+\altaffiltext{23}{The Oskar Klein Centre for Cosmoparticle Physics, Department of Physics, Stockholm University, AlbaNova, 10691 Stockholm, Sweden}
+\altaffiltext{24}{Physics Department, Lancaster University, LA1 4YB, U.K.}
+\altaffiltext{25}{University of Pennsylvania}
+\altaffiltext{26}{Rutgers, the State University of New Jersey}
+\altaffiltext{27}{Lawrence Berkeley National Laboratory, Berkeley CA 94720 USA}
+\altaffiltext{28}{Kavli Institute for Particle Astrophysics and Cosmology, P.O. Box 20450, MS29, Stanford, CA 94309, USA}
+\altaffiltext{29}{Laboratoire de l'Acc\'{e}l\'{e}rateur Lin\'{e}aire, IN2P3-CNRS, Universit\'{e} de Paris-Sud, BP 34, 91898 Orsay Cedex, France}
+\altaffiltext{30}{University of Pittsburgh, Department of Physics and Astronomy and PITT PACC}
+\altaffiltext{31}{Department of Physics & Astronomy, University College London, Gower Street, London WC1E 6BT, UK}
+\altaffiltext{32}{Centro de Investigaciones Energ\'{e}ticas, Medioambientales y Tecnol\'{o}gicas (CIEMAT), Av. Complutense 40, 28040, Madrid, Spain}
+\altaffiltext{33}{Physics Department, Brookhaven National Laboratory,  Upton, NY 11973}
+\altaffiltext{34}{Institute of Astronomy and Astrophysics, Academia Sinica, 11F of ASMAB, No.1, Section 4, Roosevelt Road, Taipei 10617, Taiwan}
+\altaffiltext{35}{Department of Physics, University of California, Davis}
+\altaffiltext{36}{University of Washington}
+
