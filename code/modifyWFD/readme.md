@@ -13,6 +13,8 @@ The goal here to construct a modified WFD footprint that is optimized for extrag
 
 `modified_wfd_overlaps.ipynb` calculates the overlap between the new WFD footprint and DESI/4MOST.
 
+`check_airmass_seeing.ipynb` looks at median statistics for some quantities (airmass, seeing, fiveSigmaDepth) at some declinations to get a sense of how things change as we observe at high declinations.
+
 #### Outputs
 All the outputs are in `/global/homes/a/awan/desc/wfd_footprint/`, including:
 - `WFDfootprint_nside256_HEALPixels.csv` with the HEALPix pixels that constitute the proposed WFD.
