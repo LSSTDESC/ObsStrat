@@ -30,24 +30,28 @@
 # ======================================================================
 Lastname,Firstname,Authorname,AuthorType,Affiliation,Contribution,Email
 Scolnic,Daniel,D.M.~Scolnic,Contact,"Kavli Institute for Cosmological Physics, University of Chicago, Chicago, IL 60637, USA","Co-Led LSST DESC ObsStrat",dan.scolnic@gmail.com
-Hook,Isobel,I.M.~Hook,Contributor,"Physics Department, Lancaster University, LA1 4YB, U.K.","Contributed to SNIa science case, specifically considering overlap area with Euclid. Also reviewed full document",i.hook@lancaster.ac.uk
-Mandelbaum,Rachel,Rachel~Mandelbaum,Contributor,"McWilliams Center for Cosmology, Department of Physics, Carnegie Mellon University, Pittsburgh, PA 15213, USA","Contributed to WL DDF science case and overall word-smithing/message",rmandelb@andrew.cmu.edu
-Gris,Philippe,Ph.~Gris,Contributor,"Laboratoire de Physique de Clermont (LPC) , CNRS/IN2P3, F-63000 Clermont-Ferrand, France","Observing strategy analysis ; Number of well-measured supernovae metric; DESC-SN group contact for cadence studies.",philippe.gris@clermont.in2p3.fr
-Allam,Tarek,T.~Allam Jr,Contributor,"Mullard Space Science Laboratory, Department of Space and Climate Physics, University College London, Holmbury Hill Rd, Dorking RH5 6NT, UK","Photometric classification of Type Ia SN metric",tarek.allam.10@ucl.ac.uk
-Biswas,Rahul,Rahul~Biswas,Contributor,"The Oskar Klein Centre for CosmoParticle Physics, Department of Physics, Stockholm University, AlbaNova, Stockholm SE-10691","Contributed to connecting SN simulations to OpSim for FoM, planning discussion, review",rbiswas4@gmail.com
-McEwen,Jason,J.D.~McEwen,Contributor,"Mullard Space Science Laboratory, Department of Space and Climate Physics, University College London, Holmbury Hill Rd, Dorking RH5 6NT, UK","Photometric classification of Type Ia SN metric",jason.mcewen@ucl.ac.uk
-Jha,Saurabh,Saurabh~W.~Jha,Contributor (+Reviewer?),"Rutgers, the State University of New Jersey","Contributed to SN science case, overall observing strategy, and review of the paper",saurabh@physics.rutgers.edu
-Neilsen,Eric,E.~Neilsen,Contributor,"Fermi National Accelerator Laboratory","Contributed to KNO ToO followup (bullet on pp. 8-9)",neilsen@fnal.gov
-Yoachim,Peter,P.~Yoachim,Contributor,"University of Washington","Reviewer, MAF support",yoachim@uw.edu
-Marshall,Phil,Phil~Marshall,Contributor,"Kavli Institute for Particle Astrophysics and Cosmology, P.O. Box 20450, MS29, Stanford, CA 94309, USA","Scientific and organizational oversight, interface with other science collaborations.",pjm@stanford.edu
 Lochner,Michelle,Michelle~Lochner,Co-lead,"African Institute for Mathematical Sciences, 6 Melrose Road, Muizenberg, 7945, South Africa",Co-lead of TF,dr.michelle.lochner@gmail.com
 Lochner,Michelle,Michelle~Lochner,Co-lead,"South African Radio Astronomy Observatory, The Park, Park Road, Pinelands, Cape Town 7405, South Africa",Co-lead of TF,dr.michelle.lochner@gmail.com
-Gawiser,Eric,Eric~Gawiser,Contributor,"Department of Physics and Astronomy, Rutgers University, Piscataway, NJ 08854, USA",Contributed to recommendations; reviewed paper,gawiser@physics.rutgers.edu
-Chang,Chihway ,Chihway Chang,Reviewer,University of Chicago,"Reviewer, overall editing",chihway@kicp.uchicago.edu
-Slosar,Anze,An\v{z}e~Slosar,Reviewer,"Physics Department, Brookhaven National Laboratory,  Upton, NY 11973",reviewer,anze@bnl.gov
+Gris,Philippe,Ph.~Gris,Contributor,"Laboratoire de Physique de Clermont (LPC) , CNRS/IN2P3, F-63000 Clermont-Ferrand, France","Observing strategy analysis ; Number of well-measured supernovae metric; DESC-SN group contact for cadence studies.",philippe.gris@clermont.in2p3.fr
+Regnault,Nicolas,Nicolas Regnault,Contributor,"LPNHE, IN2P3-CNRS, 4 place Jussieu, 75005 Paris, France","Contributed to SN science case, analysis of the LSST cadences, design of variations around proposed obs strategies",nicolas.regnault@lpnhe.in2p3.fr
+Hlozek,Renee,Ren\'ee~Hlo\v{z}ek,Contributor,"Department of Astronomy \& Astrophysics, Dunlap Institute for Astronomy \& Astrophysics, University of Toronto","Contributed to SN science case, computed Figure of Merit for the DDF and the WFD, and peculiar velocity science case for the WFD, contributed to overall observing strategy",hlozek@dunlap.utoronto.ca
+Hlozek,Renee,Ren\'ee~Hlo\v{z}ek,Contributor,"Dunlap Institute for Astronomy \& Astrophysics, University of Toroto","Contributed to SN science case, computed Figure of Merit for the DDF and the WFD, and peculiar velocity science case for the WFD, contributed to overall observing strategy",hlozek@dunlap.utoronto.ca
+Allam,Tarek,T.~Allam Jr,Contributor,"Mullard Space Science Laboratory, Department of Space and Climate Physics, University College London, Holmbury Hill Rd, Dorking RH5 6NT, UK","Photometric classification of Type Ia SN metric",tarek.allam.10@ucl.ac.uk
+Awan,Humna,Humna Awan,Contributor? Reviewer?,"Department of Physics and Astronomy, Rutgers University, Piscataway, NJ 08854, USA",Provided rotational dithers for different dbs. Reviewed paper.,awan@physics.rutgers.edu
+Biswas,Rahul,Rahul~Biswas,Contributor,"The Oskar Klein Centre for CosmoParticle Physics, Department of Physics, Stockholm University, AlbaNova, Stockholm SE-10691","Contributed to connecting SN simulations to OpSim for FoM, planning discussion, review",rbiswas4@gmail.com
 Blazek,Jonathan,Jonathan~Blazek,Reviewer,"SNSF Ambizione, Laboratory of Astrophysics, \'{E}cole Polytechnique F\'{e}d\'{e}rale de Lausanne (EPFL)","Review and editing of paper, discussion of content",
 Blazek,Jonathan,Jonathan~Blazek,Reviewer,"Center for Cosmology and Astroparticle Physics, Ohio State University","Review and editing of paper, discussion of content",
+Chang,Chihway ,Chihway Chang,Reviewer,University of Chicago,"Reviewer, overall editing",chihway@kicp.uchicago.edu
+Gawiser,Eric,Eric~Gawiser,Contributor,"Department of Physics and Astronomy, Rutgers University, Piscataway, NJ 08854, USA",Contributed to recommendations; reviewed paper,gawiser@physics.rutgers.edu
 Goobar,Ariel,Ariel Goobar,Reviewer,"The Oskar Klein Centre for Cosmoparticle Physics, Department of Physics, Stockholm University, AlbaNova, 10691 Stockholm, Sweden",,
-Awan,Humna,Humna Awan,Contributor? Reviewer?,"Department of Physics and Astronomy, Rutgers University, Piscataway, NJ 08854, USA",Provided rotational dithers for different dbs. Reviewed paper.,awan@physics.rutgers.edu
-Sevilla,Ignacio,I.~Sevilla-Noarbe,Reviewer,"Centro de Investigaciones Energ\'{e}ticas, Medioambientales y Tecnol\'{o}gicas (CIEMAT), Av. Complutense 40, 28040, Madrid, Spain",Reviewer,ignacio.sevilla@ciemat.es
+Hook,Isobel,I.M.~Hook,Contributor,"Physics Department, Lancaster University, LA1 4YB, U.K.","Contributed to SNIa science case, specifically considering overlap area with Euclid. Also reviewed full document",i.hook@lancaster.ac.uk
+Jha,Saurabh,Saurabh~W.~Jha,Contributor (+Reviewer?),"Rutgers, the State University of New Jersey","Contributed to SN science case, overall observing strategy, and review of the paper",saurabh@physics.rutgers.edu
+McEwen,Jason,J.D.~McEwen,Contributor,"Mullard Space Science Laboratory, Department of Space and Climate Physics, University College London, Holmbury Hill Rd, Dorking RH5 6NT, UK","Photometric classification of Type Ia SN metric",jason.mcewen@ucl.ac.uk
+Mandelbaum,Rachel,Rachel~Mandelbaum,Contributor,"McWilliams Center for Cosmology, Department of Physics, Carnegie Mellon University, Pittsburgh, PA 15213, USA","Contributed to WL DDF science case and overall word-smithing/message",rmandelb@andrew.cmu.edu
+Marshall,Phil,Phil~Marshall,Contributor,"Kavli Institute for Particle Astrophysics and Cosmology, P.O. Box 20450, MS29, Stanford, CA 94309, USA","Scientific and organizational oversight, interface with other science collaborations.",pjm@stanford.edu
+Neilsen,Eric,E.~Neilsen,Contributor,"Fermi National Accelerator Laboratory","Contributed to KNO ToO followup (bullet on pp. 8-9)",neilsen@fnal.gov
 Rothchild ,Daniel ,Daniel Rothchild ,Contributor,"University of California, Berkeley ","Discussions about cadence, filter strategy; helped coordinate synergy with AGN",drothchild@berkeley.edu
+Sevilla,Ignacio,I.~Sevilla-Noarbe,Reviewer,"Centro de Investigaciones Energ\'{e}ticas, Medioambientales y Tecnol\'{o}gicas (CIEMAT), Av. Complutense 40, 28040, Madrid, Spain",Reviewer,ignacio.sevilla@ciemat.es
+Slosar,Anze,An\v{z}e~Slosar,Reviewer,"Physics Department, Brookhaven National Laboratory,  Upton, NY 11973",reviewer,anze@bnl.gov
+Yoachim,Peter,P.~Yoachim,Contributor,"University of Washington","Reviewer, MAF support",yoachim@uw.edu
+
