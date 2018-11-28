@@ -54,7 +54,21 @@ summarized below.
   \mu < 0.1$, below the intrinsic dipersion in the Hubble diagram,
   after standardization.
 \end{enumerate}
-
+This last requirement may be re-expressed as a requirement on the
+signal-to-noise on the light-curve amplitude in each band. Indeed, if
+we fit a light curve model $L(t) = A \times \ell(t)$ one can show
+that (see Appendix \ref{sec:cadencemetric}):
+\begin{equation}
+\mathrm{SNR_{band}} = \sum_{i} 5 \times (f^{-2}_{i|5} L_i^2)^{1/2}\label{eqn:snr}
+\end{equation} 
+where $5-\sigma$ is the limiting flux of each visit $f_{i|5}$.  This
+metrics is simpler in the sense that it does not require to use a SN
+light curve fitter. One just need lightcurve templates and the
+limiting magnitudes of each visit -- given in the cadence
+databases. In practice, using $SNR_g > 30, SNR_r > 40, SNR_i > 30$
+(for $z<0.3$), and $SNR_r > 40$, $SNR_i > 30$ and $SNR_z > 20$ for
+$z>0.3$ allows to fulfill the requirement on color resolution above.
+This simple metric may quite easily be implemented  in \opsim/\slair.
 
 \subsubsection{SN samples}\label{sec:metrics}
 

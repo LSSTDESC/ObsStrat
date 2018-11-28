@@ -1,7 +1,7 @@
 \batchmode
 %%\documentclass[onecolumn]{lsstdescnote}
-\documentclass[modern]{lsstdescnote}
-%%\documentclass[modern,skiphelvet]{lsstdescnote}
+%%\documentclass[modern]{lsstdescnote}
+\documentclass[modern,skiphelvet]{lsstdescnote}
 \usepackage{lsstdesc_macros}
 \usepackage{graphicx}
 \usepackage{fancyvrb}
@@ -34,9 +34,9 @@
 \DeclareSIUnit\deg{deg}
 
 %% Use TeX's Palatino clone
-%% \usepackage{tgpagella}
-%% \usepackage[T1]{fontenc}
-%% \normalfont
+\usepackage{tgpagella}
+\usepackage[T1]{fontenc}
+\normalfont
 
 \definecolor{gruen}{cmyk}{0.35,0.01,0.80,0.1}
 
@@ -68,12 +68,11 @@ call for whitepapers to inform observing cadence and strategy. In
 response to this call, the LSST Dark Energy Science Collaboration
 (DESC) constituted an Observing Strategy Task-Force (OSTF) which
 developed metrics by which observing strategies could be evaluated for
-use studying dark energy using a variety of techniques, and applied
+use in studying dark energy using a variety of techniques, and applied
 these metrics to a variety of sample simulations of different
-strategies. Except for the studies by the photo-z and supernova
-cosmology groups (which are maintained separately), internal
-documentation of these studies by the different subgroups of the OSTF
-are collected here.
+strategies. Except for the studies the supernova cosmology groups
+(which is maintained separately), internal documentation of these
+studies by the different subgroups of the OSTF are collected here.
 \end{abstract}
 
 \pagebreak
@@ -95,17 +94,20 @@ are collected here.
 \input{pz}
 \pagebreak
 \input{sl}
+
 % \pagebreak
 % \input{sn}
+
 \pagebreak
 \input{wl}
 \pagebreak
 \input{static}
 \pagebreak
-\input{joint}
-\pagebreak
 
-\bibliographystyle{unsrt}
+% \input{joint}
+% \pagebreak
+
+\bibliographystyle{apj}
 \bibliography{refs}
 
 
