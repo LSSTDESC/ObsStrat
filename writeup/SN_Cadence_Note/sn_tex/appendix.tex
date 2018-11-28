@@ -158,13 +158,44 @@ feature rolling half mask &  161705 &  248253 &  498985 &  500143 &  468829 &  4
 
 \input{sn_tex/opsim_vs_altsched}
 
+\clearpage
+
 \section{DDF cadence plots}
 
 \input{sn_tex/DD_plots_cadence}
 
-  \newpage
-  
-  \section{Overlap with 4MOST}
+\clearpage
+
+\section{Cadence metric: a simple metric for SN that may be implemented in OpSim/SLAIR}
+\label{sec:cadencemetric}
+
+If we fit a light curve model $L(t) = A \times \ell(t)$ on a
+lightcurve $(t_i, y_i, \sigma_i)$, the least square estimate of $A$ is
+given by:
+$$
+\hat{A} = \frac{\sum w_i \ell_i y_i}{\sum w_i \ell_i^2}
+$$
+and the signal-to-noise ratio on $\hat{A}$ is:
+$$
+SNR = \sum_i (w_i L_i^2)^{1/2}
+$$ since we are in the background dominated regime, the weights may be
+expressed as a function of the $5-\sigma$ limiting flux of each visit
+$f_{i|5}$, and we have:
+$$
+SNR_{\mathrm{band}} = \sum_{i} 5 \times (f^{-2}_{i|5} L_i^2)^{1/2}
+$$
+where $5-\sigma$ limiting flux of each visit $f_{i|5}$.
+
+This metrics is simple in the sense that it does not require to use a SN
+light curve fitter. One just need lightcurve templates and the
+limiting magnitudes of each visit -- given in the cadence
+databases. In practice, using $SNR_g > 30, SNR_r > 40, SNR_i > 30$
+(for $z<0.3$), and $SNR_r > 40$, $SNR_i > 30$ and $SNR_z > 20$ for
+$z>0.3$ allows to fulfill the requirement on color resolution above.
+
+\clearpage
+
+\section{Overlap with 4MOST}
 
   \begin{figure}[!htbp]
     \caption{Left: the LSST Healpix maps colour-coded by number of
