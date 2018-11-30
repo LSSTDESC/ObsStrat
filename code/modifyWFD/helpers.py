@@ -77,7 +77,7 @@ def plot_skymap_somepix(pix_list, nside, title_append=None, pix_list_2=None):
 
 ########################################################################################################################
 def plot_matplot(nside, pixels_dict, colors, alphas, titles, syms,
-                 saveplot=False, fname=None, add_ec_mw=False):
+                 saveplot=False, fname=None, add_ec_mw=False, xcoord=None, ycoord=None):
     # plots the skymap using matplotlib mollweide projection since it labels RA, Dec lines
     plt.figure()
     plt.subplot(111, projection="mollweide")
@@ -148,14 +148,24 @@ def plot_matplot(nside, pixels_dict, colors, alphas, titles, syms,
                                       get_area(pixels_dict[pix_type], nside)),
                   y=1.05)
     else:
-        if i==1:xcoord, ycoord = 0.95, 1.25
-        elif i==2: xcoord, ycoord = 0.95, 1.35
-        elif i==3: xcoord, ycoord = 0.9, 1.4
-        else: xcoord, ycoord = 1., 1.25
+        if add_ec_mw:
+            del_x, del_y = 0.1, 0.2
+            labelspacing = 0.5
+        else:
+            del_x, del_y = 0., 0.
+            labelspacing = 0.001
+        if xcoord is None or ycoord is None:
+            if i==1:
+                xcoord, ycoord = 0.95+del_x, 1.25+del_y
+            elif i==2:
+                xcoord, ycoord = 0.95+del_x, 1.35+del_y
+            elif i==3:
+                xcoord, ycoord = 0.9+del_x, 1.4+del_y
+            else:
+                xcoord, ycoord = 1.+del_x, 1.25+del_y
         ax = plt.gca()
         ax.legend(custom_lines, labels, bbox_to_anchor=(xcoord, ycoord),
-                  frameon=False, labelspacing=0.001)
-    
+                  frameon=False, labelspacing=labelspacing)
     # ---------------------------------------------
     # relabel stuff: want RA increasing left-right
     locs, label = plt.xticks()
