@@ -77,7 +77,7 @@ def plot_skymap_somepix(pix_list, nside, title_append=None, pix_list_2=None):
 
 ########################################################################################################################
 def plot_matplot(nside, pixels_dict, colors, alphas, titles, syms,
-                 saveplot=False, fname=None):
+                 saveplot=False, fname=None, add_ec_mw=False):
     # plots the skymap using matplotlib mollweide projection since it labels RA, Dec lines
     plt.figure()
     plt.subplot(111, projection="mollweide")
@@ -105,6 +105,42 @@ def plot_matplot(nside, pixels_dict, colors, alphas, titles, syms,
         
         custom_lines.append(Line2D([0], [0], color=colors[i], lw=10))
         labels.append('%s (%.f deg$^2$)'%(titles[i], get_area(pixels_dict[pix_type], nside)))
+
+    if add_ec_mw:
+        # code adapted from lsst sims_maf
+        # https://github.com/lsst/sims_maf/blob/ff7bec6daa7d4291a1b87f63aca6930ba8bfedcc/python/lsst/sims/maf/plots/spatialPlotters.py#L429-L460
+        # ------------------------------------------------------------------------
+        # plot the eccliptic spur
+        ra_center = 0
+        peak_width = np.radians(10.)
+        taper_length = np.radians(80.)
+        ecinc = 23.439291 * (np.pi / 180.0)
+        ra_ec = np.arange(0, np.pi * 2., (np.pi * 2. / 360.))
+        dec_ec = np.sin(ra_ec) * ecinc
+        lon = -(ra_ec - ra_center - np.pi) % (np.pi * 2) - np.pi
+        # plot
+        plt.plot(lon, dec_ec, 'r.', markersize=2, alpha=0.6)
+        # add legend
+        custom_lines.append(Line2D([0], [0], color='r', lw=2))
+        labels.append('Ecliptic Spur')
+        # ------------------------------------------------------------------------
+        # Calculate galactic coordinates for mw location.
+        step = 0.02
+        gal_l = np.arange(-np.pi, np.pi + step / 2., step)
+        val = peak_width * np.cos(gal_l / taper_length * np.pi / 2.)
+        gal_b1 = np.where(np.abs(gal_l) <= taper_length, val, 0)
+        gal_b2 = np.where(np.abs(gal_l) <= taper_length, -val, 0)
+        # Convert to ra/dec.
+        # Convert to lon/lat and plot.
+        for gal_b in [gal_b1, gal_b2]:
+            c = SkyCoord(l=gal_l*u.radian, b=gal_b*u.radian, frame='galactic')
+            c = c.transform_to(frame='icrs')
+            ra, dec = c.ra.radian, c.dec.radian
+            lon = -(ra - ra_center - np.pi) % (np.pi * 2) - np.pi
+            plt.plot(lon, dec, 'b.', markersize=2, alpha=0.6)
+        # add legend
+        custom_lines.append(Line2D([0], [0], color='b', lw=2))
+        labels.append('Galactic Plane')
     # ---------------------------------------------
     # add legend/title
     if i==0:
