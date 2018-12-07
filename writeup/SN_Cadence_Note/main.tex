@@ -19,7 +19,8 @@
 \usepackage[titletoc]{appendix}
 \usepackage{longtable}
 \usepackage{rotating}
-\usepackage{setspace}
+%\usepackage[plainpages=false]{hyperref}
+%\usepackage{setspace}
 %\usepackage{titletoc}
 
 % Add your own macros here:
@@ -63,7 +64,7 @@
 \addtocontents{toc}{\vspace{0.2cm}}
 
 % ======================================================================
-\maxdeadcycles=200
+\maxdeadcycles=400
 
 \renewcommand\appendix{\par
   \setcounter{section}{0}
@@ -78,16 +79,16 @@
 \newcommand*\appendixwithtoc{{\bf \Huge Appendix}
   \cleardoublepage
   \appendix
-  \addtocontents{toc}{\protect\StartAppendixEntries}
-  \listofatoc
+  \addtocontents{toc}{\protect}%\StartAppendixEntries}
+  %\listofatoc
 }
 
  \AtBeginDocument{\addtocontents{toc}{\protect\setlength{\parskip}{0pt}}}
   
 \begin{document}
 
-\title{Supernovae cadence studies}
-
+%\title{Supernovae cadence studies}
+\title{LSST Observing Strategy \\ and  \\Supernovae}
 \maketitlepre
 
 
@@ -137,6 +138,12 @@
 \section{Metrics and proposed observing strategies: summary}
 \label{sec:summary}
 \input{sn_tex/metrics_summary}
+
+
+\section{Conclusion}
+The initial goal of the work presented in this document was to answer to the Call for White Papers on LSST Cadence Optimization (end of june 2018). A set of metrics has been developed to assess the impact of proposed observing strategies (the ones of the call, and the ones available prior to and after the call) on supernovae science. A ranking of observing strategies has been proposed according to metric scores.
+We have tried to go beyond a simple ranking and performed a lot of studies to understand the wide range of the scores. We have identified a set of key facets of observing strategies that are critical to collect a large sample of well-measured \sne~that could be used to constrain the nature of Dark Energy and that drive the ranking achieved. Our investigations lead us to the conclusion that the main differences observed between strategies may be due to the methods used by the scheduler to scan the sky.  
+
 % ----------------------------------------------------------------------
 
 %\section{New proposals}
