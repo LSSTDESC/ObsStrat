@@ -1,14 +1,167 @@
-We present two tables as a tentative to summarize the results exposed above: \ref{tab:summary_top} (\ref{tab:summary_worst}) is a list of the top (worst) 5 observing strategies leading to highest (lowest) scores for a given metric. Analyzing the results lead to the following conclusions.
+A ranking of observing strategies according to metric scores may be performed (Table \ref{tab:summary}).
+
+
+\begin{longtable}{c|l|l}
+  %\begin{center}
+    \caption{Ranking of observing strategies (top 5 and worst 5) according to metric scores.}\label{tab:summary}
+  \hline
+  \hline
+Metric  & \multicolumn{1}{c|}{Top 5} & \multicolumn{1}{c}{Worst 5} \\
+\hline
+\hline
+%%%%% NSN
+{\bf $N_{SN}$ (well-sampled)}  &                                          & \\
+                               & 1. altsched/altsched wide                & 1. feature\_baseline\_10yrs\\
+WFD                            & 3. Rolling mix                           & 2. blobs same zmask\\
+                               & 4. colossus\_2667                        &  3. blob same\\
+                               & 5. feature\_rolling\_2/3                 & 4. pontus\_2002 \\
+                               &                                          &  5. minion\_1016 \\
+\hline
+                               & 1. kraken\_2035/feature\_baseline\_10yrs &  1. kraken\_2036\\
+DDF                            & 3. colossus\_2665                        &  2. mothra\_2045 \\
+                               & 4. colossus\_2667                        &  3. pontus\_2489\\
+                               & 5. pontus\_2002                          &  4. colossus\_2664\\
+                               &                                          &  5. baseline\_2018a  \\
+\hline
+
+%%%%% w0wa
+{\bf w0wa FoM}                 & 1. \altsched                         &  1. nexus\_2097\\
+                                               & 2. kraken\_2026                      &  2. nexus\_2049\\
+WFD+DDF                        & 3. kraken\_2035                         &  3. pontus\_2002\\
+                                             & 4.  rolling mix                       &  4. colossus\_2664 \\
+                                            & 5.   \altsched rolling                        &  5. colossus\_2665\\
+\hline
+
+%%%%% photometric classification
+{\bf Photometric}              & 1. pontus\_2489/kraken\_2042             &  1. kraken\_2044 \\
+{\bf Classification}           & 3. colossus\_2665                        &  2. kraken\_2036\\
+      DDF                      & 4. mothra\_2045                          &  3. kraken\_2035\\
+                               & 5. colossus\_2667                        &  4. kraken\_2026\\
+\hline
+%%% peculiar velocity 
+{\bf Peculiar velocity I}      & 1. altsched                              &  1. feature\_baseline\_10yrs \\
+                               & 2. altsched\_twilight                     &  2. blobs same zmask\\
+      WFD                      & 3. kraken\_2044                           &  3. blob same\_10yrs \\
+                               & 4. colossus\_2667                        &  4. minion\_1016\\
+                               & 5. pontus\_2489                          &  5. feature\_rolling\_1/2\\
+\hline
+     
+%%% peculiar velocity 
+{\bf Peculiar velocity II}     & 1. kraken\_2044                          &  1. nexus\_2097\\
+                               & 2. colossus\_2667                        &  2. mothra\_2049 \\
+      WFD                      & 3. pontus\_2489                          &  3. colossus\_2665 \\
+                               & 4. pontus\_2002                          &  4. kraken\_2026 \\
+                               & 5. kraken\_2042                           &  5. colossus\_2664 \\
+      \hline
+%%%%% Overlap 4MOST
+
+ {\bf Overlap with 4MOST}      & 1. pontus\_2002                          &  1. colossus\_2667, kraken\_2026\\
+                               & 2. colossus\_2665                        &  pontus\_2489\\
+   WFD                         & 3. colossus\_2664                        &   \\
+     \hline
+%\end{tabular}
+%\end{center}
+\end{longtable}
+
+\noindent Lessons learned from this exercise may be summarized as follow:
+
+\myparagraph{Primary metric} 
+
+Among the set of metrics considered in this study one of the most sensitive to the features of observing strategies (ie the key facets cadence, season length, depth, spatial coverage and uniformity) is probably the number of well-measured \sne~in combination with the redshift limit of the survey \zlimit. In fact all other metrics (except the one related to synergy with 4MOST) rely on a high-quality \sne~sample. The w0-wa Figure of Merit is usually used to assess the quality of observing strategies because it can easily be compared and/or combined with other Dark Energy probes. But this metric is not as sensitive as the number of well-measured \sne. We thus think that the primary metric to assess the quality of observing strategies should be the number of well-measured supernovae combined with the redshift corresponding to the completeness of the survey (ie for a faint supernova: (\strech,\sncolor) = (-2.0,0.2)).
+
+
+\myparagraph{Conclusion about proposed observing strategies}
+
+The conclusion that may be drawn from Table \ref{tab:summary} is that the best cadences for SN science among the proposal are:
+\begin{itemize}
+\item WFD: \altsched-like simulations corresponding to surveys with high cadences in the $griz$ bands (at the level of few days), with low inter-night gap variations, over a large area (at least 18000 $deg^2$) 
+
+\item DDF: \feature-like simulations corresponding to Deep Drilling Fields observed with a regular cadence of 3 days with low inter-night gap variations, and with long seasons (typically 160 to 180 days). 
+\end{itemize}
+
+It may be noticed that some of the strategies simulated with \slair (such as rolling mix) show very promising results.
+
+Two key points are thus very important for SN science: a high and regular cadence. This is what drives the results in the WFD survey. The season length is also important in the DD mini-survey to collect a larger sample of well-measured \sne. 
+
+\myparagraph{Observing strategy and scheduler}
+
+The results presented below tend to show that the main features related to simulated strategies (the key points mentioned above) may be quite different from one simulation to another. In particular \altsched scheduler tend to propose WFD surveys that lead to very good performance in terms of number of well-measured \sne~and \zlimit. We have made further studies to understand the reason of this result by comparing some of the outputs of \opsim and \altsched(Table \ref{tab:opsim_vs_altsched}). It is very likely that the differences found between the two schedulers have as origin the methods used to observed the sky (see Appendix \ref{sec:opsim_altsched} for more details). Additional studies are nonetheless necessary to evaluate the impact of e.g. uncovered areas or observations when the Moon is up on \altsched performance.
+
+\begin{table}[!htbp]
+  \begin{center}
+    \caption{Comparison of \opsim and \altsched outputs}\label{tab:opsim_vs_altsched}
+\begin{tabular}{c|c|c}
+  \hline
+  \hline
+ & \altsched & \opsim \\
+ \hline
+ Season length [days] & $\sim$ 150 & 130 to 180 \\
+ \hline
+ Effective cadence [days]   &        & \\
+ 				           g &  14  & 23 \\
+ 				           r &   6  & 14 \\
+						   i &   8  & 14 \\
+						   z &   7  & 15 \\
+ \hline
+ Filter allocation 			&  & \\
+ 				            u & 8\% & 6-8\% \\
+ 					  		g &  11\% & 9-10\% \\
+ 				           r &   28\%  & 20-22\% \\
+						   i &   18\%  & 21-22\%\\
+						   z &   26\%  & 18-21\% \\
+						   y &   9\%  & 19-25\% \\
+ \hline
+ \# filter changes per night      & & \\
+ 				          median & 12 & 2 \\ 
+ 				          min    & 2 & 0-2\\
+ 				          max    & 18 & 11-20 \\
+ \hline
+ Observations @low Moon distance & yes (except for u-band)& no \\
+                                 & 10 to 15\% of the visits & \\
+ \hline
+ Observations @meridian          & yes    & yes \\
+ \hline
+ 				               & North Ecliptic Spur & \\
+ Uncovered areas 			& North Galactic Plane & \\
+ 							     & South Celestial Pole &  \\
+ \hline
+ \end{tabular}
+\end{center}
+\end{table}
+
+\paragraph{Parameters for close-to-optimal cadences} The metrics considered in this study allowed us to rank the proposed observing strategies and thus to outline what the parameters of a close-to-optimal cadence would be for SN science. The list of the key points is given in Table \ref{tab:optimal_strategy}
+
+\begin{table}[!htbp]
+  \begin{center}
+    \caption{Key facets of a close-to-optimal observing strategy for SN science.}\label{tab:optimal_strategy}
+\begin{tabular}{l|c}
+  \hline
+  \hline
+ Key facet & WFD \\
+ \hline
+a) Cadence                      & 10(g),5(r),6(i),6(z) days \\
+b) Season length                & $\sim$ 150 days               \\
+c) Filter allocation            & mostly g,r,i,z            \\
+d) Coverage                     & $\geq$ 20000 $deg^2$ provided a), b) and c) \\
+e) Rolling cadence              & if necessary for a), b) and c) to happen \\
+f) Revisit same band same night & no \\
+g) Uniformity                   & yes \\
+\hline
+ \hline
+ Key facet & DDF \\
+ \hline
+a) Cadence                      & 1 to 2 days (filter sequence splitting) \\
+b) Season length                & 180 to 200 days \\
+c) Filter allocation            & mostly g,r,i,z (y to be quantified) \\
+d) Coverage                     & 5 DDF - 1 ultra-deep \\
+\hline
+ \end{tabular}
+\end{center}
+\end{table}
+
 
 \begin{comment}
-\paragraph{Primary metric} Among the set of metrics considered in this paper one of the most sensitive to the features of observing strategies (ie the key facets discussed many times above: cadence, season length, depth, spatial coverage and uniformity) is probably the number of well-measured \sne. In fact all other metrics (except the one related to synergy with 4MOST) rely on a high-quality\sne sample. The w0-wa Figure of Merit is usually used to assess the quality of observing strategies because it can easily be compared and/or combined with other Dark Energy probes. But this metric seems to have  a limited sensivity (see Figure \ref{sn:fom} where most of the cadences have a DETF between 450 and 500) and is in any case optimistic (to a degree difficult to estimate). pontus\_2502 vs pontus\_2002 ? We thus think that the primary metric to assess the quality of observing strategies should be the number of well-measured supernovae.
-
-\paragraph{WFD observing strategy}
-
-
-\paragraph{DDF observing strategy}
-
-\end{comment}
+We present two tables as a tentative to summarize the results exposed above: \ref{tab:summary_top} (\ref{tab:summary_worst}) is a list of the top (worst) 5 observing strategies leading to highest (lowest) scores for a given metric. Analyzing the results lead to the following conclusions.
 
 \begin{table}[!htbp]
   \begin{center}
@@ -104,3 +257,5 @@ DDF    & 1. kraken\_2036 &  \\
 \end{tabular}
 \end{center}
 \end{table}
+
+\end{comment}

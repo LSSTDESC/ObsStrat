@@ -44,6 +44,7 @@
 \newcommand{\phasemax}{$ph_{max}$}
 \newcommand{\tgapcosmos}{$T_{gap}^{\cosmos}$}
 \newcommand{\tgapothers}{$T_{gap}^{others}$}
+\newcommand{\zlimit}{$z_{\mathrm{limit}}$}
 \newcommand{\zfaint}{$z_{\mathrm{faint}}\ $}
 \newcommand{\nsnfaint}{$N_{z<z_{\mathrm{faint}}}\ $}
 \newcommand{\zmed}{$z_{\mathrm{med}}\ $}
@@ -53,6 +54,7 @@
 \newcommand{\slair}{{\tt SLAIR\ }}
 \newcommand{\altschedsched}{{\tt AltSched\ }}
 \newcommand{\altsched}{{\tt altsched\ }}
+\newcommand{\altschednosp}{{\tt altsched}}
 %\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
 \newcommand{\myparagraph}[1]{\paragraph{\textbf{#1}}}
 \newcommand{\sne}{{SNe Ia }}
@@ -73,7 +75,7 @@
   \renewcommand\thetable{\Alph{section}\arabic{table}}
 }
 
-\newcommand*\appendixwithtoc{\%
+\newcommand*\appendixwithtoc{{\bf \Huge Appendix}
   \cleardoublepage
   \appendix
   \addtocontents{toc}{\protect\StartAppendixEntries}
@@ -179,9 +181,6 @@
 \appendixwithtoc
 
 \input{sn_tex/appendix}
-
-
-
 
 
 \end{document}
