@@ -11,7 +11,7 @@ Four classes of observing strategies have been studied in detail:
 \item the {\tt OpSim}- and {\tt Feature}-based strategies that were
   available before the white paper call,
 
-\item simulations based on the \altschedsched scheduler proposed by
+\item simulations based on the \altschedsched~scheduler proposed by
   Stubbs and Rothchild.  This includes one rolling and another
   non-rolling cadence, plus a non-rolling simulation conducted on a
   larger footprint,
@@ -89,10 +89,10 @@ to another.  As an illustration, we present on figures
 \ref{fig:pontus_2502_effective_cadences},
 \ref{fig:altsched_effective_cadences} and
 \ref{fig:altsched_rolling_effective_cadences}, we present effective
-cadence maps for {\tt Pontus\_2502}, \altsched and \altsched
+cadence maps for {\tt Pontus\_2502}, \altsched~and \altsched~
 rolling strategies.  On figure \ref{fig:effective_cadence}, we
 report the median cadence in $r$ (computed from similar maps).  The
-best effective cadences are delivered by the \altsched like
+best effective cadences are delivered by the \altsched-like
 strategies. We note that there is about a factor 7 between the best
 and worst effective cadences.
 
@@ -119,7 +119,7 @@ and worst effective cadences.
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.8\linewidth]{overview_strategy/altsched_rolling_cadence.png}
-    \caption{Average $\Delta T$ between observations for \altsched rolling, a rolling strategy that avoids same band
+    \caption{Average $\Delta T$ between observations for \altsched~rolling, a rolling strategy that avoids same band
       visit pairs.}
     \label{fig:altsched_rolling_effective_cadences}
   \end{center}
@@ -130,9 +130,9 @@ and worst effective cadences.
     \includegraphics[width=0.8\linewidth]{overview_strategy/cadence.png}
     \caption{Assessment of the effective SN cadence for all
       strategies: median $\Delta T$ between observations (after
-      grouping same night observations). \altsched cadences are shown
-      in red, \opsim cadences released for the white paper call in
-      blue, \slair in orange, and early cadences in deep blue. The
+      grouping same night observations). \altsched~cadences are shown
+      in red, \opsim~cadences released for the white paper call in
+      blue, \slair~in orange, and early cadences in deep blue. The
       rolling (resp. non-rolling) cadences are displayed with open
       (resp. solid) markers. }
     \label{fig:effective_cadence}
@@ -143,10 +143,10 @@ In the remaining of this section, we discuss some of the key design
 elements that can explain such large differences.
 
 
-\paragraph{Global filter allocation} All \opsim and \slair cadences   share the same global filter balance: 
+\paragraph{Global filter allocation} All \opsim~and \slair~cadences   share the same global filter balance: 
 $\sim 7\%, 10\%, 22\%, 22\%, 21\%$ and $18\%$ of the total open shutter time
 are allocated to the $u, g, r, i, z$- and $y$ bands respectively.
-\altschedsched makes a different choice, based on the fact that the
+\altschedsched~makes a different choice, based on the fact that the
 low-throughput of the LSST camera in $y$, combined with the high sky
 brightness in that band limit the impact of $y$-band observations.
 About half of the $y$-band observing time is therefore reallocated to
@@ -160,25 +160,25 @@ changed during the night.  In this regard, very different strategies
 have been implemented by the various schedulers proposed so far.  This
 is illustrated on figure \ref{fig:hourglass_plot_filter_alloc}, which
 shows the filter usage for  {\em Pontus 2002} and {\em
-  \altsched rolling}.  {\em Pontus 2002} attempts to minimize the
+  \altsched~rolling}.  {\em Pontus 2002} attempts to minimize the
 filter changes during a night and in fact keeps observing in the same
-filter over several nights.  Conversely, the \altsched family of
+filter over several nights.  Conversely, the \altsched~family of
 cadences attempt to switch for a different filter after each observing
 block, so that each revisit of the same field is performed in a
 different band.  As we will see below, this has a major impact on the effective cadence
-delivered by the survey. As of today, most \opsim cadences released so
-far try to minimize the number of filter changes, all \altsched cadences
-switch filters after each observing block, and \slair has been
+delivered by the survey. As of today, most \opsim~cadences released so
+far try to minimize the number of filter changes, all \altsched~cadences
+switch filters after each observing block, and \slair~has been
 experimenting with both strategies.
 
 \begin{figure}
   \begin{center}
     \subfigure[Pontus 2002]{\includegraphics[width=0.48\linewidth]{overview_strategy/pontus_2002_hourglass.png}}
-    \subfigure[\altsched rolling]{\includegraphics[width=0.48\linewidth]{overview_strategy/alt_sched_rolling_hourglass.png}}
+    \subfigure[\altsched~rolling]{\includegraphics[width=0.48\linewidth]{overview_strategy/alt_sched_rolling_hourglass.png}}
     \caption{Hourglass plots showing the filter usage for two
-      different observing strategies. Most \opsim and \slair observing
+      different observing strategies. Most \opsim~and \slair~observing
       strategies released so far tend to minimize the number of filter
-      changes. The \altschedsched strategy makes sure that each field is
+      changes. The \altschedsched~strategy makes sure that each field is
       observed twice a night in different filter. This results in a
       higher number of filter changes, but is highly beneficial for
       the SN follow-up. }
@@ -204,8 +204,8 @@ light curve sampling by a factor $\sim 2$.
     \includegraphics[width=0.8\linewidth]{overview_strategy/night_visit_ratio.png}
     \caption{Number of nights vs. number of visits for the median
       healpixel. We clearly see the effect of the same-band revisit
-      strategy.  \altsched cadences are show in red, \opsim WPC in
-      blue, \slair in orange, and early cadences in deep blue. The
+      strategy.  \altsched~cadences are show in red, \opsim~WPC in
+      blue, \slair~in orange, and early cadences in deep blue. The
       rolling (resp. non-rolling) cadences are displayed with open
       (resp. solid) markers. }
     \label{fig:effective_number_of_visits}
@@ -226,10 +226,10 @@ able to compensate.  These are either rolling strategies ({\tt
   Mothra\_2049}, {\tt Mothra\_2045} or {\tt Kraken\_2036}) or by
 increasing the total number of visits ({\tt Pontus\_2489}).
 
-All \opsim cadences, except {\tt colossus\_2667} and {\tt
+All \opsim~cadences, except {\tt colossus\_2667} and {\tt
   kraken\_2044} the number of visits is about twice the number of
 distinct nights, which is likely to degrade the effective SN cadence
-(deeper visits, less often).  All \altsched simulations attempt to
+(deeper visits, less often).  All \altsched~simulations attempt to
 avoid this, as do the recent experiements conducted with \slair.
 
 \paragraph{Season length} This is another feature that may alter the cadence, and the size of the SN sample.
@@ -241,17 +241,16 @@ effective cadence and/or the total size of the SN sample.
 Figure \ref{fig:season_length} shows the average season length for
 each cadence studied in this work (sorted by $r$-band effective
 cadence).  We see considerable differences in season durations (from 130 to 200 days).
-Most \opsim and all \altsched strategies manage to observe each field during about
-150 consecutive days. The shorter (130 days) and longer (170 days) seasons come mainly from  \slair 
-for reasons that have not been elucidated yet. In any case, we do not
+Most \opsim~and all \altsched~strategies manage to observe each field during about
+150 consecutive days. The shorter (130 days) and longer (170 days) seasons come mainly from  \slair~for reasons that have not been elucidated yet. In any case, we do not
 note any significant correlation between season duration and cadence.
 
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.8\linewidth]{overview_strategy/season_length.png}
     \caption{Median season duration for each cadence in this
-      study. \altsched cadences are show in red, \opsim WPC in blue,
-      \slair in orange, and early cadences in deep blue. The rolling
+      study. \altsched~cadences are show in red, \opsim~WPC in blue,
+      \slair~in orange, and early cadences in deep blue. The rolling
       (resp. non-rolling) cadences are displayed with open
       (resp. solid) markers. }
     \label{fig:season_length}
@@ -263,8 +262,8 @@ note any significant correlation between season duration and cadence.
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.8\linewidth]{overview_strategy/cadence_large_gaps.png}
-    \caption{Fraction of gaps higher than 15 days (r band).\altsched cadences are show in red, \opsim WPC in blue,
-      \slair in orange, and early cadences in deep blue. The rolling
+    \caption{Fraction of gaps higher than 15 days (r band).\altsched~cadences are show in red, \opsim~WPC in blue,
+      \slair~in orange, and early cadences in deep blue. The rolling
       (resp. non-rolling) cadences are displayed with open
       (resp. solid) markers. }
     \label{fig:large_gaps}
@@ -283,11 +282,11 @@ during the night (3) avoid same band visit pairs.
 
 However, each of these elements taken alone is not
 sufficient. Combining all of them has been tried, for example in the
-\slair cadences {\tt tms\ roll} and {\tt rolling mix*} and has brought
+\slair~cadences {\tt tms\ roll} and {\tt rolling mix*} and has brought
 tremendous improvements with respect to the previous experiments
-conducted with this scheduler.  However, the best \slair simulations
-are still behind \altschedsched regarding cadence.  On top of the elements
-discussed above, it seems that the core of the \altschedsched observing strategy ensures
+conducted with this scheduler.  However, the best \slair~simulations
+are still behind \altschedsched~regarding cadence.  On top of the elements
+discussed above, it seems that the core of the \altschedsched~observing strategy ensures
 an extreme regularity of the cadence. This may be explained by the method used by \altsched~ to observe the sky (see Appendix \ref{sec:opsim_altsched} for more details about differences between \opsim~and \altsched).
 
 \begin{comment}
