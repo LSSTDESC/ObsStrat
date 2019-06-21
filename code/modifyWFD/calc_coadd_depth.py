@@ -56,6 +56,7 @@ bands = options.bands
 ########################################################################################################################
 # set some things up
 if bands.__contains__(','):
+    bands = bands.replace(" ", "")
     bands = list(bands.split(','))
 else:
     bands = bands
