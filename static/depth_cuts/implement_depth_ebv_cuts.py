@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import healpy as hp
+import pandas as pd
 import copy
 from collections import OrderedDict
 import lsst.sims.maf.metricBundles as metricBundles   # need MAF installed; for reading in coadd data
@@ -116,7 +117,7 @@ if debug:
 
 # figure out the band
 if bands.__contains__(','):
-    orderBand = list(bands.split(','))
+    orderBand = [f.strip() for f in list(bands.split(','))]
 else:
     orderBand = bands
 ########################################################################
@@ -768,6 +769,13 @@ if save_stuff:
             print('## Updated %s in %s.'%(filename, outDir_md))
         else:
             print('## Saved %s in %s.'%(filename, outDir_md))
+
+        ####
+        # save the footprint as well
+        print('\n## %s pixels here'%len(final_pixels[yr]))
+        filename = 'eg_footprint_%s_%s_nside%s_HEALPixels.csv'%(dbname, yr, nside)
+        pd.DataFrame({'pixNum': final_pixels[yr]}).to_csv('%s/%s'%(outDir, filename), index=False,)
+        print('## Saved %s'%filename)
 
 print('\nTime taken: %.2f min'%((time.time()-startTime)/60.))
 print('\nAll done.\n')
