@@ -38,6 +38,9 @@ parser.add_option('--wdith',
 parser.add_option('--older_cuts',
                   action='store_true', dest='older_cuts', default=False,
                   help='Use older depth cuts.')
+parser.add_option('--fbs',
+                  action='store_true', dest='fbs', default=False,
+                  help='Treat as FBS output (no Proposal table).')
 #######################################################################################
 start_time = time.time()
 # get the inputs
@@ -49,6 +52,7 @@ nside = options.nside
 yr_cut = options.yr_cut
 wdith = options.wdith
 older_cuts = options.older_cuts
+fbs = options.fbs
 # quick check
 if yr_cut not in [1, 3, 6, 10]:
     raise ValueError('Currently can only work with yr_cut 1, 3, 6, 10. Inputs: %s'%yr_cut)
@@ -105,9 +109,12 @@ slicer = slicers.HealpixSlicer(lonCol=lonCol, latCol=latCol,
 resultsDb = db.ResultsDb(outDir=outdir)
 
 # figure out the sql constraint
-propIds, propTags = opsdb.fetchPropInfo()
-wfdWhere = opsdb.createSQLWhere('WFD', propTags)
-sqlconstraint = '%s and night <= %s'%(wfdWhere, yr_cut * 365.25)
+if fbs:
+    sqlconstraint = 'night <= %s'%(yr_cut * 365.25)
+else:
+    propIds, propTags = opsdb.fetchPropInfo()
+    wfdWhere = opsdb.createSQLWhere('WFD', propTags)
+    sqlconstraint = '%s and night <= %s'%(wfdWhere, yr_cut * 365.25)
 
 # set up the dust map
 dustmap = maps.DustMap(nside=nside, interp=False)
