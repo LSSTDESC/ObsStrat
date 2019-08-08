@@ -77,13 +77,6 @@ if wdith:
     dither = 'RandomDitherPerNight'
 else:
     dither = 'nodither'
-    
-# check if the db analysis has been run for this db already
-log_filename = 'done_y%s_lim%s%s_%s_nside%s.txt' % (yr_cut, band, lim_mag_i, dither.lower(), nside)
-if log_filename in os.listdir(outdir):
-    done_dbs = np.genfromtxt('%s/%s' % (outdir, log_filename), dtype=str)
-    if dbname in done_dbs:
-        raise ValueError('Analysis already done for %s.' % dbname)
 
 # set up directory for bundle data
 bundle_dir = '%s/bundle_data/' % outdir
@@ -91,6 +84,16 @@ os.makedirs(bundle_dir, exist_ok=True)
 # set up directory for summary data
 summary_dir = '%s/summary_data/' % outdir
 os.makedirs(summary_dir, exist_ok=True)
+# set up directory for log
+log_dir = '%s/run_log/' % outdir
+os.makedirs(log_dir, exist_ok=True)
+
+# check if the db analysis has been run for this db already
+log_filename = 'done_y%s_lim%s%s_%s_nside%s.txt' % (yr_cut, band, lim_mag_i, dither.lower(), nside)
+if log_filename in os.listdir(log_dir):
+    done_dbs = np.genfromtxt('%s/%s' % (log_dir, log_filename), dtype=str)
+    if dbname in done_dbs:
+        raise ValueError('Analysis already done for %s for y%s.\n' % (dbname, yr_cut) )
 # -------------------------------------------------------------------------------------------------------------------------
 opsdb = db.OpsimDatabase(db_path)
 
@@ -148,7 +151,7 @@ txt_file.write(to_write)
 txt_file.close()
 
 # save the depth map
-outfile = 'eg_footprint_depth_%s_%s-band_lim%s%s_%s_nside%s.npz' % ( dbname, band, band, lim_mag_i, dither.lower(), nside )
+outfile = 'depth_in_eg_%s_%s-band_lim%s%s_%s_nside%s.npz' % ( dbname, band, band, lim_mag_i, dither.lower(), nside )
 bundle.slicer.writeData('%s/%s'%(bundle_dir, outfile),
                         bundle.metricValues,
                         metricName = bundle.metric.name,
@@ -160,7 +163,7 @@ bundle.slicer.writeData('%s/%s'%(bundle_dir, outfile),
                        )
 
 # add dbname to the log file
-txt_file = open('%s/%s'%(outdir, log_filename), 'a')
+txt_file = open('%s/%s'%(log_dir, log_filename), 'a')
 txt_file.write('%s \n' % dbname)
 txt_file.close()
 # all done.
