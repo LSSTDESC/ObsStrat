@@ -114,6 +114,7 @@ resultsDb = db.ResultsDb(outDir=outdir)
 # figure out the sql constraint
 if fbs:
     sqlconstraint = 'night <= %s'%(yr_cut * 365.25)
+    sqlconstraint += ' and note not like "DD%"'
 else:
     propIds, propTags = opsdb.fetchPropInfo()
     wfdWhere = opsdb.createSQLWhere('WFD', propTags)
