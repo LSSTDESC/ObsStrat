@@ -21,7 +21,7 @@ do
     for db_path in $(find ${dbs_path} -name '*.db')
     do
         echo 'Running analysis for '${yr_cut}'yr for '${db_path}
-        python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/postwp/runscripts/run_eg_metric.py \
+        python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/run_eg_metric.py \
                             --outdir=${outdir} \
                             --db_path=${db_path} \
                             --nside=256 --yr_cut=${yr_cut} --fbs
