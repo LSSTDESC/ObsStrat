@@ -6,6 +6,48 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 import os
+
+#######################################################################################
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option('--fom_path', dest='fom_path',
+                  help='Path to the folder the FOM values.')
+parser.add_option('--data_path', dest='data_path',
+                  help='Path to the folder with area/depth etc values for different years.')
+parser.add_option('--data_file_tag', dest='data_file_tag',
+                  help='Tag to look for in filename for with area/depth etc. Then Y1 filename e.g. be <data_file_tag>_Y1.txt')
+parser.add_option('--fig_dir', dest='fig_dir',
+                  help='Path to the folder where all the figures will be stored.')
+parser.add_option('--renorm_strategy', dest='renorm_strategy', default='kraken_2026',
+                  help='Baseline dbname to renormalized the FOMs with; can be None. Default: kraken_2026')
+parser.add_option('--group_dbs',
+                  action='store_true', dest='group_dbs', default=False,
+                  help='Group the dbs.')
+parser.add_option('--limit_contour',
+                  action='store_true', dest='limit_contour', default=False,
+                  help='Limit axes for the contour plot.')
+#######################################################################################
+# get the inputs
+(options, args) = parser.parse_args()
+print(options)
+fom_path = options.fom_path
+data_path = options.data_path
+data_file_tag = options.data_file_tag
+fig_dir = options.fig_dir
+renorm_strategy = options.renorm_strategy
+group_dbs = options.group_dbs
+limit_contour = options.limit_contour
+
+if group_dbs:
+    import sys
+    sys.path.append( '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/')
+    from helper import folder_map
+    colors_cm = ['b', 'k', 'olive', 'r', 'k',
+                 'turquoise', 'b', 'm', 'dodgerblue', 'darkorchid', 'r',
+                 'palevioletred', 'teal', 'orange']
+    markers = ['+', '.', '+', '+', 'x', 'x', '2', 'x', '4', '*', '4', '4', '.', '*', '2', '2']
+
+# ------------------------------------------------------------------------------------
 cm = plt.cm.get_cmap('RdYlBu')
 
 # Set some defaults.
@@ -13,10 +55,7 @@ year_vals = ['Y1', 'Y3', 'Y6', 'Y10']
 # Should we fake the area scaling of the covariances?  For now this is necessary, since the inputs
 # have issues off of the diagonal.
 fake_area = False
-# Should we renormalize by some strategy at some year?  Use None if not.
-renorm_strategy = 'kraken_2026'
 # Where to put figures?  Make sure directory exists and if not, create it.
-fig_dir = 'figs'
 if not os.path.isdir(fig_dir):
     os.mkdir(fig_dir)
 # How many evenly-spaced contours in FoM to put on contour plots?
@@ -61,7 +100,7 @@ husni_metric = \
      'alt_sched_riswap': [27.17, 77.68, 156.62, 262.12],
      'alt_sched_rolling_riswap': [52.94, 77.90, 155.94, 260.02]}
 
-def load_foms(dir='FoM', prior=False, fake_area=False):
+def load_foms(dir, prior=False, fake_area=False):
     """Script to load some FoM values on a 3x3 grid in (area, depth)."""
 
     # Get list of files in directory.
@@ -131,8 +170,8 @@ def load_foms(dir='FoM', prior=False, fake_area=False):
             
     return fom_arr
 
-def load_strategy_table(year_str = 'Y1'):
-    infile = './strategy_table_%s.txt'%year_str
+def load_strategy_table(infile_path, file_tag, year_str = 'Y1'):
+    infile = '%s/%s_%s.txt' % (infile_path, file_tag, year_str)
     if not os.path.exists(infile):
         raise ValueError("Cannot find file %s for year %s!"%(infile, year_str))
     else:
@@ -199,7 +238,7 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
         plt.title('Emulator ratio - 0.5')
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig(os.path.join(fig_dir, '%s_ratio.pdf'%figpref))
+        plt.savefig(os.path.join(fig_dir, '%s_ratio.png'%figpref))
 
         finer_area = np.linspace(np.min(area_vals), np.max(area_vals), 20)
         finer_depth = np.linspace(np.min(depth_vals), np.max(depth_vals), 20)
@@ -218,24 +257,50 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
         plt.title('Emulated FoM / max')
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig(os.path.join(fig_dir, '%s_finer.pdf'%figpref))
+        plt.savefig(os.path.join(fig_dir, '%s_finer.png'%figpref))
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
         plot_quantity = test_emulator/tmp_renorm_value
-        contour_levels = np.linspace(np.min(plot_quantity), np.max(plot_quantity), n_contour)
-        plt.contour(finer_area_grid, finer_depth_grid, plot_quantity, contour_levels, linewidths=1, colors='k')
-        plt.pcolormesh(finer_area_grid, finer_depth_grid, plot_quantity, cmap=cm)
-        ax.scatter(area_vals[no_niexp], depth_vals[no_niexp], color='k', marker='x')
-        ax.scatter(area_vals[use_niexp], depth_vals[use_niexp], color='k', marker='o', s=20*(niexp[use_niexp]/mean_niexp)**3)
+        # set up contour levels
+        if limit_contour:
+            vmin, vmax = 0.5, 2.5
+            contour_levels = np.linspace(vmin, vmax, n_contour, endpoint=True)
+        else:
+            contour_levels = np.linspace(np.min(plot_quantity), np.max(plot_quantity), n_contour)
+            vmin, vmax = None, None
+
+        plt.contour(finer_area_grid, finer_depth_grid, plot_quantity, contour_levels, linewidths=1, colors='k', vmin=vmin, vmax=vmax)
+        plt.pcolormesh(finer_area_grid, finer_depth_grid, plot_quantity, cmap=cm, vmin=vmin, vmax=vmax)
+        if not group_dbs:
+            ax.scatter(area_vals[no_niexp], depth_vals[no_niexp], marker='x', color='k' )
+            ax.scatter(area_vals[use_niexp], depth_vals[use_niexp], marker='o', color='k', s=20*(niexp[use_niexp]/mean_niexp)**3 )
+        else:
+            for i, grp in enumerate(folder_map.keys()):
+                for j, db in enumerate(folder_map[grp]):
+                    ind = np.where( strategy_name == db )[0]
+                    if len(strategy_name[ind]) > 1:
+                        raise ValueError('Somethings wrong: have strategy_name[ind] = %s ' % strategy_name[ind] )
+                    if j == 0:
+                        ax.scatter(area_vals[ind], depth_vals[ind], marker=markers[i], color=colors_cm[i], label=grp )
+                    else:
+                        ax.scatter(area_vals[ind], depth_vals[ind], marker=markers[i], color=colors_cm[i] )
+            #ax.scatter(area_vals[ind], depth_vals[ind], marker='o', s=20*(niexp[ind]/mean_niexp)**3, label=strategy_name[ind] )
+        tag = ''
+        if limit_contour:
+            ax.set_ylim(24.9, 26.7)
+            ax.set_xlim(3000, 18000)
+            tag = '_limited'
         plt.colorbar()
+        if group_dbs:
+            ax.legend(bbox_to_anchor=(1.8,1))
         if renorm_strategy is None:
             plt.title('Emulated FoM')
         else:
             plt.title('Emulated FoM versus %s Y1'%renorm_strategy)
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig(os.path.join(fig_dir,'%s_contour.pdf'%figpref))       
+        plt.savefig(os.path.join(fig_dir, '%s_contour%s.png' % (figpref, tag) ), bbox_inches='tight')
         
     fom_vals = []
     for ind in range(len(area_vals)):
@@ -244,9 +309,9 @@ def emulate_fom(area_vals, depth_vals, grid_area_vals, grid_depth_vals, grid_fom
     return fom_vals
 
 # Get FoM values.
-foms_prior = load_foms(prior=True, fake_area=fake_area)
+foms_prior = load_foms(dir=fom_path, prior=True, fake_area=fake_area)
 print(foms_prior[:,:,0])
-foms_noprior = load_foms(prior=False, fake_area=fake_area)
+foms_noprior = load_foms(dir=fom_path, prior=False, fake_area=fake_area)
 print(foms_noprior[:,:,0])
 
 # Make some basic plots:
@@ -270,7 +335,7 @@ for year_ind in range(len(year_vals)):
         plt.title('FoM/%d (with Stage III prior)'%max_val)
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_prior.pdf'%year_vals[year_ind]))
+        plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_prior.png'%year_vals[year_ind]))
 
     # Prior, no area rescaling.
     fig = plt.figure()
@@ -281,7 +346,7 @@ for year_ind in range(len(year_vals)):
     plt.title('FoM/%d (no prior)'%max_val)
     plt.xlabel('Area [sq. deg.]')
     plt.ylabel('Median i-band depth')
-    plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_noprior.pdf'%year_vals[year_ind]))
+    plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_noprior.png'%year_vals[year_ind]))
 
     # No prior, area rescaling.
     if not fake_area:
@@ -294,7 +359,7 @@ for year_ind in range(len(year_vals)):
         plt.title('(Rescaled FoM with Stage III prior)/%d'%max_val)
         plt.xlabel('Area [sq. deg.]')
         plt.ylabel('Median i-band depth')
-        plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_prior_rescaled.pdf'%year_vals[year_ind]))
+        plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_prior_rescaled.png'%year_vals[year_ind]))
 
     # Prior, area rescaling.
     fig = plt.figure()
@@ -306,12 +371,14 @@ for year_ind in range(len(year_vals)):
     plt.title('(Rescaled FoM without prior)/%d'%max_val)
     plt.xlabel('Area [sq. deg.]')
     plt.ylabel('Median i-band depth')
-    plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_noprior_rescaled.pdf'%year_vals[year_ind]))
+    plt.savefig(os.path.join(fig_dir,'fom_emulator_%s_noprior_rescaled.png'%year_vals[year_ind]))
 
     # Evaluate various strategies using emulator as needed.
 
     # Load strategy tables:
-    tmp_strat, tmp_area, tmp_depth, tmp_niexp = load_strategy_table(year_vals[year_ind])
+    tmp_strat, tmp_area, tmp_depth, tmp_niexp = load_strategy_table(infile_path=data_path,
+                                                                    file_tag=data_file_tag,
+                                                                    year_str=year_vals[year_ind])
     emulated_fom_noprior = emulate_fom(tmp_area, tmp_depth, plot_areas, plot_depths,
                                        foms_noprior[:,:,year_ind], tmp_niexp,
                                        figpref='test_noprior_%s'%year_vals[year_ind],
