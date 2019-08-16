@@ -210,5 +210,26 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     plt.close('all')
 
 # -----------------------------------------------------------------------------------------------------
-# all done.
-print('## Time taken for %s: %.2f min\n' % (dbname, (time.time() - start_time )/60 ) )
+outdir = '%s/stats/' % results_dir
+os.makedirs(outdir, exist_ok=True)
+# save the data
+cuts = {}
+for key in data:
+    yr_cut = key.split('_')[0].split('yr')[-1]
+    mag_cut = key.split('_')[1].split('limi')[-1]
+    cuts[ '%syr' % yr_cut ] = 'i>%s ; EBV<0.2' % mag_cut
+
+    areas = data[key]['Area (deg2)']
+    med =  data[key]['$i$-band depth: median']
+    std =  data[key]['$i$-band depth: std']
+    # store what to write
+    to_write = ''
+    for i, db in enumerate( data[key]['dbname'].values ):
+        to_write += '| %s | %s | %.2f | %.2f |\n' % (db, cuts[ '%syr' % yr_cut ], areas[i], med[i])
+    # now write to the file
+    fname = 'stats_Y%s.txt' % (yr_cut)
+    txt_file = open('%s/%s' % (outdir, fname), 'a')
+    txt_file.write(to_write)
+    txt_file.close()
+
+    print('Saved %s' % fname)
