@@ -1,6 +1,6 @@
 ##############################################################################################################
-# This script runs the egFootprintMetric with the option to get the i-band depth map, calculates eg footprint
-# area and depth statistics, and saves them. Also saves the depth data bundle.
+# This script reads in the data saved by bash_run_<>_metric scripts, plots the data, and saves some stats
+# grouped by year.
 #
 # Humna Awan: humna.awan@rutgers.edu
 #
@@ -32,12 +32,14 @@ rcparams['xtick.top'] = True
 rcparams['ytick.right'] = True
 for key in rcparams: mpl.rcParams[key] = rcparams[key]
 # -----------------------------------------------------------------------------------------------------
-outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/postwp/'
+outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/'
 data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output/summary_data/'
 
 # set up for plots
 colors = ['m', 'b', 'g', 'k']
 shapes = ['o', 'v', 's', 'd']
+
+redshift_bin = '0.66<z<1.0'
 
 colors_cm = ['indianred', 'mediumslateblue', 'olive', 'orangered', 'black',
              'turquoise', 'brown', 'goldenrod', 'dodgerblue', 'darkorchid', 'y', 'palevioletred', 'teal', 'sandybrown']
@@ -52,18 +54,20 @@ yr_label = {}
 for yr in [1, 3, 6, 10]:
     files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and f.startswith('eg_') ]
     for file in files:
-        print( 'Readig in %s' % file )
+        print( 'Reading in %s' % file )
         key = 'yr%s_%s' % (yr, file.split('_')[4])
         data[ key ] = pd.read_csv('%s/%s' % (data_dir, file))
         yr_label[ key ] =  r'Y%s (i$>$%s) ' % (yr, file.split('_')[4].split('limi')[-1])
 # add ngal data if available for all dbs
 for yr in [1, 3, 6, 10]:
-    files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and f.startswith('ngal_') ]
+    files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and \
+             f.startswith('ngal_') and f.__contains__(redshift_bin) ]
     for file in files:
         print( 'Readig in %s' % file )
         key = 'yr%s_%s' % (yr, file.split('_')[6])
         temp = pd.read_csv('%s/%s' % (data_dir, file))
-        if len(temp['dbname'].values) == len(data[key]['dbname'].values):            
+        if len(temp['dbname'].values) == len(data[key]['dbname'].values):
+            # add only if we have the Ngal data for all the dbs for which we have the area, etc.
             data[key] = pd.merge(temp, data[key], left_on='dbname', right_on='dbname',how='outer')
 
 # make sure the headers make sense
@@ -126,7 +130,10 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     min_val = min([min_val, other_min])
     max_val = max([max_val, other_max])
     for i in range(2):
-        axes[i].set_xlabel(r'%s' % to_plot)
+        xlabel = r'%s' % to_plot
+        if to_plot == 'Ngal':
+            xlabel += r' (%s)' % redshift_bin
+        axes[i].set_xlabel(xlabel)
         axes[i].set_xlim(min_val, max_val)
     # set up the legend
     axes[0].legend(custom_lines, grp_labels, bbox_to_anchor=(2.8, 1.1), frameon=True, ncol=7)
@@ -140,7 +147,7 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     if to_plot == '$i$-band depth: std':
         plot_label = 'iband_std-depth'
     if to_plot == 'Ngal':
-        plot_label = 'ngal'
+        plot_label = 'ngal_%s' % redshift_bin
     # save fig
     filename = 'compare_%s_%sdbs_grouped.png'%(plot_label, ndbs_tot)
     plt.savefig('%s/%s'%(results_dir, filename), format= 'png', bbox_inches='tight')
@@ -182,7 +189,10 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     min_val = min([min_val, other_min])
     max_val = max([max_val, other_max])
     for i in range(2):
-        axes[i].set_xlabel(r'%s' % to_plot)
+        xlabel = r'%s' % to_plot
+        if to_plot == 'Ngal':
+            xlabel += r' (%s)' % redshift_bin
+        axes[i].set_xlabel(xlabel)
         axes[i].set_xlim(min_val, max_val)
     # color the ticks by folder name
     folder_colors = np.array(folder_colors)
@@ -202,7 +212,7 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     if to_plot == '$i$-band depth: std':
         plot_label = 'iband_std-depth'
     if to_plot == 'Ngal':
-        plot_label = 'ngal'
+        plot_label = 'ngal_%s' % redshift_bin
     # save fig
     filename = 'compare_%s_%sdbs_ordered_by_area.png'%(plot_label, ndbs_tot)
     plt.savefig('%s/%s'%(results_dir, filename), format= 'png', bbox_inches='tight')
