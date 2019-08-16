@@ -37,10 +37,17 @@ parser.add_option('--outdir', dest='outdir',
 (options, args) = parser.parse_args()
 dbfile = options.dbfile
 outdir = options.outdir
+
+os.makedirs(outdir, exist_ok=True)
 #######################################################################################
 rot_rand_seed = 42
 
 dbname = dbfile.split('/')[-1].split('.db')[0]
+
+# check if the analysis has been done already
+if '%s_data.csv' % (dbname) in [ f for f in os.listdir(outdir) if f.endswith('csv') ]:
+    raise ValueError('Analysis already done for %s.\n' % (dbname) )
+# proceed
 print('Running save_rot_data for %s'%(dbname))
 time0 = time.time()
 # ----------------------------------------------------------
@@ -76,7 +83,6 @@ for col in ['fieldRA', 'fieldDec', 'fieldId', 'rotTelPos', \
     else:
         data_dict[col] = simdata[col][wfd_ind]
 
-print('min, max rotTelPos: %s, %s'%(min(data_dict['rotTelPos']), max(data_dict['rotTelPos']) ) )
 # ----------------------------------------------------------
 # save the output array
 filename = '%s_data.csv'%(dbname)
