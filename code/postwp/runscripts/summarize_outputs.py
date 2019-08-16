@@ -138,7 +138,7 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     if to_plot == '$i$-band depth: median':
         plot_label = 'iband_med-depth'
     if to_plot == '$i$-band depth: std':
-        plot_label = 'iband_set-depth'
+        plot_label = 'iband_std-depth'
     if to_plot == 'Ngal':
         plot_label = 'ngal'
     # save fig
@@ -200,7 +200,7 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     if to_plot == '$i$-band depth: median':
         plot_label = 'iband_med-depth'
     if to_plot == '$i$-band depth: std':
-        plot_label = 'iband_set-depth'
+        plot_label = 'iband_std-depth'
     if to_plot == 'Ngal':
         plot_label = 'ngal'
     # save fig
