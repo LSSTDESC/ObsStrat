@@ -33,10 +33,14 @@ parser.add_option('--dbfile', dest='dbfile',
 parser.add_option('--outdir', dest='outdir',
                   help='Path to the folder with the db to consider.',
                   default='/global/homes/a/awan/awan/desc/rot_output/')
+parser.add_option('--dd',
+                  action='store_true', dest='dd_only', default=False,
+                  help='Consider only the DD visits.')
 
 (options, args) = parser.parse_args()
 dbfile = options.dbfile
 outdir = options.outdir
+dd_only = options.dd_only
 
 os.makedirs(outdir, exist_ok=True)
 #######################################################################################
@@ -68,7 +72,10 @@ simdata = s.run(simdata)
 
 # get the WFD visits
 nobs = len(simdata['note'])
-wfd_ind = [f for f in range(nobs) if not simdata['note'][f].__contains__('DD')]
+if dd_only:
+    choose_ind = [f for f in range(nobs) if simdata['note'][f].__contains__('DD')]
+else:
+    choose_ind = [f for f in range(nobs) if not simdata['note'][f].__contains__('DD')]
 
 # wrap rotTelPos
 ind = simdata['rotTelPos'] > 100
@@ -79,9 +86,9 @@ data_dict = {}
 for col in ['fieldRA', 'fieldDec', 'fieldId', 'rotTelPos', \
             'rotSkyPos', 'PA', 'note']:
     if col == 'fieldId':
-        data_dict[col] = simdata['opsimFieldId'][wfd_ind]
+        data_dict[col] = simdata['opsimFieldId'][choose_ind]
     else:
-        data_dict[col] = simdata[col][wfd_ind]
+        data_dict[col] = simdata[col][choose_ind]
 
 # ----------------------------------------------------------
 # save the output array
