@@ -12,13 +12,23 @@ setup lsst_sims
 setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 
 ########################################################################################################
-outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output/rot_output/
 dbs_path=/global/cscratch1/sd/awan/dbs_post_wp/
 #######################################################################################
-# run the script for the various OpSim outputs.
+# run the script for the various OpSim outputs for non-DD visits.
+outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output/rot_output/
 for db_path in $(find ${dbs_path} -name '*.db' )
 do
     echo 'Saving rot data for '${db_path}
     python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/descDithers/save_plot_rot_data_newfbs.py \
                         --outdir=${outdir} --dbfile=${db_path}
+done
+
+#######################################################################################
+outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output/rot_output_dd/
+# run for just the DD visits
+for db_path in $(find ${dbs_path} -name '*.db' )
+do
+    echo 'Saving rot data for '${db_path}
+    python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/code/descDithers/save_plot_rot_data_newfbs.py \
+                        --outdir=${outdir} --dbfile=${db_path} --dd
 done
