@@ -15,7 +15,8 @@ folder_map = {
         'stuck_rolling10yrs.db',
         'newB10yrs.db',
         'bluer_footprint10yrs.db',
-        'gp_heavy10yrs.db'
+        'gp_heavy10yrs.db',
+        'big_sky_dust_v1.3_10yrs.db'
     ],
 'alt_sched':
     [
@@ -33,7 +34,9 @@ folder_map = {
         'very_alt3_rm5illum50_10yrs.db',
         'very_alt3_rm5illum15_10yrs.db',
         'very_alt2_rm5illum30_10yrs.db',
-        'very_alt3_rm5illum30_10yrs.db'
+        'very_alt3_rm5illum30_10yrs.db',
+        'altwfd_v1.3_10yrs.db',
+        'altroll_mod2_sdf_0.20_v1.3_10yrs.db'
     ],
 'exp_time':
      [
