@@ -48,6 +48,7 @@ colors_cm = ['indianred', 'mediumslateblue', 'olive', 'orangered', 'black',
 results_dir = '%s/results/' % outdir
 os.makedirs(results_dir, exist_ok=True)
 # -----------------------------------------------------------------------------------------------------
+to_plot_keys = ['Area (deg2)', '$i$-band depth: median', '$i$-band depth: std' ]
 # read in the data
 data = {}
 yr_label = {}
@@ -58,6 +59,7 @@ for yr in [1, 3, 6, 10]:
         key = 'yr%s_%s' % (yr, file.split('_')[4])
         data[ key ] = pd.read_csv('%s/%s' % (data_dir, file))
         yr_label[ key ] =  r'Y%s (i$>$%s) ' % (yr, file.split('_')[4].split('limi')[-1])
+
 # add ngal data if available for all dbs
 for yr in [1, 3, 6, 10]:
     files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and \
@@ -69,18 +71,19 @@ for yr in [1, 3, 6, 10]:
         if len(temp['dbname'].values) == len(data[key]['dbname'].values):
             # add only if we have the Ngal data for all the dbs for which we have the area, etc.
             data[key] = pd.merge(temp, data[key], left_on='dbname', right_on='dbname',how='outer')
-
+            to_plot_keys.append('Ngal')
 # make sure the headers make sense
 for key in data:
     data[key] = data[key].rename(columns=lambda x: x.strip())
-        
+
 # order data in a specific way
 from itertools import chain
 order_group = list (chain(*folder_map.values()) )
 df_b = pd.DataFrame({'dbname' : order_group})
 
 for key in data:
-    data[key] = pd.merge(df_b, data[key], left_on='dbname',right_on='dbname',how='outer')
+    data[key] = pd.merge(df_b, data[key], left_on='dbname', right_on='dbname', how='outer')
+
 # set up the colors
 folder_colors = []
 custom_lines, grp_labels = [], []
@@ -90,10 +93,10 @@ for i, group in enumerate(folder_map.keys()):
     grp_labels += [group]         
     custom_lines += [Line2D([0], [0], color=colors_cm[i], lw=10) ]
 # -----------------------------------------------------------------------------------------------------
-# plot and group things by folder-group
 xlabels = np.array( data[list(data.keys())[0]]['dbname'].values )
 ndbs_tot = len(xlabels)
-for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band depth: std', 'Ngal'] ):
+# plot and group things by folder-group
+for j, to_plot in enumerate( to_plot_keys ):
     plt.clf()
     nrows, ncols = 1, 2
     fig, axes = plt.subplots(nrows, ncols)
