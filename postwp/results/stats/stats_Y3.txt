@@ -9,6 +9,7 @@
 | newB10yrs | i>25.35 ; EBV<0.2 | 16820.70 | 25.69 |
 | bluer_footprint10yrs | i>25.35 ; EBV<0.2 | 15057.40 | 25.71 |
 | gp_heavy10yrs | i>25.35 ; EBV<0.2 | 15173.01 | 25.75 |
+| big_sky_dust_v1.3_10yrs | i>25.35 ; EBV<0.2 | 17499.69 | 25.71 |
 | very_alt10yrs | i>25.35 ; EBV<0.2 | 15354.46 | 25.64 |
 | very_alt2_rm5illum20_10yrs | i>25.35 ; EBV<0.2 | 12495.04 | 25.53 |
 | very_alt_rm510yrs | i>25.35 ; EBV<0.2 | 15397.42 | 25.65 |
@@ -24,6 +25,8 @@
 | very_alt3_rm5illum15_10yrs | i>25.35 ; EBV<0.2 | 13672.57 | 25.55 |
 | very_alt2_rm5illum30_10yrs | i>25.35 ; EBV<0.2 | 12891.55 | 25.53 |
 | very_alt3_rm5illum30_10yrs | i>25.35 ; EBV<0.2 | 13722.77 | 25.56 |
+| altwfd_v1.3_10yrs | i>25.35 ; EBV<0.2 | 15184.13 | 25.76 |
+| altroll_mod2_sdf_0.20_v1.3_10yrs | i>25.35 ; EBV<0.2 | 14733.75 | 25.67 |
 | exptime_1exp_pairsmix_10yrs | i>25.35 ; EBV<0.2 | 15127.32 | 25.70 |
 | baseline_1exp_nopairs_10yrs | i>25.35 ; EBV<0.2 | 15265.49 | 25.80 |
 | baseline_1exp_pairsmix_10yrs | i>25.35 ; EBV<0.2 | 15253.85 | 25.78 |
