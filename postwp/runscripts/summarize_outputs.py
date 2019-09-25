@@ -153,71 +153,7 @@ for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band
     plt.savefig('%s/%s'%(results_dir, filename), format= 'png', bbox_inches='tight')
     print('\n# Saved %s'%filename)
     plt.close('all')
-# -----------------------------------------------------------------------------------------------------
-# plot and group things yr1 area
-xlabels = np.array( data[list(data.keys())[0]]['dbname'].values )
-ndbs = len(xlabels)
-for j, to_plot in enumerate( ['Area (deg2)', '$i$-band depth: median', '$i$-band depth: std', 'Ngal'] ):
-    plt.clf()
-    nrows, ncols = 1, 2
-    fig, axes = plt.subplots(nrows, ncols)
-    plt.subplots_adjust(wspace=1.0, hspace=0.2, top=0.9)
-    
-    for i, yr in enumerate( data ):
-        if to_plot in data[yr]:
-            data_to_plot = data[yr][to_plot].values
-            if i + j == 0:
-                print('Ordering by ascending %s for %s' % (to_plot, yr) )
-                ind = np.argsort( data_to_plot )
-                mid = int(len(ind)/2)
-            # plot  
-            axes[0].plot(data_to_plot[ ind[0:mid] ] , range(ndbs)[0:mid], '%s'%shapes[i], color=colors[i], label=yr_label[yr]) 
-            axes[1].plot(data_to_plot[ ind[mid:] ] , range(ndbs)[mid:], '%s'%shapes[i], color=colors[i], label=yr_label[yr]) 
-    # plot 18K limit for area
-    if to_plot == 'Area (deg2)':
-        axes[0].plot(( [18000] * ndbs)[0:mid], range(ndbs)[0:mid], 'r--', lw=2, label='18K') 
-        axes[1].plot(( [18000] * ndbs)[mid:], range(ndbs)[mid:], 'r--', lw=2, label='18K') 
-    # plot details
-    axes[-1].legend(bbox_to_anchor=(1.,1))
-    axes[0].set_yticks( range(ndbs)[0:mid] )
-    axes[0].set_yticklabels(xlabels[ ind[0:mid] ] )
-    axes[1].set_yticks( range(ndbs)[mid:] )
-    axes[1].set_yticklabels(xlabels[ ind[mid:] ] ) #rotation=90)
-    # axis lims
-    min_val, max_val = axes[0].get_xlim()
-    other_min, other_max = axes[1].get_xlim()
-    min_val = min([min_val, other_min])
-    max_val = max([max_val, other_max])
-    for i in range(2):
-        xlabel = r'%s' % to_plot
-        if to_plot == 'Ngal':
-            xlabel += r' (%s)' % redshift_bin
-        axes[i].set_xlabel(xlabel)
-        axes[i].set_xlim(min_val, max_val)
-    # color the ticks by folder name
-    folder_colors = np.array(folder_colors)
-    for ytick, color in zip(axes[0].get_yticklabels(), folder_colors[ ind[0:mid] ]):
-        ytick.set_color(color)
-    for ytick, color in zip(axes[1].get_yticklabels(), folder_colors[ ind[mid:] ]):
-        ytick.set_color(color)
-    # overall legend
-    axes[0].legend(custom_lines, grp_labels, bbox_to_anchor=(2.8, 1.1), frameon=True, ncol=7)
-    # fig size
-    plt.gcf().set_size_inches(20, 15)
-    # set up to save
-    if to_plot == 'Area (deg2)':
-        plot_label = 'area'
-    if to_plot == '$i$-band depth: median':
-        plot_label = 'iband_med-depth'
-    if to_plot == '$i$-band depth: std':
-        plot_label = 'iband_std-depth'
-    if to_plot == 'Ngal':
-        plot_label = 'ngal_%s' % redshift_bin
-    # save fig
-    filename = 'compare_%s_%sdbs_ordered_by_area.png'%(plot_label, ndbs_tot)
-    plt.savefig('%s/%s'%(results_dir, filename), format= 'png', bbox_inches='tight')
-    print('\n# Saved %s'%filename)
-    plt.close('all')
+
 
 # -----------------------------------------------------------------------------------------------------
 outdir = '%s/stats/' % results_dir
