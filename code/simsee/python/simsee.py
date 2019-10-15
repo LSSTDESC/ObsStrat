@@ -1,7 +1,7 @@
 #!/bin/env python
 "Simulate seeing based on a model."
 
-
+import logging
 import sys
 from argparse import ArgumentParser
 import configparser
@@ -10,6 +10,7 @@ import csv
 import numpy as np
 import pandas as pd
 import astropy.time
+from scipy.interpolate import UnivariateSpline
 
 # constants
 
@@ -17,7 +18,10 @@ __author__ = "Eric H. Neilsen, Jr."
 __maintainer__ = "Eric H. Neilsen, Jr."
 __email__ = "neilsen@fnal.gov"
 
-year_length_days = 365.24217
+YEAR_LENGTH_DAYS = 365.24217
+CONSTANT_MEAN = False
+
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 # exception classes
 
@@ -47,8 +51,7 @@ def seeing(start_mjd, end_mjd, freq,
             (peak r0 in days after November 17)
         nightly_coeff: AR1 model coefficient for nightly variation
         nightly_innovation: amplitude of nightly model variation in log10(r0)
-        sample_coeff: AR1 model coefficient for sample variation
-        sample_innovation: amplitude of sample model variation in log10(r0)
+        sample_coeff: AR1 model coefficient for sample variation sample_innovation: amplitude of sample model variation in log10(r0)
 
     Returns:
         a generator function that generates seeing values at samples
@@ -78,6 +81,10 @@ def seeing(start_mjd, end_mjd, freq,
     SeeingSample(mjd=61100.01388..., elapsed_seconds=1200, r0=0.06491..., seeing=1.31761...)
 
     """
+    printed_month = ''
+    printed_year = 0
+
+
     if random_seed is not None:
         np.random.seed(random_seed)
 
@@ -103,6 +110,7 @@ def seeing(start_mjd, end_mjd, freq,
                         + seasonal_offset(mjd + 0.5)
                         + nightly_offset)
         night_mjd = calc_night_mjd(mjd)
+
         # iterate over samples within the night
         for sample_offset in sample_offsets:
             if mjd > end_mjd:
@@ -113,6 +121,7 @@ def seeing(start_mjd, end_mjd, freq,
 
             log_r0 = night_log_r0 + sample_offset
             r0 = np.power(10, log_r0)
+                
             seeing = vk_seeing(r0, outer_scale)
             kol_seeing = 60*60*np.degrees(0.98*5e-7/r0)
             yield SeeingSample(mjd, elapsed_seconds, r0, seeing,
@@ -131,13 +140,13 @@ def sim_seeing(fp=sys.stdout, first=False, **kwargs):
 
     The remaining arguments are as in simsee.seeing
     """
-    writer = csv.writer(sys.stdout, delimiter="\t")
+    writer = csv.writer(fp, delimiter="\t")
     for seeing_record in seeing(**kwargs):
         if first:
             writer.writerow(seeing_record._fields)
             first = False
         writer.writerow(seeing_record)
-
+    
 
 def interpolate_seeing(dimm, fp=sys.stdout, **kwargs):
     """Interpolate gaps in seeing data.
@@ -151,6 +160,9 @@ def interpolate_seeing(dimm, fp=sys.stdout, **kwargs):
 
     The remaining arguments are the same as in sim_seeing.
     """
+    printed_month = ''
+    printed_year = 0
+    
     if 'random_seed' in kwargs:
         random_seed = kwargs['random_seed']
         if random_seed is not None:
@@ -159,7 +171,7 @@ def interpolate_seeing(dimm, fp=sys.stdout, **kwargs):
     start_mjd = kwargs['start_mjd']
     end_mjd = kwargs['end_mjd']
     years_offset = kwargs['years_offset']
-    mjd_offset = int(round(year_length_days*years_offset))
+    mjd_offset = int(round(YEAR_LENGTH_DAYS*years_offset))
     mean_log_r0 = kwargs['mean_log_r0']
     seasonal_amplitude = kwargs['seasonal_amplitude']
     seasonal_phase = kwargs['seasonal_phase']
@@ -180,13 +192,27 @@ def interpolate_seeing(dimm, fp=sys.stdout, **kwargs):
     # Do thes before we filter on time to include measuremens
     # at edge nights that are not within the strict limits,
     # if the limits are part way into their nights.
+    if CONSTANT_MEAN:
+        mjd_offset = int(round(YEAR_LENGTH_DAYS*years_offset))
+        mjds = np.arange(calc_night_mjd(start_mjd) - mjd_offset - 1, calc_night_mjd(end_mjd) - mjd_offset + 2)        
+        longterm_fit_log_r0 = pd.DataFrame({'night_mjd': mjds, 'fit_diff': mean_log_r0}).set_index('night_mjd', drop=False)
+    else:
+        mjd_offset = int(round(YEAR_LENGTH_DAYS*years_offset))
+        mjds = np.arange(calc_night_mjd(start_mjd) - mjd_offset - 1, calc_night_mjd(end_mjd) - mjd_offset + 2)        
+        dimm_nights = dimm.groupby('night_mjd').agg({'log_r0': 'mean'}).reset_index(drop=False)
+        seasonal_diff = dimm_nights.log_r0 - year_cos(dimm_nights.night_mjd, seasonal_phase, seasonal_amplitude)
+        calc_longterm_diff =  UnivariateSpline(dimm_nights.night_mjd.values, seasonal_diff, k=2, s=0.012*len(dimm_nights), ext=3)
+        longterm_fit_log_r0 = pd.DataFrame({'night_mjd': mjds, 'fit_diff': calc_longterm_diff(mjds)}).set_index('night_mjd', drop=False)
+        longterm_fit_log_r0.to_csv('longterm_fit_log_r0.txt', sep="\t")
+        logging.info("Long term fit params: " +  str(longterm_fit_log_r0.fit_diff.describe()))
+        
     nightly_dimm = interpolate_night_seeing(dimm,
                                             calc_night_mjd(start_mjd),
                                             calc_night_mjd(end_mjd) + 1,
-                                            years_offset, mean_log_r0,
+                                            years_offset, longterm_fit_log_r0,
                                             seasonal_amplitude, seasonal_phase,
                                             nightly_coeff, nightly_innovation)
-
+    
     # actually filter to get measurements in the requested time range
     dimm_in_time = dimm.query('{0} < mjd < {1}'.format(start_mjd-mjd_offset,
                                                        end_mjd-mjd_offset))
@@ -199,10 +225,21 @@ def interpolate_seeing(dimm, fp=sys.stdout, **kwargs):
 
     prev_mjd = start_mjd
 
-    writer = csv.writer(sys.stdout, delimiter="\t")
+    writer = csv.writer(fp, delimiter="\t")
     writer.writerow(SeeingSample._fields)
+    printed_month = ""
+
+    sample_offsets = []
     for dimm_time, dimm_row in dimm_in_time.iterrows():
         next_mjd = dimm_row.mjd + mjd_offset
+
+        # Progress reporting
+        night_date = pd.to_datetime(next_mjd + 2400000, unit='D', origin='julian')
+        month_name = night_date.month_name()
+        if month_name != printed_month:
+            logging.info(f'Creating {night_date.month_name()}, {night_date.year}')
+            printed_month = month_name
+            
         if next_mjd > prev_mjd + freq_days:
             try:
                 sim_start_mjd = prev_mjd + freq_days
@@ -222,8 +259,13 @@ def interpolate_seeing(dimm, fp=sys.stdout, **kwargs):
                 # This is the first point
                 init_sample_offset = 0
 
-            nightly_offsets = [n - seasonal_offset(start_mjd+0.5) - mean_log_r0
-                               for n in nightly_dimm.loc[sim_start_night:sim_end_night]]
+            sample_offsets.append(init_sample_offset)
+
+            nightly_offsets = nightly_dimm.loc[sim_start_night:sim_end_night].values \
+                              - seasonal_offset(
+                                  0.5 + nightly_dimm.loc[sim_start_night:sim_end_night].index.values) \
+                              - mean_log_r0
+            
             sim_seeing(fp,
                        start_mjd=sim_start_mjd,
                        end_mjd=sim_end_mjd,
@@ -391,7 +433,7 @@ def calc_night_mjd(mjd, obs_lon=-70.8062):
 
 def interpolate_night_seeing(dimm, start_mjd, end_mjd,
                              years_offset,
-                             mean_log_r0,
+                             longterm_fit_log_r0,
                              seasonal_amplitude, seasonal_phase,
                              nightly_coeff, nightly_innovation,
                              random_seed=None):
@@ -401,7 +443,7 @@ def interpolate_night_seeing(dimm, start_mjd, end_mjd,
         samples: a pandas.DataFrame of seeing samples
         start_mjd: the first mjd in the sequence
         end_mjd: the last mjd in the sequence
-        mean_log_r0: the global mean log10(r0)
+        longterm_fit_log_r0: the expected log10(r0)
         seasonal_amplitude: amplitude of seasonal variation in log10(r0)
         seasonal_phase: phase of seasonal variation in log10(r0)
             (peak r0 in days after November 17)
@@ -432,33 +474,40 @@ def interpolate_night_seeing(dimm, start_mjd, end_mjd,
     dtype: float64
 
     """
+    logging.info("Interpolating night seeing")
+    
     if random_seed is not None:
         np.random.seed(random_seed)
 
-    mjd_offset = int(round(year_length_days*years_offset))
+    mjd_offset = int(round(YEAR_LENGTH_DAYS*years_offset))
 
-    def seasonal_offset(mjd):
+    def calc_seasonal_offset(mjd):
         return year_cos(mjd, seasonal_phase, seasonal_amplitude)
 
-    dimm_nights = dimm.groupby('night_mjd').agg({'log_r0': 'mean'})
+    dimm_nights = dimm.groupby('night_mjd').agg({'log_r0': 'median'}).reset_index(drop=False)
 
     mjds = []
     log_r0s = []
     nightly_offset = 0
+    nightly_offsets = []
     for mjd in range(start_mjd, end_mjd+1):
+        dimm_mjd = mjd - mjd_offset
+        expected_seasonal_offset = calc_seasonal_offset(mjd + 0.5)
+        this_longterm_fit_log_r0 = longterm_fit_log_r0.loc[dimm_mjd, 'fit_diff']
         try:
-            log_r0 = dimm_nights.loc[mjd-mjd_offset, 'log_r0']
-            season_log_r0 = mean_log_r0 + seasonal_offset(mjd + 0.5)
-            nightly_offset = log_r0 - season_log_r0
+            log_r0 = dimm_nights.loc[dimm_mjd, 'log_r0']
+            nightly_offset = log_r0 - this_longterm_fit_log_r0 - expected_seasonal_offset
         except KeyError:
             nightly_offset = nightly_coeff * nightly_offset \
                              + np.random.normal(0.0, nightly_innovation)
-            log_r0 = season_log_r0 + nightly_offset
+            log_r0 = nightly_offset + this_longterm_fit_log_r0 + expected_seasonal_offset
         mjds.append(mjd)
         log_r0s.append(log_r0)
+        nightly_offsets.append(nightly_offset)
 
     dimm_interp_nights = pd.Series(log_r0s, index=mjds)
-
+    dimm_interp_nights.index.name = 'mjd'
+    
     return dimm_interp_nights
 
 
@@ -491,7 +540,11 @@ def load_dimm(fname, obs_lon=-70.8062, outer_scale=20):
     2004-03-17 02:37:58  53081.109699      53080
 
     """
+    logging.info("Loading DIMM data")
     dimm = pd.read_hdf(fname)
+    if 'fwhm' in dimm.columns and 'seeing' not in dimm.columns:
+        dimm['seeing'] = dimm['fwhm']
+        
     dimm = dimm.query('0.05 < seeing < 10.0').copy()
     dimm['r0'] = 0.98*5e-7/np.radians(dimm.seeing/(60*60))
     dimm['log_r0'] = np.log10(dimm.r0)
@@ -529,7 +582,7 @@ def year_cos(mjd, seasonal_phase, seasonal_amplitude):
     """
     mjd_jan_1_2000 = 51544
 
-    angle = (mjd - mjd_jan_1_2000 - seasonal_phase)*2*np.pi/year_length_days
+    angle = (mjd - mjd_jan_1_2000 - seasonal_phase)*2*np.pi/YEAR_LENGTH_DAYS
     return seasonal_amplitude * np.cos(angle)
 
 
