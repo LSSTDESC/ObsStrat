@@ -33,24 +33,26 @@
 
 \begin{abstract}
 
-The \texttt{opsim4} operations simulation program for the LSST astronomical
-survey uses a database of seeing values covering the range of times to
-be simulated. I describe the creation of such a database using Dual
-Image Motion Monitor (DIMM) data collected at Cerro Pachon from
-2014-03-17 to 2018-03-21. This data has significant gaps, so I model
-the data and generate artificial data in the gaps according to the
-model. The model consists of a sinusoidal variation with a period of
-one year, an autoregressive (AR1) model for variations in mean seeing
-from one night to the next, and another AR1 model for variations on a
-5 minute timescale. I create two databases according to this
-procedure, one based on DIMM data from 2008-01-01 to 2018-12-31, and
-the other for 2005-01-01 to 2015-12-31, and run \texttt{opsim4} simulations
-using each. I also run an otherwise identical simulation using the
-default seeing database. The results show a variation in mean point
-spread function (PSF) width with right ascension with peak-to-peak
-differences of 17\% and 16\%, respectively, compared to a 2\%
-variation in the default seeing database.
- 
+The \texttt{opsim4} operations simulation program for the LSST
+astronomical survey uses a database of seeing values covering the
+range of times to be simulated. I describe the creation of such a
+database using Dual Image Motion Monitor (DIMM) data collected at
+Cerro Pachon from 2014-03-17 to 2019-10-07. In times during which the
+data overlap, I compare the distribution of DIMM seeing values to the
+seeing measured in DECam images, taken at a site ~10 km
+away. Instrumental problems in the DIMM may indicate unreliable
+measuremens, cuts on image quality (as indicated by the measured
+Strehl ratio) were explored. The DIMM has significant gaps, so I model
+the data (with and without cuts on Strehl ratio) and generate
+artificial data in the gaps according to the model. The model consists
+of a sinusoidal variation with a period of one year, an autoregressive
+(AR1) model for variations in mean seeing from one night to the next,
+and another AR1 model for variations on a 5 minute timescale. I create
+four databases according to this procedure, two based on DIMM data
+starting 2006-01-01 (with and without a Strehl ratio cut), and two
+starting 2009-01-01. I then run \texttt{opsim} simulations using each,
+and an otherwise identical simulation using the default seeing
+database, and explore the differences.
 \end{abstract}
 
 % Keywords are ignored in the LSST DESC Note style:
@@ -83,12 +85,12 @@ transient weather patterns. \textcite{2009PASP..121..922E}, for example,
 measure a significant variation in seeing with time of year at Cerro
 Tololo, a site $\sim10 \mbox{ km}$ from Cerro Pachon.
 
-The \texttt{opsim4} operations simulation computer program generates a
-database of exposures plausible for an execution of the survey. Each
-exposure in the database includes several parameters, including the
-time the exposure was taken, the depth of the image (the brightness of
-the faintest objects detected at a given signal to noise ratio), and
-the delivered PSF FWHM. The LSST project and science groups use these
+The \texttt{opsim} operations simulationor generates a database of
+exposures plausible for an execution of the survey. Each exposure in
+the database includes several parameters, including the time the
+exposure was taken, the depth of the image (the brightness of the
+faintest objects detected at a given signal to noise ratio), and the
+delivered PSF FWHM. The LSST project and science groups use these
 databases of simulated exposures to evaluate the data quality that
 would result from different operations strategies. Such evaluations
 can then be used both to select among candidate observing strategies,
@@ -110,8 +112,8 @@ be taken in preference to a more urgent exposure needed for another,
 if the seeing is too poor for the data to be useful for the more
 urgent exposure, but adequate for the less urgent one.
 
-Therefore, the details of the seeing database used by \texttt{opsim4}
-can therefore affect the results in several ways:
+TTherefore, the details of the seeing database used by \texttt{opsim}
+can affect the results in several ways:
 
 \begin{itemize}
   \item The global quality of the survey is strongly affected by the
@@ -172,21 +174,18 @@ Tololo [\cite{2012ASPC..461..201N}]. The model used by \texttt{obstac} included
 both a seasonal component and a short timescale autoregressive model,
 producing seeing values on 5 minute intervals.
 
-Plots in this note were generated using \texttt{jupyter} notebooks
-that can be found in github:
-\url{https://github.com/LSSTDESC/obs_strat/tree/master/doc/seeing}. The
-\texttt{simsee} application itself can be found in the same product:
-\url{https://github.com/LSSTDESC/obs_strat/tree/master/code/simsee}. Data
-files not included in the \texttt{github} product can be found in the
-\texttt{/global/project/projectdirs/lsst/survey\_sims/input/seeing}
-directory on \texttt{cori.nersc.gov}.
+%% Plots in this note were generated using \texttt{jupyter} notebooks
+%% that can be found in github:
+%% \url{https://github.com/LSSTDESC/obs_strat/tree/master/doc/seeing}. The
+%% \texttt{simsee} application itself can be found in the same product:
+%% \url{https://github.com/LSSTDESC/obs_strat/tree/master/code/simsee}. Data
+%% files not included in the \texttt{github} product can be found in the
+%% \texttt{/global/project/projectdirs/lsst/survey\_sims/input/seeing}
+%% directory on \texttt{cori.nersc.gov}.
 
 % ----------------------------------------------------------------------
 
-\section{Methods}
-\label{sec:methods}
-
-\subsection{Overview}
+\section{Overview}
 \label{sec:overview}
 
 The following procedure was followed in generating new seeing
@@ -196,6 +195,10 @@ databases and exploring their effects on \texttt{opsim4} simulations:
 
   \item Obtain the Cerro Pachon DIMM data, and explore it
     interactively, as provided. See section~\ref{sec:dimm}.
+  \item Validate the DIMM data through comparison with seeing
+    estimated using DECam imaging. Examine the agreement between these
+    data sets as a function of the Strehl ratio recorded for the DIMM,
+    and filter the DIMM data accordingly.
   \item For each DIMM measurement, calculate the Fried parameter,
     $r_{0}$, and seeing based on the von K\'arm\'an model using the
     correction given in \cite{2002PASP..114.1156T} and an outer scale
@@ -220,26 +223,26 @@ databases and exploring their effects on \texttt{opsim4} simulations:
     in the resampled data.) Derive a global AR1 model for short
     time-scale residuals using a weighted average of the parameters as
     derived from each sequence.
-  \item Generate two seeing databases, using two different subsets of
-    the Cerro Pachon DIMM data. Use the derived models to fill in gaps
-    in the DIMM data with values randomly generated according to the
-    derived seasonal, nightly, and short-timescale AR models.
-  \item Run three \texttt{opsim4} simulations: one using the default seeing
+  \item Generate four seeing databases, using four different subsets
+    of the Cerro Pachon DIMM data, corresponding to two different
+    start dates, each cut on not cut on Strehl ratio. Use the derived
+    models to fill in gaps in the DIMM data with values randomly
+    generated according to the derived seasonal, nightly, and
+    short-timescale AR models.
+  \item Run five \texttt{opsim4} simulations: one using the default seeing
     database, and one for each of the newly generates seeing
-    databases.
-  \item Compare the results of these three simulations.
+    databases, and compare the results.
 \end{itemize}
 
-\subsection{Cerro Pachon DIMM data}
+\section{Cerro Pachon DIMM data}
 \label{sec:dimm}
 
 \cite{ebustos} kindly provided an the Cerro Pachon DIMM data in the
 form of two text tables, each with a timestamp and an
-airmass-corrected seeing value for a wavelength of 0.5 \micron,
-derived using a Kolmogorov seeing
-model.
+airmass-corrected seeing value for a wavelength of 0.5\micron,
+derived using a Kolmogorov seeing model.
 
-Figure~\ref{fig:monthly-raw-dimm} shows the variation in
+Figure~\ref{fig:monthly-dimm-vs-year} shows the variation in
 reported FWHM seeing values with time. The regular extremes of good
 and poor seeing, shortly after the start and midpoint of each year,
 match well with anecdotal experience, and indicate a significant
@@ -249,28 +252,114 @@ attempt is made to model these longer term trends here. This feature
 is also evident in the autocorrelation function of the nightly means,
 
 \begin{figure*}
-  \includegraphics[width=\columnwidth]{monthly_raw_dimm.png}
-  \caption{Points show the mean FWHM reported by the DIMM for each
-    month. The upper and lower bounds of the dark gray band are
-    LOWESS smoothed curves derived from the 1st and 3rd quartiles of
-    this data.}
-  \label{fig:monthly-raw-dimm}
+  \includegraphics[width=\columnwidth]{monthly_dimm_vs_year.png}
+  \caption{
+    Horizontal black lines show the median DIMM seeing in each
+    month. Dark gray bars extend from the first though the third
+    quartiles for each month, and light bars from the 5\% to 95\%
+    quantiles.
+    The think red line shows the median FWHM seeing as derived from
+    DECam imaging (after subtraction in quadrature of a 0.45''
+    instrumental contribution, and correction to zenith and
+    500nm). Thin red lines show the first and third quartiles, and
+    thin orange lines the 5\% and 95\% quantiles.
+    }
+  \label{fig:monthly-dimm-vs-year}
 \end{figure*}
+
+
+Figure~\ref{fig:dimm-vs-decam} compares the seeing quantiles for
+different months of DIMM and DECam data. The correspondence is worst
+when the seeing is very poor (and so is unlikely to be useful in any
+case), and in very good seeing, during which DECam seems to hit a hard
+floor (about where the PSF becomes undersampled).
+
+\begin{figure*}
+  \includegraphics[width=\columnwidth]{dimm_vs_decam.png}
+  \caption{
+    Each point represents a quantile in the FWHM distribution of a
+    month, as measured by DECam (horizontal axis) and the DIMM
+    (vertical). The shape and size indicated which quantile, and the
+    color the median DIMM Strehl ratio in that month.
+    }
+  \label{fig:dimm-vs-decam}
+\end{figure*}
+
+\section{DIMM data quality and Strehl ratio}
+
+A DIMM can give unreliable results if it is out of focus or poorly
+aligned. One diagnostic is the Strehl ratio of the DIMM data (see Wang
+et al 2006). However, the Strehl ratio may also be low due to
+atmospheric seeing itself. Figure~\ref{fig:strehl-boxplots} shows both
+of these effects: the upper panel shows that DIMM and DECam seeing are
+well matched except when the Strehl ratio falls below 0.25, where the
+DIMM shows significantly wider PSF FWHMs than the corresponding DECam
+data. On the other hand, the lower panel shows that the DECam seeing
+is genuinely worse when the DIMM Strehl ratio is less than 0.25, such
+that filtering the DIMM data based on Strehl ratio will bias the data
+in the other direction. Fortunately, the fraction of DIMM data with a
+Strehl ratio below 0.25 is low (see figure~\ref{fig:strehl-hist}), so
+it may not make much difference. Seeing simulations based on cut and
+uncut DIMM data will be used to indicated the range.
+
+\begin{figure*}
+  \includegraphics[width=\columnwidth]{strehl_boxplots.png}
+  \caption{
+    The upper panel shows the distribution of the fractional
+    difference between DECam and DIMM seeing in hourly bins, split by
+    the median DIMM Strehl ratio for these bins. The lower panel shows
+    a similar distribution of the simple DECam seeing, similarly
+    binned. Blue bars show the median, and red boxes the second and
+    third quaritiles. Whiskers indicate the 5\% and 95\% quantiles.
+    }
+  \label{fig:strehl-boxplots}
+\end{figure*}
+
+\begin{figure*}
+  \includegraphics[width=\columnwidth]{strehl_hist.png}
+  \caption{
+    A histogram of the median Strehl ratio in each hour of DIMM observing.
+  }
+  \label{fig:strehl-hist}
+\end{figure*}
+
+\section{The legacy seeing database}
+
+As of October 2019, \texttt{opsim} uses a seeing database artificially
+generated using statistics derived from Pachon DIMM data taken between
+2004-05-06 and 2006-01-20, after a cuts on data with low Strehl ratios
+in the left star image. Figure~\ref{fig:claver-strehl-cut} indicates
+that the cut value was 0.3 for data taken before 2005-06-17
+(MJD=53538), and 0.5 for data taken after.
+
+\begin{figure*}
+  \includegraphics[width=\columnwidth]{claver_strehl_cut.png}
+  \caption{
+    2D histograms of the left DIMM Strehl ratio and date in the subset
+    of DIMM data used to generate the legacy \texttt{opsim} seeing data, before
+    (left) and after (right) appliction of cuts on Strehl ratios.
+  }
+  \label{fig:claver-strehl-cut}
+\end{figure*}
+
+
+\section{The Fried parameter}
 
 The Fried parameter, $r_0$, was then calculated for each reported
 value by inverting equation~5 of \cite{2002PASP..114.1156T}.
-Figure~\ref{fig:raw-r0-dist} shows the
+Figure~\ref{fig:r0-dist} shows the
 distribution of measured values for the $r_0$, in meters (left) and
 $\log(r_0)$ (right), together with best fit normal
 distributions. Neither distribution is precisely normal, but $\log(
-r_0)$ is noticeably closer to normal.
+r_0)$ is noticeably closer.
 
 \begin{figure*}
-  \includegraphics[width=\columnwidth]{raw_r0_dist.png}
-  \caption{The distribution of the Fried parameter, $r_0$ in meters
+  \includegraphics[width=\columnwidth]{r0_dist.png}
+  \caption{The upper row shows the distribution of the Fried parameter, $r_0$ in meters
     (left), and $\log(r_0)$ (right), together with best fit normal
-    distributions.}
-  \label{fig:raw-r0-dist}
+    distributions. The lower row shows the corresponding
+    probability plots.}
+  \label{fig:r0-dist}
 \end{figure*}
 
 %% The
@@ -310,14 +399,15 @@ $\log(r_0)$ (equation~\ref{eq:seasonal-sine}).
 
 \begin{table}
 \begin{center}
-\begin{tabular}{ l l l } \hline
-  $a$ & -0.9170 & corresponds to a seeing of 0.83'' (Kolmogorov)\\
-  $c$ & 0.048 & corresponds to a peak to peak amplitude of 0.18''\\
-  $d$ & 18.8 & best seeing on January 18, worst on July 21 \\ \hline
-  Nightly $\mbox{L1}$ & 0.2 \\
-  Nightly $e$ & 0.084 \\ \hline
-  5 minute $\mbox{L1}$ & 0.7 \\
-  5 minute $e$ & 0.052 \\ \hline
+  \begin{tabular}{ l l l } \hline
+      & uncut & cut \\ \hline
+  $a$ & -0.9163 & -0.9119\\
+  $c$ & 0.04 & 0.04 \\
+  $d$ & 24.3 &  23.2 \\ \hline
+  Nightly $\mbox{L1}$ & 0.23 & 0.22 \\
+  Nightly $e$ & 0.082 & 0.088\\ \hline
+  5 minute $\mbox{L1}$ & 0.68 & 0.73\\
+  5 minute $e$ & 0.052 & 0.052\\ \hline
 \end{tabular}
 \caption{Parameters for the least squares fit of Pachon DIMM data to
   equation~\ref{eq:seasonal-sine}, the nightly autoregressive model,
@@ -343,7 +433,7 @@ structure.
   \caption{The top plot shows the distributions of mean monthly values
     for each month. The blue bar shows the median mean value for that
     month, the box the 1st and 3rd quartiles, and the whiskers the
-    full range. The bottom plot shows the distributions after
+    5\% and 95\% quantiles. The bottom plot shows the distributions after
     subtraction of the seasonal fit to $\log(r_0)$.}
   \label{fig:monthly-boxplot}
 \end{figure*}
@@ -401,10 +491,10 @@ the AR1 fit is sharper than the measured one, and does not capture the
 tail on the low-$\log(r_0)$ side of the distribution. The later is a
 fundamental limitation of the model. The sharper distribution likely
 arises from the fit of a collection of sub-sequences of nights, rather
-than a full, uninterrupted data set: figure~\ref{fig:monthly-raw-dimm}
-clearly shows variations on timescales of months to years, too long to
-be captured by the sub-sequences of nights to which the AR1 model was
-fit.
+than a full, uninterrupted data set:
+figure~\ref{fig:monthly-dimm-vs-year} clearly shows variations on
+timescales of months to years, too long to be captured by the
+sub-sequences of nights to which the AR1 model was fit.
 
 \begin{figure*}
   \includegraphics[width=\columnwidth]{night_ar1_dist.png}
@@ -453,7 +543,7 @@ strongly dependent on weather.
 \subsection{Seeing data generation}
 \label{sec:data-generation}
 
-Much of the data to be used by an \texttt{opsim4} simulation can be copied
+Much of the data to be used by an \texttt{opsim} simulation can be copied
 directly from the historical DIMM data, after conversion from a
 Kolmogorov to a von~K\'arm\'an turbulence model and application of an
 offset in time by an integer number of years. The gaps can then be
@@ -467,34 +557,49 @@ sequences of short time-scale (5 minute interval) points, artificial
 data is generated similarly, using the nightly mean, the last good
 DIMM data point, and random values of $e_t$.
 
-Two different seeing databases were generated: one using a 14 year
+Two different seeing databases were generated: one using a 13 year
 offset (such that the 2022-01-01T00:00:00Z data point in the data set
-is copied from the 2008-01-01T00:00:00Z DIMM data), and one using a 17
+is copied from the 2009-01-01T00:00:00Z DIMM data), and one using a 16
 year offset, such that we take full advantage of all available DIMM
 data. Note that there is overlap between the DIMM data used by these
 two database, so the results are not uncorrelated.
 
-\subsection{\texttt{opsim4} simulations}
+\subsection{\texttt{opsim} simulations}
 \label{sec:simulations}
 
-Three separate simulations were run using \texttt{opsim4-081217}, as
-distributed from \url{https://hub.docker.com/r/oboberg/opsim4/}. Each
-simulation was run for a full 10-year LSST survey, with the default
-configuration except for the seeing database.
+Three separate simulations were run using \texttt{opsim}, specificaly
+\texttt{sims\_featureScheduler} revision \texttt{b9f8585} and
+\texttt{sims\_featureScheduler\_runs\_1.3} revision
+\texttt{2aba222}. Each simulation was run for a full 10-year LSST
+survey, with the default configuration except for the seeing database.
 
 \begin{description}
-  \item[\texttt{des70\_2001}] a 10-year simulation using the seeing database
-    provided in the \texttt{opsim4-081217} container, used as a reference.
-  \item[\texttt{des70\_2012}] a simulation using the
-    \texttt{simsee\_pachon6} seeing database, which uses DIMM data
-    from 2008-01-01 to 2018-12-31 to to simulate 2022-01-01 to
-    2032-12-31. This simulation is otherwise identical to
-    \texttt{des70\_2001}.
-  \item[\texttt{des70\_2013}] a simulation using the
-    \texttt{simsee\_pachon7} seeing database, which uses DIMM data
-    from 2005-01-01 to 2015-12-31 to to simulate 2022-01-01 to
-    2032-12-31. This simulation is otherwise identical to
-    \texttt{des70\_2001}.
+  \item[\texttt{baseline\_v1.3\_10yrs}] a 10-year simulation using the defaults
+    seeing database, used as a reference.
+  \item[\texttt{ss58777y13\_v1.3\_10yrs}] a simulation using the
+    \texttt{simsee\_pachon\_58777\_13.db} seeing database, which uses
+    uncut DIMM data from 2009-01-01 to 2019-10-07 to simulate
+    2022-01-01 to 2033-10-07 and the seeing model derived from uncut
+    DIMM data to generate simulated data for gaps. This simulation is otherwise identical
+    to \texttt{baseline\_v1.3\_10yr}.
+  \item[\texttt{ss58777y16\_v1.3\_10yrs}] a simulation using the
+    \texttt{simsee\_pachon\_58777\_16.db} seeing database, which uses
+    uncut DIMM data from 2006-01-01 to 2019-10-07 to simulate
+    2022-01-01 to 2036-10-07 and the seeing model derived from uncut
+    DIMM data to generate simulated data for gaps. This simulation is otherwise identical
+    to \texttt{baseline\_v1.3\_10yr}.
+  \item[\texttt{ss58779y13\_v1.3\_10yrs}] a simulation using the
+    \texttt{simsee\_pachon\_58779\_13.db} seeing database, which uses
+    cut DIMM data from 2009-01-01 to 2019-10-07 to simulate 2022-01-01
+    to 2033-10-07 and the seeing model derived from cut DIMM data to
+    generate simulated data for gaps. This simulation is otherwise
+    identical to \texttt{baseline\_v1.3\_10yr}.
+  \item[\texttt{ss58779y16\_v1.3\_10yrs}] a simulation using the
+    \texttt{simsee\_pachon\_58779\_16.db} seeing database, which uses
+    cut DIMM data from 2006-01-01 to 2019-10-07 to simulate 2022-01-01
+    to 2036-10-07 and the seeing model derived from cut DIMM data to
+    generate simulated data for gaps. This simulation is otherwise
+    identical to \texttt{baseline\_v1.3\_10yr}.
 \end{description}
 
 % ----------------------------------------------------------------------
@@ -503,30 +608,36 @@ configuration except for the seeing database.
 \label{sec:results}
 
 Figure~\ref{fig:simseecomp} shows the seeing as a function of time, as
-recorded in the databases produced by each of the three runs of
-\texttt{opsim4}. The two year periodicity of the seeing that results
+recorded in the databases produced by each of the five runs of
+\texttt{opsim}. The two year periodicity of the seeing that results
 from the default two year input database is apparent in the leftmost
 plot in the figure. Yearly periodicity, expected from the seasonal
 variation in the DIMM data and model, is apparent in the plots from
-the other two runs. The average seeing in the default model is also
-better than either of the revised simulations: the mean FWHM in the
-revised simulations are 13\% and 14\% wider than the default.
+the other two runs. 
 
 
 \begin{figure*}
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{seeing_2001.png}
+\begin{center}
+  \minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_baseline_v1_3_10yrs.png}
 \endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{seeing_2012.png}
+\end{center}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_ss58777y13_v1_3_10yrs.png}
 \endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{seeing_2013.png}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_ss58777y16_v1_3_10yrs.png}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_ss58779y13_v1_3_10yrs.png}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_ss58779y16_v1_3_10yrs.png}
 \endminipage\hfill
   \caption{Each plot shows the variation in seeing with time
-    produced by a different run of \texttt{opsim4}. The leftmost plot
+    produced by a different run of \texttt{opsim}. The top plot
     shows the seeing for the default seeing database, and the
-    remaining two show the seeing for each of the seeing databases
+    remaining plots show the seeing for each of the seeing databases
     produced by \texttt{simsee}.} 
   \label{fig:simseecomp}
 \end{figure*}
@@ -535,66 +646,76 @@ Figure~\ref{fig:simseemaps} shows maps of the mean seeing in the LSST
 wide-fast-deep (WFD) survey from each simulation. Degradation is
 apparent near the northern and southern edges of all three
 simulations. This is expected, because these areas are never at low
-airmass from Cerro Pachon. The seeing in the default simulation
-shows no obvious trends otherwise. In the simulations that use the
-revised seeing databases, however, there is an obvious large scale
-trend with R.A. This same trend is also apparent in the plot of the
-mean seeing as a function of R.A. in the left plot of
-figure~\ref{fig:seelimra}: seeing in fields that transit when the
-seeing is poor ($180\degree < \mbox{R.A.} < 330\degree$) have a mean
-FWHM 17\% wider than those that transit when the seeing is good
-($60\degree < \mbox{R.A.} < 150\degree$).
+airmass from Cerro Pachon. At a give range in declination, there is
+also variation with R.A. This variation is much more pronounced in the
+revised seeing databases than in the baseline: in the baseline, the
+best 6 hours of R.A. have a mean seeing 6\% better than the worst 6
+hours, while for the revised seeing simulations the difference is
+about 12\% (or 14\% if not cut on Strehl ratio is applied). 
 
 \begin{figure*}
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{seeing_map_2001.png}
+\begin{center}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_map_baseline_v1_3_10yrs.png}
 \endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{seeing_map_2012.png}
+\end{center}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_map_ss58777y13_v1_3_10yrs.png}
 \endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{seeing_map_2013.png}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_map_ss58777y16_v1_3_10yrs.png}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_map_ss58779y13_v1_3_10yrs.png}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{seeing_map_ss58779y16_v1_3_10yrs.png}
 \endminipage\hfill
   \caption{Each plot shows the map of mean seeing
-    produced by a different run of \texttt{opsim4}. The leftmost plot
+    produced by a different run of \texttt{opsim}. The top plot
     shows the seeing for the default seeing database, and the
-    remaining two show the seeing for each of the seeing databases
+    remaining plots show the seeing for each of the seeing databases
     produced by \texttt{simsee}.} 
   \label{fig:simseemaps}
 \end{figure*}
 
 The variation in seeing corresponds to a variation in depth, shown in
 figure~\ref{fig:simdepthmaps} and the right-hand plot in
-figure~\ref{fig:seelimra}: the $5-\sigma$ magnitude limit in fields
-that transit when the seeing is poor ($180\degree < \mbox{R.A.} <
-330\degree$) is $\sim 0.12$ shallower than those that transit when the
-seeing is good ($60\degree < \mbox{R.A.} < 150\degree$).
+figure~\ref{fig:seelimra}, so there is a
+similar difference in the amplitude of variation for limiting
+magnitude: in the baseline, there is a difference of about 0.14
+magnitudes between the mean limiting magnitudes of the best and worst
+6 hours of R.A., while in the revised seeing simulations the difference is
+about 0.20 magnitudes.
 
 \begin{figure*}
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{depth_map_2001.png}
+\begin{center}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{depth_map_baseline_v1_3_10yrs.png}
 \endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{depth_map_2012.png}
+\end{center}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{depth_map_ss58777y13_v1_3_10yrs.png}
 \endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\columnwidth]{depth_map_2013.png}
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{depth_map_ss58777y16_v1_3_10yrs.png}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{depth_map_ss58779y13_v1_3_10yrs.png}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\columnwidth]{depth_map_ss58779y16_v1_3_10yrs.png}
 \endminipage\hfill
   \caption{Each plot shows the map of mean depth
-    produced by a different run of \texttt{opsim4}. The leftmost plot
+    produced by a different run of \texttt{opsim}. The top plot
     shows the depth for the default seeing database, and the
-    remaining two show the depth for each of the seeing databases
+    remaining plots show the depth for each of the seeing databases
     produced by \texttt{simsee}.} 
   \label{fig:simdepthmaps}
 \end{figure*}
 
 \begin{figure*}
-\minipage{0.5\textwidth}
-  \includegraphics[width=\columnwidth]{seeing_by_ra.png}
-\endminipage\hfill
-\minipage{0.5\textwidth}
-  \includegraphics[width=\columnwidth]{depth_by_ra.png}
-\endminipage\hfill
+  \includegraphics[width=\columnwidth]{seeing_depth_by_ra.png}
   \caption{The seeing and depth as a function of RA for different runs
   of \texttt{opsim4}.} 
   \label{fig:seelimra}
@@ -607,34 +728,30 @@ seeing is good ($60\degree < \mbox{R.A.} < 150\degree$).
 \section{Discussion}
 \label{sec:discussion}
 
-The use of real seeing data (and a more elaborate model for
-times when such data is not available) in operations simulations
-demonstrates a significant, large angular scale variation in seeing
-(and therefore depth) using the current strategy. The impact of this
-variation on science results needs to be carefully evaluated and, if
-warranted by the science, adjustments to the strategy made to mitigate
-these effects.
+The use of a longer baseline of real seeing data (and a more elaborate
+model for times when such data is not available) in operations
+simulations demonstrates a significant, large angular scale variation
+in seeing (and therefore depth) using the current strategy, as well as
+a mean shift to wider PSF (and therefore shallower limiting
+magnitude). The impact of this variation on science results needs to
+be carefully evaluated and, if warranted by the science, adjustments
+to the strategy made to mitigate these effects.
 
 Such mitigation strategies will necessarily come at a cost. The
 current strategy is designed to observe fields when they are near
 transit. Such a strategy optimizes the quality of data taken at any
 given time: a field observed near transit at a given declination will
 have a better FWHM than another at the same declination, but further
-from transit. Observing fields dear transit, however, necessarily maps
+from transit. Observing fields near transit, however, necessarily maps
 time of observation directly to sidereal time, which is correlated
 with time of year, and therefore the seasonal variation in seeing.
 
 This correlation can be reduced by observing fields when they are
-further from transit, depending on seeing conditions. For example, the
-strategy could be modified to select fields in the ($180\degree <
-\mbox{R.A.} < 330\degree$) range whenever such fields are at an
-airmass better than some threshold and the seeing is better than
-average, and in the ($60\degree < \mbox{R.A.} < 150\degree$) range
-when it is worse than average. Such a strategy will tend to even out
-the extremes in the variation. However (if the strategy maintains the
-global distribution in declination) these exposures will be at higher
-airmasses than those that would have been taken at transit, which will
-degrade the overall mean image quality.
+further from transit, depending on seeing conditions. Such a strategy
+can be designed to even out the extremes in the variation. However (if
+the strategy maintains the global distribution in declination) these
+exposures will be at higher airmasses than those that would have been
+taken at transit, which will degrade the overall mean image quality.
 
 A compromise will need to be made. The effect on image quality is not
 linear with zenith distance (or time from transit), but is shallow
@@ -651,10 +768,15 @@ improvement. Some refinements that should be explored include:
 
 \begin{itemize}
 
-\item Modeling the long term (multi-year) trends in the DIMM
-  seeing. Currently the model regresses to the average seeing (for the
-  specific time of year) quickly, rather than keeping the multi-year
-  trend apparent in the data.
+\item Creating a better model of the poor seeing tail in the
+  distribution of seeing values, either as an additional component or
+  by transforming the DIMM's $\log(r_0)$ distribution.
+
+\item Interactive exploration and informal experience suggest that the
+  seeing has a systematic variation with the time of night, in
+  particular that the seeing is slightly worse shortly after
+  sunset. This needs to be studied further, and perhaps modeled as
+  well.
 
 \item Rigorous evaluation of higher-order ARMA models using a formal
   criteria (either Akaike's Information Criterion (AIC) or a Bayesian
@@ -676,25 +798,17 @@ improvement. Some refinements that should be explored include:
   discrete ARMA model used here. Such models are significantly more
   complex and lack the well developed software tools, but naturally
   handle the irregularly sampled nature of the DIMM data.
-
-\item Creating a better model of the poor seeing tail in the
-  distribution of seeing values, either as an additional component or
-  by transforming the DIMM's $\log(r_0)$ distribution.
-
-\item Interactive exploration and informal experience suggest that the
-  seeing has a systematic variation with the time of night, in
-  particular that the seeing is slightly worse shortly after
-  sunset. This needs to be studied further, and perhaps modeled as
-  well.
   
 \end{itemize}
 
+Long term (multi-year) trends in seeing are apparent in the DIMM data,
+however, and improvement from any of the above seems likely to be
+minor compared to the uncertainty due to these trends. Finally, it
+seems unlikely that any of these imporvements will have a major effect
+on survey strategy metrics anyway.
+
 In addition to modeling the seeing, improved modeling of the effect of
 clouds in survey data quality should also be studied.
-
-Finally, observing strategy adjustments may need to be developed to
-address non-uniformity introduced by seasonal seeing variations.
-
 
 % ----------------------------------------------------------------------
 
@@ -703,9 +817,9 @@ address non-uniformity introduced by seasonal seeing variations.
 
 The full archive of data from the Cerro Tololo DIMM shows strong
 seasonal variations, and larger mean values for the seeing, than are
-present in the default input database used by the LSST \texttt{opsim4}
+present in the default input database used by the LSST \texttt{opsim}
 operations simulator. Inclusion of an updated seeing database is
-therefore important for using \texttt{opsim4} to evaluate both the
+therefore important for using \texttt{opsim} to evaluate both the
 overall survey quality and also large scale variation in seeing and
 depth across the survey footprint.
 
@@ -715,7 +829,8 @@ depth across the survey footprint.
 
 I am grateful to Edison Bustos and other staff of the National Optical
 Astronomical Observatory (NOAO) for supplying the data used in this
-study.
+study, and discussions with Chuck Claver that led to an understanding
+of the origin of the baseline data set.
 
 This manuscript has been authored by Fermi Research Alliance, LLC
 under Contract No. DE-AC02-07CH11359 with the U.S. Department of
