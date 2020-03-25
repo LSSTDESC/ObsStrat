@@ -61,7 +61,7 @@ if yr_cut not in [1, 3, 6, 10]:
 if older_cuts:
     mag_cuts = {1: 24.5, 3: 25.0, 6: 25.5, 10: 26.0}
 else:
-    mag_cuts = {1: 24.75, 3: 25.35, 6: 25.72, 10: 26.0}
+    mag_cuts = {1: 24.75-0.1, 3: 25.35-0.1, 6: 25.72-0.1, 10: 26.0-0.1}
 lim_mag_i = mag_cuts[yr_cut]
 nfilters_needed = 6
 lim_ebv = 0.2
