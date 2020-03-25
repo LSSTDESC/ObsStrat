@@ -32,8 +32,8 @@ rcparams['xtick.top'] = True
 rcparams['ytick.right'] = True
 for key in rcparams: mpl.rcParams[key] = rcparams[key]
 # -----------------------------------------------------------------------------------------------------
-outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/plots_v1.4/' #'/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/'
-data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.4/summary_data/'
+outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/plots_v1.4_-0.1cuts/' #'/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/'
+data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.4_-0.1cuts/summary_data/'
 
 # set up for plots
 colors = ['m', 'b', 'g', 'k']
