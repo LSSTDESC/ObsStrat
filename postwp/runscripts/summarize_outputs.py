@@ -32,27 +32,38 @@ rcparams['xtick.top'] = True
 rcparams['ytick.right'] = True
 for key in rcparams: mpl.rcParams[key] = rcparams[key]
 # -----------------------------------------------------------------------------------------------------
-outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/'
-data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output/summary_data/'
+outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/plots_v1.4/' #'/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/'
+data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.4/summary_data/'
 
 # set up for plots
 colors = ['m', 'b', 'g', 'k']
 shapes = ['o', 'v', 's', 'd']
 
+yrs = [1, 3, 6, 10]
+
 redshift_bin = '0.66<z<1.0'
 
 colors_cm = ['indianred', 'mediumslateblue', 'olive', 'orangered', 'black',
+             'turquoise', 'brown', 'goldenrod', 'dodgerblue', 'darkorchid', 'y', 'palevioletred', 'teal', 'sandybrown',
+            'indianred', 'mediumslateblue', 'olive', 'orangered', 'black',
+             'turquoise', 'brown', 'goldenrod', 'dodgerblue', 'darkorchid', 'y', 'palevioletred', 'teal', 'sandybrown',
+            'indianred', 'mediumslateblue', 'olive', 'orangered', 'black',
+             'turquoise', 'brown', 'goldenrod', 'dodgerblue', 'darkorchid', 'y', 'palevioletred', 'teal', 'sandybrown',
+            'indianred', 'mediumslateblue', 'olive', 'orangered', 'black',
              'turquoise', 'brown', 'goldenrod', 'dodgerblue', 'darkorchid', 'y', 'palevioletred', 'teal', 'sandybrown']
+
+from matplotlib import cm
+#colors_cm = [cm.viridis(i) for i in np.arange(0, 255, int(255/len(folder_map.keys())))]
 # -----------------------------------------------------------------------------------------------------
 # set up directory for bundle data
-results_dir = '%s/results/' % outdir
+results_dir = '%s/' % outdir
 os.makedirs(results_dir, exist_ok=True)
 # -----------------------------------------------------------------------------------------------------
 to_plot_keys = ['Area (deg2)', '$i$-band depth: median', '$i$-band depth: std' ]
 # read in the data
 data = {}
 yr_label = {}
-for yr in [1, 3, 6, 10]:
+for yr in yrs:
     files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and f.startswith('eg_') ]
     for file in files:
         print( 'Reading in %s' % file )
@@ -61,14 +72,15 @@ for yr in [1, 3, 6, 10]:
         yr_label[ key ] =  r'Y%s (i$>$%s) ' % (yr, file.split('_')[4].split('limi')[-1])
 
 # add ngal data if available for all dbs
-for yr in [1, 3, 6, 10]:
+for yr in yrs:
     files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and \
              f.startswith('ngal_') and f.__contains__(redshift_bin) ]
     for file in files:
         print( 'Readig in %s' % file )
         key = 'yr%s_%s' % (yr, file.split('_')[6])
         temp = pd.read_csv('%s/%s' % (data_dir, file))
-        if len(temp['dbname'].values) == len(data[key]['dbname'].values):
+        if list(temp['dbname'].values) == list(data[key]['dbname'].values):
+            print(key)
             # add only if we have the Ngal data for all the dbs for which we have the area, etc.
             data[key] = pd.merge(temp, data[key], left_on='dbname', right_on='dbname',how='outer')
             to_plot_keys.append('Ngal')
@@ -79,6 +91,7 @@ for key in data:
 # order data in a specific way
 from itertools import chain
 order_group = list (chain(*folder_map.values()) )
+order_group = ['%s' % f.split('.db')[0] for f in order_group]
 df_b = pd.DataFrame({'dbname' : order_group})
 
 for key in data:
@@ -95,6 +108,8 @@ for i, group in enumerate(folder_map.keys()):
 # -----------------------------------------------------------------------------------------------------
 xlabels = np.array( data[list(data.keys())[0]]['dbname'].values )
 ndbs_tot = len(xlabels)
+print(ndbs_tot)
+
 # plot and group things by folder-group
 for j, to_plot in enumerate( to_plot_keys ):
     plt.clf()
@@ -141,7 +156,7 @@ for j, to_plot in enumerate( to_plot_keys ):
     # set up the legend
     axes[0].legend(custom_lines, grp_labels, bbox_to_anchor=(2.8, 1.1), frameon=True, ncol=7)
     # figure size
-    plt.gcf().set_size_inches(20, 15)
+    plt.gcf().set_size_inches(20, int(15 * (ndbs_tot/75)) )
     # set up to save fig
     if to_plot == 'Area (deg2)':
         plot_label = 'area'
@@ -156,7 +171,6 @@ for j, to_plot in enumerate( to_plot_keys ):
     plt.savefig('%s/%s'%(results_dir, filename), format= 'png', bbox_inches='tight')
     print('\n# Saved %s'%filename)
     plt.close('all')
-
 
 # -----------------------------------------------------------------------------------------------------
 outdir = '%s/stats/' % results_dir

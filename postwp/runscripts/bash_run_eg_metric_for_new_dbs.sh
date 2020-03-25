@@ -13,8 +13,8 @@ setup lsst_sims
 setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 
 ########################################################################################################
-outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output/
-dbs_path=/global/cscratch1/sd/awan/dbs_post_wp/
+outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.4/
+dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v3/
 
 for yr_cut in 10 1 3 6
 do
