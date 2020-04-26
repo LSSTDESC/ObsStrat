@@ -253,6 +253,123 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
                     reference_version=reference_version, order_of_versions=order_of_versions,
                     valid_pixels='eg', eg_ind_dict=eg_ind)
 
+    # ---------------------------------------------------------------------------------------------
+    #  seeing box plot: to see the range of seeing for each band
+    plt.clf()
+    nrows, ncols = 3, 2
+    fig, axes = plt.subplots(nrows=nrows, ncols=ncols)
+    plt.subplots_adjust(wspace=0.2, hspace=0.3)
+
+    nrow, ncol = 0, 0
+    xmin, xmax = 1e7, -1e7
+    for band in seeing_bundle[reference_version]:
+        for i, version_key in enumerate( versions ):
+            ind_nondd = np.where( seeing_bundle[version_key][band].metricValues.mask == False)[0]
+            if i == 0:
+                stack_nondd = [ seeing_bundle[version_key][band].metricValues.data[ind_nondd] ]
+                stack_eg = [ seeing_bundle[version_key][band].metricValues.data[eg_ind[version_key]] ]
+            else:
+                stack_nondd.append(seeing_bundle[version_key][band].metricValues.data[ind_nondd]  )
+                stack_eg.append(seeing_bundle[version_key][band].metricValues.data[eg_ind[version_key]]  )
+
+        ax = axes[nrow, ncol]
+        # plot
+        box1 = ax.boxplot(stack_nondd, vert=False, sym='')
+        box2 = ax.boxplot(stack_eg, vert=False, sym='')
+        # plot details
+        for item in ['boxes', 'whiskers', 'fliers', 'medians', 'caps']:
+            plt.setp(box1[item], color='#1f77b4', linewidth=1.5)
+            plt.setp(box2[item], color='#ff7f0e', linewidth=1.5)
+
+        # yticks
+        ax.set_yticklabels( versions ) #, rotation=90)
+        # title
+        ax.set_title('%s-band' % band) #, rotation=90)
+
+        # get the lims
+        xlims = ax.get_xlim()
+        xmin = min( xmin, xlims[0] )
+        xmax = max( xmax, xlims[1] )
+
+        ncol += 1
+        if ncol == ncols:
+            nrow += 1
+            ncol = 0
+
+    # legend
+    axes[0, -1].legend([box1["boxes"][0], box2["boxes"][0]], ['non-dd visits', 'eg-footprint visits'], bbox_to_anchor=(1,1))
+    # xlabels
+    for ncol in range(ncols):
+        axes[-1, ncol].set_xlabel('seeing')
+    # xlims
+    for nrow in range(nrows):
+        for ncol in range(ncols):
+            axes[nrow, ncol].set_xlim(xmin, xmax)
+
+    # figure size
+    plt.gcf().set_size_inches(5 * nrows, 5 * ncols)
+    # save fig
+    fname = 'plot-box_seeing.png'
+    plt.savefig('%s/%s' % (outdir, fname), format= 'png', bbox_inches='tight')
+    print('saved %s' % fname)
+    plt.close('all')
+    #plt.show()
+
+    # ---------------------------------------------------------------------------------------------
+    #  scatter plot for airmass vs. seeing
+    plt.clf()
+    nrows, ncols = 6, 2
+    fig, axes = plt.subplots(nrows=nrows, ncols=ncols)
+    plt.subplots_adjust(wspace=0.2, hspace=0.3)
+
+    xmin, xmax = 1e7, -1e7
+    ymin, ymax = 1e7, -1e7
+    for j, band in enumerate( seeing_bundle[reference_version].keys() ):
+        for version_key in versions:
+            ind_nondd = np.where( seeing_bundle[version_key][band].metricValues.mask == False)[0]
+
+            p = axes[j, 0].plot(seeing_bundle[version_key][band].metricValues.data[ind_nondd],
+                                airmass_bundle[version_key][band].metricValues.data[ind_nondd],
+                                '.', label='%s: non-dd' % version_key)
+            axes[j, 1].plot(seeing_bundle[version_key][band].metricValues.data[eg_ind[version_key]],
+                            airmass_bundle[version_key][band].metricValues.data[eg_ind[version_key]],
+                            '.', label='%s: eg' % version_key, color=p[0].get_color(),  )
+
+        # title
+        axes[j, 0].set_title('%s-band; wfd' % band)
+        axes[j, 1].set_title('%s-band; eg' % band)
+
+        # get the lims
+        for ncol in range(ncols):
+            xlims = axes[j, ncol].get_xlim()
+            xmin = min( xmin, xlims[0] )
+            xmax = max( xmax, xlims[1] )
+
+            ylims = axes[j, ncol].get_ylim()
+            ymin = min( ymin, ylims[0] )
+            ymax = max( ymax, ylims[1] )
+
+    for nrow in range(nrows):
+        # xlabel
+        axes[nrow, 0].set_ylabel(r'airmass')
+        for ncol in range(ncols):
+            # legend
+            axes[0, ncol].legend(loc='best', ncol=len(versions)) #bbox_to_anchor=(1,1))
+            # xlabel
+            axes[-1, ncol].set_xlabel(r'seeing')
+            # xlims
+            axes[nrow, ncol].set_xlim([xmin, xmax])
+            # ylims
+            axes[nrow, ncol].set_ylim([ymin, ymax])
+    # figure size
+    fig.set_size_inches(7 * ncols, 5 * nrows)
+    # save fig
+    fname = 'plot_seeing-vs-airmass.png'
+    plt.savefig('%s/%s' % (outdir, fname), format= 'png', bbox_inches='tight')
+    print('saved %s' % fname)
+    # plt.show()
+    plt.close('all')
+
 ##########################################################################
 def plot_to_compare(outdir, nside, dbname, bundle_mapper, reference_version, order_of_versions,
                     valid_pixels='default', eg_ind_dict=None):
