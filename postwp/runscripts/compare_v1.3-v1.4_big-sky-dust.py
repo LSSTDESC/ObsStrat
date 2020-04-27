@@ -14,14 +14,14 @@ start_time = time.time()
 nside = 64 # not the most high resolution but its faster..
 
 yr_cut = 10
-outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/compare-baseline_v1.3-v1.4/'
+outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/compare-big-sky-dust_v1.3-v1.4/'
 os.makedirs(outdir, exist_ok=True)
 
 dbpath_dict = {}
-dbpath_dict['v1.4'] = '/global/cscratch1/sd/awan/dbs_post_wp_v3/baseline_v1.4_10yrs.db' #footprint_big_sky_dustv1.4_10yrs.db'
-dbpath_dict['v1.3'] = '/global/cscratch1/sd/awan/dbs_post_wp_v2/baseline_v1.3_10yrs.db' #big_sky_dust_v1.3_10yrs.db'
+dbpath_dict['v1.4'] = '/global/cscratch1/sd/awan/dbs_post_wp_v3/footprint_big_sky_dustv1.4_10yrs.db' #baseline_v1.4_10yrs.db'
+dbpath_dict['v1.3'] = '/global/cscratch1/sd/awan/dbs_post_wp_v2/big_sky_dust_v1.3_10yrs.db' #baseline_v1.3_10yrs.db'
 
-dbname = 'baseline'
+dbname = 'big-sky-dust'
 
 reference_version = 'v1.3'
 order_of_versions = ['v1.3', 'v1.4']
