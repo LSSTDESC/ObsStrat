@@ -43,7 +43,7 @@ __all__ = ['compare_versions', 'plot_to_compare']
 
 ##########################################################################
 def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_versions,
-                     nside=64, yr_cut=10, ilims=26.0, ebvlims=0.2, ):
+                     nside=64, yr_cut=10, ilims=26.0, ebvlims=0.2, wfdtype_dict=None):
     """
 
     This function runs a series of (simple) metrics to compare specified versions of a
@@ -73,6 +73,9 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
              if dict: keys should be version-tags (as in dbpath_dict) and
                       values should be the respective ebvlim
              Default: 0.2
+    * wfdtype_dict: dict: keys=verion_key, values: one of 'prop-id', 'wfd-only', 'non-dd'
+                          if None: will assume all the dbs have wfd to be 'non-dd'.
+                          Default: None
 
     """
     versions = order_of_versions
@@ -106,6 +109,16 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
     if reference_version != order_of_versions[0]:
         raise ValueError('reference_version must be the first in order_of_versions: input order_of_versions = %s' % order_of_versions)
 
+    if wfdtype_dict is None:
+        wfdtype_dict = {}
+        for version_key in versions:
+            wfdtype_dict[version_key] = 'non-dd'
+    else:
+        valid = ['prop-id', 'wfd-only', 'non-dd']
+        for val in wfdtype_dict.values():
+            if val not in valid:
+                raise ValueError('wfdtype_dict values must be one of %s. Input: %s' % (valid, val))
+
     # okay inputs are fine.
     print('## running compare versions for %s' % versions)
 
@@ -137,8 +150,17 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
             # load the db
             opsdb = db.OpsimDatabase(dbpath_dict[version_key])
             # constraint to get the right visits
-            sqlconstraint = 'night <= %s and filter=="%s"'%(yr_cut * 365.25, band)
-            sqlconstraint += ' and note not like "DD%"'
+            if wfdtype_dict[version_key] == 'prop-id':
+                prop_ids, prop_tags = opsdb.fetchPropInfo()
+                wfd_constraint = ' and %s' % opsdb.createSQLWhere('WFD', prop_tags)
+            elif wfdtype_dict[version_key] == 'wfd-only':
+                wfd_constraint = ''
+            else:
+                wfd_constraint = ' and %s' %'note not like "DD%"'
+
+            sqlconstraint = 'night <= %s and filter=="%s"' % (yr_cut * 365.25, band)
+            sqlconstraint += wfd_constraint
+
             print(sqlconstraint)
             # slicer
             slicer = slicers.HealpixSlicer(lonCol='fieldRA', latCol='fieldDec',
@@ -221,8 +243,17 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
         opsdb = db.OpsimDatabase(dbpath_dict[version_key])
         print('\n## running eg-metric for *%s* %s\n' % (version_key, dbname))
 
+        # constraint to get the right visits
+        if wfdtype_dict[version_key] == 'prop-id':
+            prop_ids, prop_tags = opsdb.fetchPropInfo()
+            wfd_constraint = ' and %s' % opsdb.createSQLWhere('WFD', prop_tags)
+        elif wfdtype_dict[version_key] == 'wfd-only':
+            wfd_constraint = ''
+        else:
+            wfd_constraint = ' and %s' %'note not like "DD%"'
+
         sqlconstraint = 'night <= %s' % (yr_cut * 365.25)
-        sqlconstraint += ' and note not like "DD%"'
+        sqlconstraint += wfd_constraint
 
         slicer = slicers.HealpixSlicer(lonCol='fieldRA', latCol='fieldDec',
                                        latLonDeg=opsdb.raDecInDeg, nside=nside, useCache=False)
