@@ -272,7 +272,7 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
         plt.clf()
         hp.mollview(bundle.metricValues, title='%s i-band 5sigma coadded depth with dust extinction; eg-footprint' % version_key)
         hp.graticule(dpar=20, dmer=20, verbose=False)
-        filename = 'skymap-eg_%s_%s.png' % (dbname, version_key)
+        filename = 'skymap-eg_%s_%s_nside%s.png' % (dbname, version_key, nside)
         plt.savefig('%s/%s' % (outdir, filename), format= 'png', bbox_inches='tight')
         print('saved %s' % filename)
         plt.close('all')
@@ -353,45 +353,59 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols)
     plt.subplots_adjust(wspace=0.2, hspace=0.3)
 
-    xmin, xmax = 1e7, -1e7
-    ymin, ymax = 1e7, -1e7
+    xmin1, xmax1 = 1e7, -1e7
+    ymin1, ymax1 = 1e7, -1e7
+    xmin2, xmax2 = 1e7, -1e7
+    ymin2, ymax2 = 1e7, -1e7
     for j, band in enumerate( seeing_bundle[reference_version].keys() ):
         for version_key in versions:
             ind_nondd = np.where( seeing_bundle[version_key][band].metricValues.mask == False)[0]
 
             p = axes[j, 0].plot(seeing_bundle[version_key][band].metricValues.data[ind_nondd],
                                 airmass_bundle[version_key][band].metricValues.data[ind_nondd],
-                                '.', label='%s: non-dd' % version_key)
+                                '.', label=version_key, alpha=0.3)
             axes[j, 1].plot(seeing_bundle[version_key][band].metricValues.data[eg_ind[version_key]],
                             airmass_bundle[version_key][band].metricValues.data[eg_ind[version_key]],
-                            '.', label='%s: eg' % version_key, color=p[0].get_color(),  )
+                            '.', label=version_key, color=p[0].get_color(), alpha=0.3  )
 
         # title
         axes[j, 0].set_title('%s-band; wfd' % band)
         axes[j, 1].set_title('%s-band; eg' % band)
 
         # get the lims
-        for ncol in range(ncols):
-            xlims = axes[j, ncol].get_xlim()
-            xmin = min( xmin, xlims[0] )
-            xmax = max( xmax, xlims[1] )
+        ncol = 0
+        xlims = axes[j, ncol].get_xlim()
+        xmin1 = min( xmin1, xlims[0] )
+        xmax1 = max( xmax1, xlims[1] )
 
-            ylims = axes[j, ncol].get_ylim()
-            ymin = min( ymin, ylims[0] )
-            ymax = max( ymax, ylims[1] )
+        ylims = axes[j, ncol].get_ylim()
+        ymin1 = min( ymin1, ylims[0] )
+        ymax1 = max( ymax1, ylims[1] )
+
+        ncol = 1
+        xlims = axes[0, ncol].get_xlim()
+        xmin2 = min( xmin2, xlims[0] )
+        xmax2 = max( xmax2, xlims[1] )
+
+        ylims = axes[0, ncol].get_ylim()
+        ymin2 = min( ymin2, ylims[0] )
+        ymax2 = max( ymax2, ylims[1] )
 
     for nrow in range(nrows):
         # xlabel
         axes[nrow, 0].set_ylabel(r'airmass')
+        # xlims
+        axes[nrow, 0].set_xlim([xmin1, xmax1])
+        axes[nrow, 1].set_xlim([xmin2, xmax2])
+        # ylims
+        axes[nrow, 0].set_ylim([ymin1, ymax1])
+        axes[nrow, 1].set_ylim([ymin2, ymax2])
+        # legend
+        axes[nrow, 1].legend(bbox_to_anchor=(1,1))
         for ncol in range(ncols):
-            # legend
-            axes[0, ncol].legend(loc='best', ncol=len(versions)) #bbox_to_anchor=(1,1))
             # xlabel
             axes[-1, ncol].set_xlabel(r'seeing')
-            # xlims
-            axes[nrow, ncol].set_xlim([xmin, xmax])
-            # ylims
-            axes[nrow, ncol].set_ylim([ymin, ymax])
+
     # figure size
     fig.set_size_inches(7 * ncols, 5 * nrows)
     # save fig
