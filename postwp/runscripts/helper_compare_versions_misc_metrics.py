@@ -269,8 +269,12 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
                                               resultsDb=resultsDb, saveEarly=False)
         grp.runAll()
 
+        # calculate eg-footprint area
+        area = len( np.where(bundle.metricValues.mask == False)[0] ) * hp.nside2pixarea(nside=nside, degrees=True)
+        # plot
         plt.clf()
-        hp.mollview(bundle.metricValues, title='%s i-band 5sigma coadded depth with dust extinction; eg-footprint' % version_key)
+        hp.mollview(bundle.metricValues,
+                    title='%s i-band 5sigma coadded depth with dust extinction; eg-footprint\narea %.2f deg2' % (version_key, area))
         hp.graticule(dpar=20, dmer=20, verbose=False)
         filename = 'skymap-eg_%s_%s_nside%s.png' % (dbname, version_key, nside)
         plt.savefig('%s/%s' % (outdir, filename), format= 'png', bbox_inches='tight')
