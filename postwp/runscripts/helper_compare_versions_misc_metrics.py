@@ -509,7 +509,7 @@ def plot_to_compare(outdir, nside, dbname, bundle_mapper, reference_version, ord
                         meds_2[band] = np.sum(bundle_to_consider[version_key][band].metricValues.data[ind])
                         llabel='%s: total %.f (%s - [%.f]; %.2f%% )' % (band, meds_2[band],  reference_version,
                                                                          meds_1[band] - meds_2[band],
-                                                                        ((meds_1[band] - meds_2[band])/meds_1[band]) * 100
+                                                                        ((meds_2[band] - meds_1[band])/meds_1[band]) * 100
                                                                        ),
                     else:
                         meds_2[band] = np.median(bundle_to_consider[version_key][band].metricValues.data[ind])
