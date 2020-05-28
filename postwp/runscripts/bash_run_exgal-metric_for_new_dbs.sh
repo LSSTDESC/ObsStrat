@@ -18,8 +18,9 @@ outdir=${maindir}/exgalm5_data/
 #outdir=/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/test_exgalm5_data/
 dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v3/
 egpath=${maindir}/lss_fom/eg-footprint-mask/
+depth_bundles_path=${maindir}/bundle_data/
 
-for yr_cut in 10 #1 3 6
+for yr_cut in 1 3 6 #10
 do
     for band in i u g r z y
     do
@@ -30,6 +31,7 @@ do
                                 --outdir=${outdir} \
                                 --eg-path=${egpath} \
                                 --db-path=${db_path} \
+                                --depths-path=${depth_bundles_path} \
                                 --nside=256 --yr_cut=${yr_cut} --band=${band}
         done
     done
