@@ -29,7 +29,7 @@ do
             python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/run_exgal_metric.py \
                                 --outdir=${outdir} \
                                 --eg-path=${egpath} \
-                                --db_path=${db_path} \
+                                --db-path=${db_path} \
                                 --nside=256 --yr_cut=${yr_cut} --band=${band}
         done
     done

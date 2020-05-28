@@ -21,10 +21,13 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option('--outdir', dest='outdir',
                   help='Path to the folder where all the output should be stored; should already exist.')
-parser.add_option('--db_path', dest='db_path',
+parser.add_option('--db-path', dest='db_path',
                   help='Path to the folder with the db to consider.')
-parser.add_option('--eg-path', dest='eg_path',
+parser.add_option('--eg-path', dest='eg_dir',
                   help='Path to the folder with all the csv files for eg-footprint pixels.')
+parser.add_option('--depths-path', dest='depth_dir',
+                  help='Path to the folder with the depth bundle data that could be used\
+                          to get the eg-footprint; will be accessed only if eg-path doesnt work out.')
 parser.add_option('--nside', dest='nside', type='int',
                   help='HEALPix resolution parameter. Default: 256',
                   default=256)
@@ -39,10 +42,11 @@ start_time = time.time()
 print('## %s' % options)
 outdir = options.outdir
 db_path = options.db_path
-eg_path = options.eg_path
+eg_dir = options.eg_dir
 nside = options.nside
 yr_cut = options.yr_cut
 band = options.band
+depth_dir = options.depth_dir
 
 # quick check
 if yr_cut not in [1, 3, 6, 10]:
@@ -99,17 +103,37 @@ grp = metricBundles.MetricBundleGroup({0: bundle}, opsdb, outDir=outdir,
 grp.runAll()
 
 # read in the footprint pixels
-file = [f for f in os.listdir(eg_path) if f.__contains__(dbname) and \
-                                            f.__contains__('_yr%s' % yr_cut)
-       ][0]
+file = [f for f in os.listdir(eg_dir) if f.__contains__('eg-footprint_%s' % dbname) and \
+                                            f.__contains__('_yr%s_' % yr_cut)
+       ]
+if len(file) != 1:
+    print('## did not find the file for eg-footprint in the specified directory: %s' % file)
+    print('## looking for the bundle data in the specified depth_data_dir ... ')
+    file = [f for f in os.listdir(depth_dir) if f.__contains__('depth_in_eg_%s' % dbname) and \
+            f.__contains__('limi%s' % ilim)
+           ]
+    if len(file) != 1:
+        raise ValueError('## depth bundle data didnt work either: found files: %s' % file)
+    else:
+        file = file[0]
+        if not file.__contains__('%s' % nside):
+            raise ValueError('need depth-data for nside %s' % (nside))
 
-if not file.__contains__('%s' % nside):
-    raise ValueError('need eg-mask for nside %s' % (nside))
+        depth_bundle_eg = metricBundles.createEmptyMetricBundle()
+        depth_bundle_eg.read('%s/%s' % (depth_dir, file))
+        # find indices for the in-survey pixels.
+        good_pix = np.where( depth_bundle_eg.metricValues.mask == False)[0]
+else:
+    file = file[0]
 
-print('## reading in %s' % file)
-eg_mask = np.array( np.genfromtxt('%s/%s' % (eg_path, file)) )
-# find the indices for the in-survey pixels
-good_pix = np.where( eg_mask == 0)[0]
+    if not file.__contains__('%s' % nside):
+        raise ValueError('need eg-mask for nside %s' % (nside))
+
+    print('## reading in %s' % file)
+    eg_mask = np.array( np.genfromtxt('%s/%s' % (eg_dir, file)) )
+    # find the indices for the in-survey pixels
+    good_pix = np.where( eg_mask == 0)[0]
+
 # calculate statistics
 area = len( good_pix ) * hp.nside2pixarea(nside=nside, degrees=True)
 med_depth = np.median( bundle.metricValues.data[good_pix] )
