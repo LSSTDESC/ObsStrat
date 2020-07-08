@@ -93,7 +93,8 @@ log_filename = 'done_y%s_lim%s%s_%s_nside%s.txt' % (yr_cut, band, lim_mag_i, dit
 if log_filename in os.listdir(log_dir):
     done_dbs = np.genfromtxt('%s/%s' % (log_dir, log_filename), dtype=str)
     if dbname in done_dbs:
-        raise ValueError('Analysis already done for %s for y%s.\n' % (dbname, yr_cut) )
+        print('## Analysis already done for %s for y%s.\n Exiting.' % (dbname, yr_cut) )
+        exit()
 # -------------------------------------------------------------------------------------------------------------------------
 opsdb = db.OpsimDatabase(db_path)
 
