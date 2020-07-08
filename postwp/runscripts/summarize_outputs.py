@@ -69,7 +69,7 @@ for yr in yrs:
         print( 'Reading in %s' % file )
         key = 'yr%s_%s' % (yr, file.split('_')[4])
         data[ key ] = pd.read_csv('%s/%s' % (data_dir, file))
-        yr_label[ key ] =  r'Y%s (i$>$%s) ' % (yr, file.split('_')[4].split('limi')[-1])
+        yr_label[ key ] =  r'Y%s (i$>$%s) ' % (yr, '%.2f' % float(file.split('_')[4].split('limi')[-1]))
 
 # add ngal data if available for all dbs
 for yr in yrs:
