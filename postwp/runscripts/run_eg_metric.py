@@ -62,7 +62,7 @@ if older_cuts:
     mag_cuts = {1: 24.5, 3: 25.0, 6: 25.5, 10: 26.0}
 else:
     mag_cuts = {1: 24.75-0.1, 3: 25.35-0.1, 6: 25.72-0.1, 10: 26.0-0.1}
-lim_mag_i = mag_cuts[yr_cut]
+ptsrc_lim_mag_i = mag_cuts[yr_cut]
 nfilters_needed = 6
 lim_ebv = 0.2
 
@@ -89,7 +89,7 @@ log_dir = '%s/run_log/' % outdir
 os.makedirs(log_dir, exist_ok=True)
 
 # check if the db analysis has been run for this db already
-log_filename = 'done_y%s_lim%s%s_%s_nside%s.txt' % (yr_cut, band, lim_mag_i, dither.lower(), nside)
+log_filename = 'done_y%s_lim%s%s_%s_nside%s.txt' % (yr_cut, band, ptsrc_lim_mag_i, dither.lower(), nside)
 if log_filename in os.listdir(log_dir):
     done_dbs = np.genfromtxt('%s/%s' % (log_dir, log_filename), dtype=str)
     if dbname in done_dbs:
@@ -125,7 +125,7 @@ else:
 dustmap = maps.DustMap(nside=nside, interp=False)
 
 # set up the metric
-metric = egFootprintMetric(nfilters_needed=nfilters_needed, lim_mag_i=lim_mag_i, lim_ebv=lim_ebv, return_coadd_band=band)
+metric = egFootprintMetric(nfilters_needed=nfilters_needed, ptsrc_lim_mag_i=ptsrc_lim_mag_i, lim_ebv=lim_ebv, return_coadd_band=band)
 
 # setup the bundle
 bundle = metricBundles.MetricBundle(metric, slicer, sqlconstraint,
@@ -142,7 +142,7 @@ med_depth = np.median( bundle.metricValues.data[good_pix] )
 std_depth = np.std( bundle.metricValues.data[good_pix] )
 to_write = '%s,%.2f,%.2f,%.2f\n' % ( dbname, area, med_depth, std_depth )
 #
-filename = 'eg_footprint_stats_y%s_lim%s%s_%s_nside%s.csv' % ( yr_cut, band, lim_mag_i, dither.lower(), nside )
+filename = 'eg_footprint_stats_y%s_lim%s%s_%s_nside%s.csv' % ( yr_cut, band, ptsrc_lim_mag_i, dither.lower(), nside )
 if filename not in os.listdir( summary_dir ):
     # file does not exist already so need to set up the header
     to_write = 'dbname,Area (deg2),$i$-band depth: median, $i$-band depth: std\n%s' % ( to_write )

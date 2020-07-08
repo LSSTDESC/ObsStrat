@@ -61,8 +61,9 @@ if yr_cut not in [1, 3, 6, 10]:
 if older_cuts:
     mag_cuts = {1: 24.5, 3: 25.0, 6: 25.5, 10: 26.0}
 else:
-    mag_cuts = {1: 24.75, 3: 25.35, 6: 25.72, 10: 26.0}
-lim_mag_i = mag_cuts[yr_cut]
+    #mag_cuts = {1: 24.75, 3: 25.35, 6: 25.72, 10: 26.0}
+    mag_cuts = {1: 24.75-0.1, 3: 25.35-0.1, 6: 25.72-0.1, 10: 26.0-0.1}
+lim_mag_i_ptsrc = mag_cuts[yr_cut]
 nfilters_needed = 6
 lim_ebv = 0.2
 
@@ -91,7 +92,7 @@ log_dir = '%s/run_log/' % outdir
 os.makedirs(log_dir, exist_ok=True)
 
 # check if the db analysis has been run for this db already
-log_filename = 'ngal_done_%s_y%s_lim%s%s_%s_nside%s.txt' % ( redshift_bin, yr_cut, band, lim_mag_i, dither.lower(), nside)
+log_filename = 'ngal_done_%s_y%s_lim%s%s_%s_nside%s.txt' % ( redshift_bin, yr_cut, band, lim_mag_i_ptsrc, dither.lower(), nside)
 if log_filename in os.listdir(log_dir):
     done_dbs = np.genfromtxt('%s/%s' % (log_dir, log_filename), dtype=str)
     if dbname in done_dbs:
@@ -130,7 +131,7 @@ dustmap = maps.DustMap(nside=nside, interp=False)
 metric = depthLimitedNumGalMetric(nside=nside, filterBand=band,
                                   redshiftBin=redshift_bin, 
                                   nfilters_needed=nfilters_needed,
-                                  lim_mag_i=lim_mag_i, lim_ebv=lim_ebv)
+                                  lim_mag_i_ptsrc=lim_mag_i_ptsrc, lim_ebv=lim_ebv)
         
 # setup the bundle
 bundle = metricBundles.MetricBundle(metric, slicer, sqlconstraint,
@@ -144,7 +145,7 @@ grp.runAll()
 good_pix = np.where(bundle.metricValues.mask == False)[0]
 to_write = '%s,%.2e\n' % ( dbname, np.sum( bundle.metricValues.data[good_pix] ) )
 #
-filename = 'ngal_in_eg_stats_%s_y%s_lim%s%s_%s_nside%s.csv' % ( redshift_bin, yr_cut, band, lim_mag_i, dither.lower(), nside )
+filename = 'ngal_in_eg_stats_%s_y%s_lim%s%s_%s_nside%s.csv' % ( redshift_bin, yr_cut, band, lim_mag_i_ptsrc, dither.lower(), nside )
 if filename not in os.listdir( summary_dir ):
     # file does not exist already so need to set up the header
     to_write = 'dbname,Ngal\n%s' % ( to_write )
@@ -155,7 +156,7 @@ txt_file.write(to_write)
 txt_file.close()
 
 # save the depth map
-outfile = 'ngal_in_eg_%s_%s_%s-band_lim%s%s_%s_nside%s.npz' % ( redshift_bin, dbname, band, band, lim_mag_i, dither.lower(), nside )
+outfile = 'ngal_in_eg_%s_%s_%s-band_lim%s%s_%s_nside%s.npz' % ( redshift_bin, dbname, band, band, lim_mag_i_ptsrc, dither.lower(), nside )
 bundle.slicer.writeData('%s/%s'%(bundle_dir, outfile),
                         bundle.metricValues,
                         metricName = bundle.metric.name,
