@@ -14,24 +14,27 @@ start_time = time.time()
 nside = 64 # not the most high resolution but its faster..
 
 yr_cut = 10
-outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/compare-baselines/'
+outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/compare-baselines_v1.4-v1.5-v1.6/'
 os.makedirs(outdir, exist_ok=True)
 
 dbpath_dict = {}
-dbpath_dict['v1.4'] = '/global/cscratch1/sd/awan/dbs_post_wp_v3/baseline_v1.4_10yrs.db' #footprint_big_sky_dustv1.4_10yrs.db'
-dbpath_dict['v1.3'] = '/global/cscratch1/sd/awan/dbs_post_wp_v2/baseline_v1.3_10yrs.db' #big_sky_dust_v1.3_10yrs.db'
-dbpath_dict['v1'] = '/global/cscratch1/sd/awan/dbs_post_wp_v1/baseline10yrs.db'
-dbpath_dict['wp'] = '/global/cscratch1/sd/awan/dbs_wp_unzipped/baseline2018a.db'
+dbpath_dict['v1.6-exp2'] = '/global/cscratch1/sd/awan/dbs_post_wp_v1.6/baseline_nexp2_v1.6_10yrs.db'
+dbpath_dict['v1.6-exp1'] = '/global/cscratch1/sd/awan/dbs_post_wp_v1.6/baseline_nexp1_v1.6_10yrs.db'
+dbpath_dict['v1.5'] = '/global/cscratch1/sd/awan/dbs_post_wp_v1.5/baseline_v1.5_10yrs.db' 
+dbpath_dict['v1.4'] = '/global/cscratch1/sd/awan/dbs_post_wp_v1.4/baseline_v1.4_10yrs.db' #footprint_big_sky_dustv1.4_10yrs.db'
+#dbpath_dict['v1.3'] = '/global/cscratch1/sd/awan/dbs_post_wp_v1.3/baseline_v1.3_10yrs.db' #big_sky_dust_v1.3_10yrs.db'
+#dbpath_dict['v1'] = '/global/cscratch1/sd/awan/dbs_post_wp_v1/baseline10yrs.db'
+#dbpath_dict['wp'] = '/global/cscratch1/sd/awan/dbs_wp_unzipped/baseline2018a.db'
 
 dbname = 'baseline'
 
-reference_version = 'wp'
-order_of_versions = ['wp', 'v1', 'v1.3', 'v1.4']
+reference_version = 'v1.4'
+order_of_versions = ['v1.4', 'v1.5', 'v1.6-exp1', 'v1.6-exp2']
 
-ilims = {'wp': 26.0, 'v1': 26.0, 'v1.3': 26.0,  'v1.4': 25.9}
+ilims = 25.9 #{'v1.4': 25.9, 'v1.5': 25.9, 'v1.6-exp1': 25.9}
 ebvlims = 0.2
 
-wfdtype = {'wp': 'prop-id', 'v1': 'wfd-only', 'v1.3': 'non-dd',  'v1.4': 'non-dd'}
+wfdtype = {'v1.4': 'non-dd', 'v1.5': 'non-dd', 'v1.6-exp1': 'non-dd', 'v1.6-exp2': 'non-dd'}
 
 # run the code
 compare_versions(outdir=outdir, dbpath_dict=dbpath_dict, dbname=dbname,
