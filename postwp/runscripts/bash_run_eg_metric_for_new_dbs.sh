@@ -6,17 +6,17 @@
 #
 ##############################################################################################################
 # source sims_maf
-source /global/common/software/lsst/cori-haswell-gcc/stack/setup_current_sims.sh
-setup lsst_sims
+#source /global/common/software/lsst/cori-haswell-gcc/stack/setup_current_sims.sh
+#setup lsst_sims
 # set up my mafcontrib
 # setup sims_maf -r /global/homes/a/awan/LSST/lsstRepos/sims_maf
-setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
+#setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 
 ########################################################################################################
-outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.4/
-dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v3/
+outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.6_-0.1cuts/
+dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.6/
 
-for yr_cut in 10 1 3 6
+for yr_cut in 1 3 6 10
 do
     for db_path in $(find ${dbs_path} -name '*.db')
     do
