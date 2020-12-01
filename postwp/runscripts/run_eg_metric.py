@@ -125,7 +125,7 @@ else:
 dustmap = maps.DustMap(nside=nside, interp=False)
 
 # set up the metric
-metric = egFootprintMetric(nfilters_needed=nfilters_needed, ptsrc_lim_mag_i=ptsrc_lim_mag_i, lim_ebv=lim_ebv, return_coadd_band=band)
+metric = egFootprintMetric(nfilters_needed=nfilters_needed, lim_mag_i_ptsrc=ptsrc_lim_mag_i, lim_ebv=lim_ebv, return_coadd_band=band)
 
 # setup the bundle
 bundle = metricBundles.MetricBundle(metric, slicer, sqlconstraint,
@@ -153,7 +153,7 @@ txt_file.write(to_write)
 txt_file.close()
 
 # save the depth map
-outfile = 'depth_in_eg_%s_%s-band_lim%s%s_%s_nside%s.npz' % ( dbname, band, band, lim_mag_i, dither.lower(), nside )
+outfile = 'depth_in_eg_%s_%s-band_lim%s%s_%s_nside%s.npz' % ( dbname, band, band, ptsrc_lim_mag_i, dither.lower(), nside )
 bundle.slicer.writeData('%s/%s'%(bundle_dir, outfile),
                         bundle.metricValues,
                         metricName = bundle.metric.name,

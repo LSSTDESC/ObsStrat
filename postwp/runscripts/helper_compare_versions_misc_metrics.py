@@ -259,7 +259,7 @@ def compare_versions(outdir, dbpath_dict, dbname, reference_version, order_of_ve
                                        latLonDeg=opsdb.raDecInDeg, nside=nside, useCache=False)
 
         # set up the metric
-        metric = egFootprintMetric(nfilters_needed=6, lim_mag_i=lim_mag_i_dict[version_key],
+        metric = egFootprintMetric(nfilters_needed=6, lim_mag_i_ptsrc=lim_mag_i_dict[version_key],
                                    lim_ebv=lim_ebv_dict[version_key], return_coadd_band='i')
 
         # setup the bundle
