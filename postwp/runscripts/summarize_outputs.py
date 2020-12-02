@@ -64,16 +64,19 @@ to_plot_keys = ['Area (deg2)', '$i$-band depth: median', '$i$-band depth: std' ]
 data = {}
 yr_label = {}
 for yr in yrs:
-    files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and f.startswith('eg_') ]
+    files = [f for f in os.listdir( data_dir ) if f.endswith('csv') \
+             and f.__contains__('y%s_' % yr) and f.startswith('eg_') ]
     for file in files:
         print( 'Reading in %s' % file )
         key = 'yr%s_%s' % (yr, file.split('_')[4])
         data[ key ] = pd.read_csv('%s/%s' % (data_dir, file))
-        yr_label[ key ] =  r'Y%s (i$>$%s) ' % (yr, '%.2f' % float(file.split('_')[4].split('limi')[-1]))
+        yr_label[ key ] =  r'Y%s (i$>$%s) ' % (yr, '%.2f' % \
+                                               float(file.split('_')[4].split('limi')[-1]))
 
 # add ngal data if available for all dbs
 for yr in yrs:
-    files = [f for f in os.listdir( data_dir ) if f.endswith('csv') and f.__contains__('y%s_' % yr) and \
+    files = [f for f in os.listdir( data_dir ) if f.endswith('csv') \
+             and f.__contains__('y%s_' % yr) and \
              f.startswith('ngal_') and f.__contains__(redshift_bin) ]
     for file in files:
         print( 'Readig in %s' % file )
@@ -124,8 +127,10 @@ for j, to_plot in enumerate( to_plot_keys ):
                 mid = int(len(ind)/2)
                 ndbs = ndbs_tot
             # plot
-            axes[0].plot(data_to_plot[ ind[0:mid] ] , range(ndbs)[0:mid], '%s'%shapes[i], color=colors[i], label=yr_label[yr]) 
-            axes[1].plot(data_to_plot[ ind[mid:] ] , range(ndbs)[mid:], '%s'%shapes[i], color=colors[i], label=yr_label[yr]) 
+            axes[0].plot(data_to_plot[ ind[0:mid] ], range(ndbs)[0:mid],
+                         '%s'%shapes[i], color=colors[i], label=yr_label[yr])
+            axes[1].plot(data_to_plot[ ind[mid:] ] , range(ndbs)[mid:],
+                         '%s'%shapes[i], color=colors[i], label=yr_label[yr])
     # plot 18K line
     if to_plot == 'Area (deg2)':
         axes[0].plot(( [18000] * ndbs)[0:mid], range(ndbs)[0:mid], 'r--', lw=2, label='18K') 
