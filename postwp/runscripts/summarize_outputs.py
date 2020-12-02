@@ -32,8 +32,8 @@ rcparams['xtick.top'] = True
 rcparams['ytick.right'] = True
 for key in rcparams: mpl.rcParams[key] = rcparams[key]
 # -----------------------------------------------------------------------------------------------------
-outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/plots_v1.6_-0.1cuts/' #'/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/'
-data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.6_-0.1cuts/summary_data/'
+outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/plots_v1.5_-0.1cuts/' #'/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/'
+data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.5_-0.1cuts/summary_data/'
 
 # set up for plots
 colors = ['m', 'b', 'g', 'k']
@@ -159,7 +159,7 @@ for j, to_plot in enumerate( to_plot_keys ):
         axes[i].set_xlabel(xlabel)
         axes[i].set_xlim(min_val, max_val)
     # set up the legend
-    axes[0].legend(custom_lines, grp_labels, bbox_to_anchor=(2.8, 1.3), frameon=True, ncol=7)
+    axes[0].legend(custom_lines, grp_labels, bbox_to_anchor=(2.8, 1.1), frameon=True, ncol=7)
     # figure size
     plt.gcf().set_size_inches(20, int(15 * (ndbs_tot/75)) )
     # set up to save fig
