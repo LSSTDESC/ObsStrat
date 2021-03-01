@@ -13,8 +13,8 @@
 #setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 
 ########################################################################################################
-outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.6_-0.1cuts/
-dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.6/
+outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.7_-0.1cuts/
+dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.7/
 
 for yr_cut in 1 3 6 10
 do

@@ -13,9 +13,9 @@
 #setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 
 ########################################################################################################
-maindir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.6_-0.1cuts
+maindir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.7_-0.1cuts/
 outdir=${maindir}/exgalm5_data/
-dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.6/
+dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.7/
 egpath=${maindir}/eg-footprint-mask/
 depth_bundles_path=${maindir}/bundle_data/
 
@@ -29,6 +29,7 @@ do
             python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/run_exgal_metric.py \
                                 --outdir=${outdir} \
                                 --db-path=${db_path} \
+                                --eg-path=${egpath} \
                                 --depths-path=${depth_bundles_path} \
                                 --nside=256 --yr_cut=${yr_cut} --band=${band}
         done
