@@ -76,7 +76,7 @@ band = 'i'
 if wdith:
     dither = 'RandomDitherPerNight'
 else:
-    dither = 'nodither'
+    dither = 'NoDither'
 
 # set up directory for bundle data
 bundle_dir = '%s/bundle_data/' % outdir
@@ -93,7 +93,7 @@ log_filename = 'done_y%s_lim%s%s_%s_nside%s.txt' % (yr_cut, band, ptsrc_lim_mag_
 if log_filename in os.listdir(log_dir):
     done_dbs = np.genfromtxt('%s/%s' % (log_dir, log_filename), dtype=str)
     if dbname in done_dbs:
-        print('## Analysis already done for %s for y%s.\n Exiting.' % (dbname, yr_cut) )
+        print('## Analysis already done for %s for y%s.\n Exiting.\n' % (dbname, yr_cut) )
         exit()
 # -------------------------------------------------------------------------------------------------------------------------
 opsdb = db.OpsimDatabase(db_path)

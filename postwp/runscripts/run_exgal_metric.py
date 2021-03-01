@@ -107,7 +107,8 @@ file = [f for f in os.listdir(eg_dir) if f.__contains__('eg-footprint_%s' % dbna
                                             f.__contains__('_yr%s_' % yr_cut)
        ]
 if len(file) != 1:
-    print('## did not find the file for eg-footprint in the specified directory: %s' % file)
+    if eg_dir is not None:
+        print('## did not find the file for eg-footprint in the specified directory: %s' % file)
     print('## looking for the bundle data in the specified depth_data_dir ... ')
     file = [f for f in os.listdir(depth_dir) if f.__contains__('depth_in_eg_%s' % dbname) and \
             f.__contains__('limi%s' % ilim)
@@ -124,6 +125,7 @@ if len(file) != 1:
         # find indices for the in-survey pixels.
         good_pix = np.where( depth_bundle_eg.metricValues.mask == False)[0]
 else:
+    print('## read in the eg-footprint-mask: %s' % file[0])
     file = file[0]
 
     if not file.__contains__('%s' % nside):
