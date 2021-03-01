@@ -168,5 +168,17 @@ bundle.slicer.writeData('%s/%s'%(bundle_dir, outfile),
 txt_file = open('%s/%s'%(log_dir, log_filename), 'a')
 txt_file.write('%s \n' % dbname)
 txt_file.close()
+
+# save the mask for lss-fom runs
+# set up directory for mask
+folder_to_save_data = '%s/eg-footprint-mask/' % outdir
+os.makedirs(folder_to_save_data, exist_ok=True)
+
+mask_arr = bundle.metricValues.mask
+fname = 'eg-footprint_%s_yr%s_i>%s_%s_nside%s.txt' % (dbname, yr_cut, ptsrc_lim_mag_i, dither, nside)
+# save the array
+np.savetxt(fname='%s/%s' % (folder_to_save_data, fname), X=mask_arr)
+update = 'Saved the footprint in %s' % fname
+
 # all done.
 print('## Time taken for %s: %.2f min\n' % (dbname, (time.time() - start_time )/60 ) )
