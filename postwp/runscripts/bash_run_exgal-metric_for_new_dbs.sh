@@ -13,9 +13,9 @@
 #setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 
 ########################################################################################################
-maindir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.7_-0.1cuts/
+maindir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.5_-0.1cuts/
 outdir=${maindir}/exgalm5_data/
-dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.7/
+dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.5/
 egpath=${maindir}/eg-footprint-mask/
 depth_bundles_path=${maindir}/bundle_data/
 
@@ -23,12 +23,12 @@ for yr_cut in 1 3 6 10
 do
     for band in i u g r z y
     do
-        for db_path in $(find ${dbs_path} -name '*.db')
+        for db_path in baseline_samefilt_v1.5_10yrs.db
         do
             echo 'Running analysis for '${band}'-band for '${yr_cut}'yr for '${db_path}
             python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/run_exgal_metric.py \
                                 --outdir=${outdir} \
-                                --db-path=${db_path} \
+                                --db-path=${dbs_path}${db_path} \
                                 --eg-path=${egpath} \
                                 --depths-path=${depth_bundles_path} \
                                 --nside=256 --yr_cut=${yr_cut} --band=${band}
