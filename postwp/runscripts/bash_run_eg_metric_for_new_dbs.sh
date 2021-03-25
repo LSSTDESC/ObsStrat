@@ -13,17 +13,17 @@
 #setup sims_maf_contrib -r /global/homes/a/awan/LSST/lsstRepos/sims_maf_contrib
 
 ########################################################################################################
-outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.5_-0.1cuts/
-dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.5/
+outdir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.7_-0.1cuts/
+dbs_path=/global/cscratch1/sd/awan/dbs_post_wp_v1.7/
 
 for yr_cut in 1 3 6 10
 do
-    for db_path in baseline_samefilt_v1.5_10yrs.db
+    for db_path in $(find ${dbs_path} -name '*.db')
     do
         echo 'Running analysis for '${yr_cut}'yr for '${db_path}
         python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/run_eg_metric.py \
                             --outdir=${outdir} \
-                            --db_path=${dbs_path}${db_path} \
+                            --db_path=${db_path} \
                             --nside=256 --yr_cut=${yr_cut} --fbs
     done
 done
