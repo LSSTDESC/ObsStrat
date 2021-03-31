@@ -10,7 +10,6 @@ import numpy as np
 import matplotlib as mpl
 import os
 import pandas as pd
-from helper import folder_map
 from matplotlib.lines import Line2D
 # -----------------------------------------------------------------------------------------------------
 fontsize = 18
@@ -34,6 +33,7 @@ for key in rcparams: mpl.rcParams[key] = rcparams[key]
 # -----------------------------------------------------------------------------------------------------
 outdir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/results-plots+/plots_v1.7_-0.1cuts/'
 data_dir = '/global/cscratch1/sd/awan/lsst_output/post_wp_output_v1.7_-0.1cuts/summary_data/'
+from helper_dbcategories import db_catmap_v17 as db_catmap
 
 # set up for plots
 colors = ['m', 'b', 'g', 'k']
@@ -93,7 +93,7 @@ for key in data:
 
 # order data in a specific way
 from itertools import chain
-order_group = list (chain(*folder_map.values()) )
+order_group = list (chain(*db_catmap.values()) )
 order_group = ['%s' % f.split('.db')[0] for f in order_group]
 df_b = pd.DataFrame({'dbname' : order_group})
 
@@ -103,8 +103,8 @@ for key in data:
 # set up the colors
 folder_colors = []
 custom_lines, grp_labels = [], []
-for i, group in enumerate(folder_map.keys()):
-    for key in folder_map[group]:
+for i, group in enumerate(db_catmap.keys()):
+    for key in db_catmap[group]:
         folder_colors += [colors_cm[i]]
     grp_labels += [group]         
     custom_lines += [Line2D([0], [0], color=colors_cm[i], lw=10) ]
