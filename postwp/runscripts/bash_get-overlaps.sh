@@ -2,13 +2,13 @@
 ##############################################################################################################
 # The goal here is to run get_overlaps for various dbs.
 ########################################################################################################
-fbs_version=v1.6
+fbs_version=v1.5
 maindir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_${fbs_version}_-0.1cuts/
 repo_path=/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp
 # path for the dbs order list
 dbs_order_path=${repo_path}/paper-data/summary_csv_${fbs_version}_-0.1cuts/given_order_${fbs_version}_2.csv
 # lsst footprint details
-eg_path=${maindir}/eg-footprint-mask/
+eg_path=${maindir}/eg-footprint-mask-redone/
 nside_lsst=256
 # outdir
 outdir=${repo_path}/paper-data/overlaps_${fbs_version}
@@ -38,4 +38,7 @@ python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/get_overla
                         --other-footprint-path=${other_footprint_path} \
                         --survey=${survey_name} --nside-other=${nside_other} \
                         --dbs-order-path=${dbs_order_path}
-
+# ------------------------------------------------------------------------
+# create plot
+python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/plot_overlaps.py \
+                        --fbs-version=${fbs_version}
