@@ -109,9 +109,11 @@ for db in dbs_in_order:
     for yr in yr_cuts:
         # locate the file
         fname = [f for f in os.listdir(eg_path) if f.endswith('txt') \
-                 and f.__contains__(db) and f.__contains__('yr%s_' % yr)]
+                 and f.__contains__('eg-footprint_%s' % db) and f.__contains__('yr%s_' % yr)]
         if len(fname) != 1:
-            raise ValueError('somethings wrong - expecting 1 file but got %s' % len(fname))
+            err =  'somethings wrong - expecting 1 file but got %s' % len(fname)
+            err += '\ndb %s; yr %s;\n fnames: %s' % (db, yr, fname)
+            raise ValueError(err)
         fname = fname[0]
         # load the lsst eg-footprint
         eg_mask_path = '%s/%s' % (eg_path, fname)
