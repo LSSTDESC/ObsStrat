@@ -2,11 +2,11 @@
 ##############################################################################################################
 # The goal here is to run get_overlaps for various dbs.
 ########################################################################################################
-fbs_version=v1.7
-maindir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_${fbs_version}_-0.1cuts-1-olderAx/
+fbs_version=v1.6
+maindir=/global/cscratch1/sd/awan/lsst_output/post_wp_output_${fbs_version}_-0.1cuts/
 repo_path=/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp
 # path for the dbs order list
-dbs_order_path=${repo_path}/paper-data/summary_csv_${fbs_version}_-0.1cuts/given_order_${fbs_version}.csv
+dbs_order_path=${repo_path}/paper-data/summary_csv_${fbs_version}_-0.1cuts/given_order_${fbs_version}_2.csv
 # lsst footprint details
 eg_path=${maindir}/eg-footprint-mask/
 nside_lsst=256
