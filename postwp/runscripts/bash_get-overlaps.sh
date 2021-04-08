@@ -13,9 +13,9 @@ nside_lsst=256
 # outdir
 outdir=${repo_path}/paper-data/overlaps_${fbs_version}
 # ------------------------------------------------------------------------
-# run things for 4MOST-TiDES
-survey_name=4MOST-TiDES
-other_footprint_path=/global/homes/a/awan/desc_oswg/4most-tides_desi_data/4MOST-TiDES_pixels_nside16_ring.csv
+# run things for 4MOST
+survey_name=4MOST
+other_footprint_path=/global/homes/a/awan/desc_oswg/2021-4most_nside16.csv
 nside_other=16
 
 echo 'Running analysis for '${fbs_version} 'dbs for overlaps with '${survey_name}

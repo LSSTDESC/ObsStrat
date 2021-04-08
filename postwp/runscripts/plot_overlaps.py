@@ -35,14 +35,14 @@ else:
     
 datadir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/paper-data/overlaps_%s/' % fbs_version
 # set up the surveys
-surveys = ['4MOST-TiDES', 'DESI' ,'euclid']
+surveys = ['4MOST', 'DESI' ,'euclid']
 # yrs to consider
 yrs = [1, 3, 6, 10]
 
 # read in the data
 datas = {}
 for survey in surveys:
-    fname = [f for f in os.listdir(datadir) if f.endswith('csv') and f.__contains__(survey)][0]
+    fname = [f for f in os.listdir(datadir) if f.endswith('csv') and f.__contains__('%s_' % survey)][0]
     print('## reading in %s' % fname)
     datas[survey] = pd.read_csv('%s/%s' % (datadir, fname))
     ndbs = int(fname.split('dbs')[0].split('_')[-1])
