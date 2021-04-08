@@ -39,6 +39,19 @@ python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/get_overla
                         --survey=${survey_name} --nside-other=${nside_other} \
                         --dbs-order-path=${dbs_order_path}
 # ------------------------------------------------------------------------
+# run things for euclid
+survey_name=euclid
+other_footprint_path=/global/homes/a/awan/desc_oswg/euclid_footprint_pixels_nside256.csv
+nside_other=256
+
+echo 'Running analysis for '${fbs_version} 'dbs for overlaps with '${survey_name}
+python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/get_overlaps.py \
+                        --outdir=${outdir} \
+                        --eg-path=${eg_path} --nside-lsst=${nside_lsst} \
+                        --other-footprint-path=${other_footprint_path} \
+                        --survey=${survey_name} --nside-other=${nside_other} \
+                        --dbs-order-path=${dbs_order_path}
+# ------------------------------------------------------------------------
 # create plot
 python /global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/runscripts/plot_overlaps.py \
                         --fbs-version=${fbs_version}
