@@ -35,7 +35,7 @@ else:
     
 datadir = '/global/homes/a/awan/LSST/lsstRepos/ObsStrat/postwp/paper-data/overlaps_%s/' % fbs_version
 # set up the surveys
-surveys = ['4MOST-TiDES', 'DESI']
+surveys = ['4MOST-TiDES', 'DESI' ,'euclid']
 # yrs to consider
 yrs = [1, 3, 6, 10]
 
@@ -86,7 +86,7 @@ shapes = ['d', 'o', 's', 'v']
 
 # plot and group things by folder-group
 plt.clf()
-nrows, ncols = 1, 2
+nrows, ncols = 1, len(surveys)
 fig, axes = plt.subplots(nrows, ncols)
 plt.subplots_adjust(wspace=0.05, hspace=0.2, top=0.9)
 
@@ -105,7 +105,8 @@ for ncol in range(ncols):
     axes[ncol].set_yticks( range(ndbs) )
     axes[ncol].set_xlabel( r'deg$^2$' )
 axes[0].set_yticklabels(xlabels )
-axes[1].set_yticklabels([] )
+for col in range(1, ncols):
+    axes[col].set_yticklabels([])
 
 # now add legend for the db catagories
 # color-code the yticks
@@ -117,7 +118,7 @@ plt.setp(legend.get_title(), fontsize=16)
 # fig size
 plt.gcf().set_size_inches(20, 20 * (ndbs/50) )
 # save figure
-filename = 'compare-overlaps_%sdbs_grouped.png' % (ndbs)
+filename = '%s_compare-overlaps_%sdbs_grouped.png' % (fbs_version, ndbs)
 plt.savefig('%s/%s' % (datadir, filename), format='png', bbox_inches='tight')
 print('\n# Saved %s' % filename)
 plt.close('all')
