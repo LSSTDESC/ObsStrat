@@ -21,7 +21,7 @@ __email__ = "neilsen@fnal.gov"
 YEAR_LENGTH_DAYS = 365.24217
 CONSTANT_MEAN = False
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+# logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 # exception classes
 
