@@ -1,2 +1,3 @@
 paper_plots_output/
+.ipynb*
 *.pyc
