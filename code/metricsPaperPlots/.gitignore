@@ -1,3 +1,4 @@
 paper_plots_output/
 .ipynb*
+.ipynb_checkpoints/*
 *.pyc
