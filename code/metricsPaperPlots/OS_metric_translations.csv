@@ -1,0 +1,12 @@
+key,desc_metric_name,desc_metric_display_name,maf_metric_v1_5_name,maf_metric_v2_0_name,transform_invert,transform_mag_to_flux,transform_to_precision,transform_one_minus,validated,comment
+fom,wl_fom,WL + LSS DETF Figure of Merit,3x2ptFoM ExgalM5_with_cuts i band non-DD year 10 HealpixSlicer,3x2ptFoM ExgalM5_with_cuts i band non-DD year 10 HealpixSlicer,False,False,False,False,Y,v2.0 metric validated
+wl,wl_systematics,WL average gri visits,"Mean WeakLensingNvisits fiveSigmaDepth, visitExposureTime i band non-DD HealpixSlicer",Median WeakLensingNvisits gri band non-DD HealpixSlicer,False,False,False,False,Y,Updated to match 
+sn,sn_normal_nsn_tot,Number of SNe Ia with z<zlim(med),,Total detected SNNSNMetric_nSN  HealpixSlicer,False,False,False,False,,"No metric present in v1.5, v2.0 metric being validated"
+sl,sl_num_lensed_SNe_Ia_with_good_time_delays_lensed_by_galaxies,Number of SNe Ia lensed by galaxies,,Total detected SNSLMetric  HealpixSlicer,False,False,False,False,Y,"No metric present in v1.5, v2.0 metric vetted by Simon"
+kn,kn_Maf_Mean_Counts,kN Population Counts 10yrs,,Total detected KNePopMetric_all__multi_color_detect all models UserPointsSlicer,False,False,False,False,,"No metric in v1.5, v2.0 metric is validated by TVS, still waiting for DESC"
+area,static_Y10 effective survey area,Y10 area for static science (deg$^2$),Effective Area (deg) ExgalM5_with_cuts i band non-DD year 10 HealpixSlicer,Effective Area (deg) ExgalM5_with_cuts i band non-DD year 10 HealpixSlicer,False,False,False,False,Y,Correlates perfectly with 3x2
+depth,static_median Y10 $i$-band coadded depth in effective survey area,Median $i$-band depth,,Median ExgalM5_with_cuts i band non-DD year 10 HealpixSlicer,False,True,True,False,Y,Humna supports
+internight_gap,,Median internight-gap (days),Median Median Inter-Night Gap all bands HealpixSlicer,Median Median Inter-Night Gap WFD all bands HealpixSubsetSlicer,False,False,False,False,?,I've vetted this as much as I can
+internight_gap_filter,,,Median Median Inter-Night Gap r band HealpixSlicer,Median Median Inter-Night Gap WFD r band HealpixSubsetSlicer,False,False,False,False,?,
+season_length,cumulative_season_length_[yr],,,Mean Median Season Length WFD all bands HealpixSubsetSlicer,False,False,False,False,?,There's no cumulative season length but maybe this is ok
+nvis,,Median number of visits per pointing,fONv MedianNvis fO All visits HealpixSlicer,fONv MedianNvis fO  HealpixSlicer,,,,,?,"The one that has WFD in the name is weird, it has some -666 values"
