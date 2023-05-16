@@ -1,10 +1,8 @@
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 import george
 from scipy.optimize import minimize
-import seaborn as sns
 import read_metrics
 
 which_probes = 'all'
