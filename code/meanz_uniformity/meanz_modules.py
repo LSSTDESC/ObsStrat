@@ -250,7 +250,58 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
             overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])            
             overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms'])
             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile'])
-            overall_meanzbins.append(mzmod.mean_z(bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5))
+            overall_meanzbins.append(mean_z(bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5))
     df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanz)), 
                   columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin'])
     return df
+
+# Define combined plotting routine - base it on Renee's
+def combined_metric_plots(use_run_name_vec, use_opsim_fname_vec, 
+                          use_metric=maf.ExgalM5(), year=10, use_color_min=None, use_color_max=None,nside=64):
+    # use_run_name_vec says which OpSim DBs we want to use - will also be used for labels
+    # use_opsim_fname_vec says where they live, e.g. one item might be `/global/cfs/cdirs/lsst/groups/CO/rubin_sim/sim_baseline/baseline_v2.1_10yrs.db`
+    if use_color_min is not None and use_color_max is not None:
+        plot_dict={"color_min": use_color_min, "color_max": use_color_max, "x_min": use_color_min, "x_max": use_color_max}
+    else:
+        plot_dict=None
+    days = year*365.3
+    constraint_str='filter="i" and note not like "DD%" and night <= XX and note not like "twilight_neo" '
+    constraint_str = constraint_str.replace('XX','%d'%days)
+    print(constraint_str)
+    
+    bg_list = []
+    bd_list = []
+    overall_plot_dict = {}
+    color_list = ["k", "r", "b", "c", "g", "o", "m", "y"] # hopefully long enough to handle everything
+    for i in range(len(use_run_name_vec)):
+        use_run_name = use_run_name_vec[i]
+        use_opsim_fname = use_opsim_fname_vec[i]
+        print(use_run_name, use_opsim_fname)
+        depth_map_bundle = maf.MetricBundle(
+            metric=use_metric,
+            slicer=maf.HealpixSubsetSlicer(nside=nside, use_cache=False, hpid=np.where(map_labels == "lowdust")[0]),
+            constraint=constraint_str,
+            run_name=use_run_name,
+            summary_metrics=[maf.MedianMetric(), maf.MeanMetric(), maf.RmsMetric()],
+            plot_dict=plot_dict
+        )
+        #print('Bundle diagnostics',depth_map_bundle.run_name, depth_map_bundle.metric.name, 
+        #      depth_map_bundle.info_label, depth_map_bundle.slicer.slicer_name, depth_map_bundle.file_root)
+        
+        bd = maf.metricBundles.make_bundles_dict_from_list([depth_map_bundle])
+        print(bd[list(bd.keys())[0]].summary_values)
+        #bgroup = maf.MetricBundleGroup(
+        #    bd, use_run_name, out_dir="./"
+        #)
+        #bgroup.run_all()
+        
+        #bg_list.append(bgroup)
+        #bd_list.append(bd)
+        #overall_plot_dict[use_run_name] = color_list[i]
+    
+    #ph = maf.PlotHandler()
+    #ph.set_metric_bundles(bg_list)
+    #ph.plot(plot_dicts=overall_plot_dict)
+    #for i in range(len(bd_list)): print(use_opsim_fname_vec[i], year, bd_list[i][list(bd_list[i].keys())[0]].summary_values)
+    #for tmpbd in bd_list: print(tmpbd[list(tmpbd.keys())[0]].summary_values)
+ 
