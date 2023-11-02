@@ -186,6 +186,7 @@ def plot_metric_by_year(df, stat_name, y_axis_label=None):
     # y-axis label handling
     if y_axis_label is None:
         y_axis_label = stat_name
+
         
     ## put in line style stuff
     for s in strategies:
@@ -196,3 +197,60 @@ def plot_metric_by_year(df, stat_name, y_axis_label=None):
     plt.ylabel(y_axis_label)
     plt.legend()
     plt.show()
+    
+# A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
+def plot_meanz_metric_by_year(df, y_axis_label=None):
+    year_vals = np.array(list(set(df['Year'])))
+    strategies=list(set(df['Strategy']))
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    # Offset axes:
+    offsets = 0.01*np.arange(0,len(strategies))
+    offsets -= np.mean(offsets)
+    offset_index = 0
+
+    # y-axis label handling
+    if y_axis_label is None:
+        y_axis_label = 'Mean z'
+
+    ls = ['--','-',':','-.','-']
+    lw = [1,2,2,2,1]
+        
+    ## put in line style stuff
+    for s in strategies:
+        for bin in range(5):
+            yvals = np.array(df['Mean bin z'][df['Strategy']==s][bin])
+            if bin==0:
+                ax.plot(year_vals+offsets[offset_index], yvals, label=s)
+            else:
+                ax.plot(year_vals+bin*offsets[offset_index], yvals)
+
+        offset_index += 1
+    plt.xlabel('Year')
+    plt.ylabel(y_axis_label)
+    plt.legend()
+    plt.show()
+
+# First define a routine to run across a list of years and produce a dataframe
+def get_year_by_year_metrics(year_list, name_list, sim_list):
+    overall_names = []
+    overall_years = []
+    overall_meds = []
+    overall_means = []
+    overall_std = []
+    overall_iqr = []
+    overall_meanzbins=[]
+    for year in year_list:
+        for i in range(len(sim_list)):
+            bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year)
+            overall_names.append(name_list[i])
+            overall_years.append(year)
+            overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median'])
+            overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])            
+            overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms'])
+            overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile'])
+            overall_meanzbins.append(mzmod.mean_z(bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5))
+    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanz)), 
+                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin'])
+    return df
