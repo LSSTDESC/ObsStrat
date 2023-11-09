@@ -23,7 +23,7 @@ def load_maf_map(fname,nside=64):
     fin = maf.MetricBundle(
         metric=maf.ExgalM5(),
         slicer=maf.HealpixSubsetSlicer(nside=nside, use_cache=False, hpid=np.where(map_labels == "lowdust")[0]),
-        constraint='note not like "DD%" and note not like "twilight_neo"'
+        constraint='note not like "DD%" and note not like "twilight_near_sun"'
     )
     fin._setup_metric_values()
     #counts/map values
@@ -43,15 +43,16 @@ def maf_maps_to_fits(fname_in, fname_out,nside=64):
 
 # Here we define a function for some of the metric plots we want to show.
 def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_color_min=None, use_color_max=None,
-                year=10,nside=64):
+                year=10,nside=64, use_filter="i", return_map=False):
     # use_run_name says which OpSim DB we want to use, e.g. `baseline_v2.1_10yrs` - will also be used for labels
     # use_opsim_fname says where it lives, e.g. `/global/cfs/cdirs/lsst/groups/CO/rubin_sim/sim_baseline/baseline_v2.1_10yrs.db`
     surveyAreas = SkyAreaGenerator(nside=nside)
     map_footprints, map_labels = surveyAreas.return_maps()
     days = year*365.25
     # Here the constraint on use of i-band data, exclusion of DDFs, time limitations, and avoiding twilight exposures 
-    constraint_str='filter="i" and note not like "DD%" and night <= XX and note not like "twilight_neo" '
+    constraint_str='filter="YY" and note not like "DD%" and night <= XX and note not like "twilight_near_sun" '
     constraint_str = constraint_str.replace('XX','%d'%days)
+    constraint_str = constraint_str.replace('YY','%s'%use_filter)
     
     # Just some optional plotting stuff
     if use_color_min is not None and use_color_max is not None:
@@ -79,8 +80,13 @@ def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_co
     )
     bgroup.run_all()
     
-    return bgroup, bd
-
+    if return_map:
+        map= depth_map_bundle.metric_values
+        output_map = np.copy(map.data)
+        output_map[map.mask] = 0
+        return bgroup, bd, output_map
+    else:
+        return bgroup, bd
 
 def coeff_solve(ilim,meanz):
 
@@ -233,7 +239,7 @@ def plot_meanz_metric_by_year(df, y_axis_label=None):
     plt.show()
 
 # First define a routine to run across a list of years and produce a dataframe
-def get_year_by_year_metrics(year_list, name_list, sim_list):
+def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
     overall_names = []
     overall_years = []
     overall_meds = []
@@ -243,7 +249,7 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
     overall_meanzbins=[]
     for year in year_list:
         for i in range(len(sim_list)):
-            bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year)
+            bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
             overall_names.append(name_list[i])
             overall_years.append(year)
             overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median'])
