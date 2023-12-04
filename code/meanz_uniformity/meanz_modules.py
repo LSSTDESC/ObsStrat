@@ -254,18 +254,23 @@ def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
     overall_std = []
     overall_iqr = []
     overall_meanzbins=[]
+    overall_stdzbins=[]
     for year in year_list:
         for i in range(len(sim_list)):
             bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
-            overall_names.append(name_list[i])
-            overall_years.append(year)
-            overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median'])
-            overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])            
-            overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms'])
-            overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile'])
-            overall_meanzbins.append(mean_z(bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5))
-    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanz)), 
-                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin'])
+            overall_names.append(name_list[i]) # strategy name
+            overall_years.append(year) 
+            overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median']) # median i-band mags
+            overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])   # mean i-band mags        
+            overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
+            overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
+            overall_meanzbins.append(mean_z(ilim=bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5)) # mean z in each tomographic bin
+            stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
+            # multiply the sensitivity from Arun's code by the std of the i-band mag to get the std of the z in each bin
+            overall_stdzbins.append(stdz)
+            
+    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins)), 
+                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin'])
     return df
 
 # Define combined plotting routine - base it on Renee's
