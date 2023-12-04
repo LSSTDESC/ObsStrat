@@ -234,32 +234,31 @@ def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
     ## put in line style stuff
     cols = ['r','g','k','c','m', 'lightcoral', 'mediumpurple','deepskyblue','teal','forestgreenß']
     offset = 0.05
-    fig, axs = plt.subplots(len(year_vals),2,sharex=True)
+    fig, axs = plt.subplots(2,len(year_vals),sharex=True, figsize=(12,9))
   
+    print(np.shape(axs))
     for sy,year in enumerate(year_vals):
-        axs[sy][0].set_title(f'Year {year}')
-        axs[sy][1].set_title(f'Year {year}')
+        axs[0][sy].set_title(f'Year {year}')
+        axs[1][sy].set_xlabel('Bin')
         for scount,s in enumerate(strategies):
             for bin in range(num_bins):
                 
                 meanz=df['Mean z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
                 stdz=df['Std z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
-            
-                if sy==0:
-                    axs[sy][0].plot(bin+offset*scount,meanz, marker='*',label=s,color=cols[scount])
-                    axs[sy][1].plot(bin+offset*scount,stdz, marker='*',label=s,color=cols[scount])
+                if (sy==len(year_vals)-1 and bin==0):
+                    axs[0][sy].plot(bin+offset*scount,meanz, marker='*',label=s,color=cols[scount])
+                    axs[1][sy].plot(bin+offset*scount,stdz, marker='*',label=s,color=cols[scount])
                 else:
-                    axs[sy][0].plot(bin+offset*scount,meanz, marker='*',color=cols[scount])
-                    axs[sy][1].plot(bin+offset*scount,stdz, marker='*',color=cols[scount])
+                    axs[0][sy].plot(bin+offset*scount,meanz, marker='*',color=cols[scount])
+                    axs[1][sy].plot(bin+offset*scount,stdz, marker='*',color=cols[scount])
             
     #     axs[sy].set_ylabel(y_axis_label)
 
-    axs[sy][0].set_xlabel('Bin')
-    axs[sy][0].set_ylabel('Mean z')
-    axs[sy][1].set_xlabel('Bin')
-    axs[0][0].set_ylabel('Std z')
-    # axs[0].legend()
-    # axs[0].show()
+
+    axs[0][0].set_ylabel('Mean z')
+    axs[1][0].set_ylabel('Std z')
+    axs[1][sy].legend(loc='upper right',fontsize=10)
+    #axs[0].show()
 
 # First define a routine to run across a list of years and produce a dataframe
 def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
@@ -283,6 +282,9 @@ def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
             overall_meanzbins.append(mean_z(ilim=bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5)) # mean z in each tomographic bin
             stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
             # multiply the sensitivity from Arun's code by the std of the i-band mag to get the std of the z in each bin
+            
+            # testing
+            #stdz = [float(sens) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
             overall_stdzbins.append(stdz)
             
     df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins)), 
