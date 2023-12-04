@@ -42,6 +42,7 @@ def maf_maps_to_fits(fname_in, fname_out,nside=64):
 
 
 # Here we define a function for some of the metric plots we want to show.
+# TO DO: need to rename this function since it doesn't actually always plot the metrics
 def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_color_min=None, use_color_max=None,
                 year=10,nside=64, use_filter="i", return_map=False):
     # use_run_name says which OpSim DB we want to use, e.g. `baseline_v2.1_10yrs` - will also be used for labels
@@ -212,11 +213,11 @@ def plot_metric_by_year(df, stat_name, y_axis_label=None):
     plt.show()
     
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
-def plot_meanz_metric_by_year(df, y_axis_label=None):
-    year_vals = np.array(list(set(df['Year'])))
+def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
+    year_vals = years
     strategies=list(set(df['Strategy']))
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111)
 
     # Offset axes:
     offsets = 0.01*np.arange(0,len(strategies))
@@ -231,19 +232,34 @@ def plot_meanz_metric_by_year(df, y_axis_label=None):
     lw = [1,2,2,2,1]
         
     ## put in line style stuff
-    for s in strategies:
-        for bin in range(5):
-            yvals = np.array(df['Mean bin z'][df['Strategy']==s][bin])
-            if bin==0:
-                ax.plot(year_vals+offsets[offset_index], yvals, label=s)
-            else:
-                ax.plot(year_vals+bin*offsets[offset_index], yvals)
+    cols = ['r','g','k','c','m', 'lightcoral', 'mediumpurple','deepskyblue','teal','forestgreenß']
+    offset = 0.05
+    fig, axs = plt.subplots(len(year_vals),2,sharex=True)
+  
+    for sy,year in enumerate(year_vals):
+        axs[sy][0].set_title(f'Year {year}')
+        axs[sy][1].set_title(f'Year {year}')
+        for scount,s in enumerate(strategies):
+            for bin in range(num_bins):
+                
+                meanz=df['Mean z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
+                stdz=df['Std z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
+            
+                if sy==0:
+                    axs[sy][0].plot(bin+offset*scount,meanz, marker='*',label=s,color=cols[scount])
+                    axs[sy][1].plot(bin+offset*scount,stdz, marker='*',label=s,color=cols[scount])
+                else:
+                    axs[sy][0].plot(bin+offset*scount,meanz, marker='*',color=cols[scount])
+                    axs[sy][1].plot(bin+offset*scount,stdz, marker='*',color=cols[scount])
+            
+    #     axs[sy].set_ylabel(y_axis_label)
 
-        offset_index += 1
-    plt.xlabel('Year')
-    plt.ylabel(y_axis_label)
-    plt.legend()
-    plt.show()
+    axs[sy][0].set_xlabel('Bin')
+    axs[sy][0].set_ylabel('Mean z')
+    axs[sy][1].set_xlabel('Bin')
+    axs[0][0].set_ylabel('Std z')
+    # axs[0].legend()
+    # axs[0].show()
 
 # First define a routine to run across a list of years and produce a dataframe
 def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
