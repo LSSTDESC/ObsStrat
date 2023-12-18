@@ -232,14 +232,14 @@ def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
     lw = [1,2,2,2,1]
         
     ## put in line style stuff
-    cols = ['r','g','k','c','m', 'lightcoral', 'mediumpurple','deepskyblue','teal','forestgreenß']
+    cols = ['lightcoral', 'mediumpurple','deepskyblue','teal','forestgreen','r','g','k','c','m']
     offset = 0.05
     fig, axs = plt.subplots(2,len(year_vals),sharex=True, figsize=(12,9))
   
     print(np.shape(axs))
     for sy,year in enumerate(year_vals):
-        axs[0][sy].set_title(f'Year {year}')
-        axs[1][sy].set_xlabel('Bin')
+        axs[0][sy].set_title(f'Year {year}', fontsize=15)
+        axs[1][sy].set_xlabel('Tomographic Bin', fontsize=15)
         for scount,s in enumerate(strategies):
             for bin in range(num_bins):
                 
@@ -255,9 +255,9 @@ def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
     #     axs[sy].set_ylabel(y_axis_label)
 
 
-    axs[0][0].set_ylabel('Mean z')
-    axs[1][0].set_ylabel('Std z')
-    axs[1][sy].legend(loc='upper right',fontsize=10)
+    axs[0][0].set_ylabel('Mean z', fontsize=15)
+    axs[1][0].set_ylabel('Std z', fontsize=15)
+    axs[1][sy].legend(loc='upper left',fontsize=10)
     #axs[0].show()
 
 # First define a routine to run across a list of years and produce a dataframe
@@ -280,8 +280,9 @@ def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
             overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
             overall_meanzbins.append(mean_z(ilim=bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5)) # mean z in each tomographic bin
-            stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
-            # multiply the sensitivity from Arun's code by the std of the i-band mag to get the std of the z in each bin
+            stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean'])-1, num_bins=5)]
+            # We send the i-band magnitude - 1 (so one mag brighter than the output of the i-band limiting magnitude) to Arun's sensitivity code
+            # we then multiply the sensitivity from Arun's code by the std of the i-band mag to get the std of the z in each bin
             
             # testing
             #stdz = [float(sens) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
