@@ -234,15 +234,17 @@ def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
     ## put in line style stuff
     cols = ['lightcoral', 'mediumpurple','deepskyblue','teal','forestgreen','r','g','k','c','m']
     offset = 0.05
-    fig, axs = plt.subplots(2,len(year_vals),sharex=True, figsize=(12,9))
+    fig, axs = plt.subplots(3,len(year_vals),sharex=True, figsize=(15,12))
   
     print(np.shape(axs))
     for sy,year in enumerate(year_vals):
         axs[0][sy].set_title(f'Year {year}', fontsize=15)
-        axs[1][sy].set_xlabel('Tomographic Bin', fontsize=15)
+        #axs[1][sy].set_xlabel('Tomographic Bin', fontsize=15)
+        axs[2][sy].set_xlabel('Tomographic Bin', fontsize=15)
+        axs[2][sy].set_ylabel('Cl bias', fontsize=15)
+
         for scount,s in enumerate(strategies):
-            for bin in range(num_bins):
-                
+            for bin in range(num_bins):      
                 meanz=df['Mean z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
                 stdz=df['Std z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
                 if (sy==len(year_vals)-1 and bin==0):
@@ -251,10 +253,21 @@ def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
                 else:
                     axs[0][sy].plot(bin+offset*scount,meanz, marker='*',color=cols[scount])
                     axs[1][sy].plot(bin+offset*scount,stdz, marker='*',color=cols[scount])
-            
-    #     axs[sy].set_ylabel(y_axis_label)
+        
+        nbins_use = np.shape(df['Used meanz'][df['Strategy']==s][df['Year']==year].values[0])[0]
+        #print(nbins_use, 'nbins_use')
+        for binn in range(nbins_use):
+            clbias = df['Clbias'][df['Strategy']==s][df['Year']==year].values[0][binn]
+        
+            if (sy==len(year_vals)-1 and bin==0):
+                axs[2][sy].plot(binn+offset*scount,clbias, marker='*',label=s,color=cols[scount])
+            else:
+                axs[2][sy].plot(binn+offset*scount,clbias, marker='*',color=cols[scount])
 
+    #     
+        #axs[sy].set_yscale('log')
 
+    
     axs[0][0].set_ylabel('Mean z', fontsize=15)
     axs[1][0].set_ylabel('Std z', fontsize=15)
     axs[1][sy].legend(loc='upper left',fontsize=10)
@@ -270,6 +283,8 @@ def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
     overall_iqr = []
     overall_meanzbins=[]
     overall_stdzbins=[]
+    overall_clbias = []
+    meanz_usecl= []
     for year in year_list:
         for i in range(len(sim_list)):
             bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
@@ -279,17 +294,23 @@ def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
             overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])   # mean i-band mags        
             overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
-            overall_meanzbins.append(mean_z(ilim=bd[list(bd.keys())[0]].summary_values['Mean'], num_bins=5)) # mean z in each tomographic bin
-            stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean'])-1, num_bins=5)]
+            meanz = mean_z(ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)
+            overall_meanzbins.append(meanz) # mean z in each tomographic bin
+            stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
+            clbias, meanz_use = compute_Clbias(meanz,stdz)
+            overall_clbias.append(clbias)
+            meanz_usecl.append(meanz_use)
             # We send the i-band magnitude - 1 (so one mag brighter than the output of the i-band limiting magnitude) to Arun's sensitivity code
             # we then multiply the sensitivity from Arun's code by the std of the i-band mag to get the std of the z in each bin
-            
+            # print(bd[list(bd.keys())[0]].summary_values['Rms'], 'rms')
+            # print([float(sens) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)])
+            # print(stdz)
             # testing
             #stdz = [float(sens) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
             overall_stdzbins.append(stdz)
             
-    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins)), 
-                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin'])
+    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
+                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin','Clbias','Used meanz'])
     return df
 
 # Define combined plotting routine - base it on Renee's
@@ -342,3 +363,25 @@ def combined_metric_plots(use_run_name_vec, use_opsim_fname_vec,
     #for i in range(len(bd_list)): print(use_opsim_fname_vec[i], year, bd_list[i][list(bd_list[i].keys())[0]].summary_values)
     #for tmpbd in bd_list: print(tmpbd[list(tmpbd.keys())[0]].summary_values)
  
+def use_zbins(meanz_vals, figure_9_mean_z=np.array([0.2, 0.4, 0.7, 1.0]),  figure_9_width=0.2):
+    max_z_use = np.max(figure_9_mean_z)+2*figure_9_width
+    use_bins = meanz_vals < max_z_use
+    #print(use_bins, 'use_bins')
+    return use_bins
+
+def compute_Clbias(meanz_vals,scatter_mean_z_values,figure_9_mean_z=np.array([0.2, 0.4, 0.7, 1.0]), figure_9_Clbias =np.array([1e-3, 2e-3, 5e-3, 1.1e-2]),figure_9_width=0.2,figure_9_mean_z_scatter = 0.02):
+    import numpy as np
+    mzvals= np.array([float(mz) for mz in meanz_vals])
+    sctz = np.array([float(sz)for sz in scatter_mean_z_values])
+
+    fit_res = np.polyfit(figure_9_mean_z, figure_9_Clbias, 2)
+    poly_fit = np.poly1d(fit_res)
+    use_bins = use_zbins(meanz_vals,figure_9_mean_z, figure_9_width)
+    mean_z_values_use = mzvals[use_bins]
+    Clbias = poly_fit(mean_z_values_use)
+    rescale_fac = sctz[use_bins] / figure_9_mean_z_scatter
+    Clbias *= rescale_fac
+    fit_res_bias = np.polyfit(mean_z_values_use, Clbias, 1)
+    poly_fit_bias = np.poly1d(fit_res_bias)
+
+    return poly_fit_bias(mean_z_values_use), mean_z_values_use
