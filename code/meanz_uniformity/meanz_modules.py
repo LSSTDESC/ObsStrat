@@ -385,3 +385,125 @@ def compute_Clbias(meanz_vals,scatter_mean_z_values,figure_9_mean_z=np.array([0.
     poly_fit_bias = np.poly1d(fit_res_bias)
 
     return poly_fit_bias(mean_z_values_use), mean_z_values_use
+
+def n_of_i_func(imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=401,n_mc=300000):
+
+    # set up to make interpolation tables
+    # can change the i magnitude range of objects or the z
+    # range to consider in this cell
+    deltai = (imax-imin)/(ni-1)
+    deltaz = (zmax-zmin)/(nz-1)
+    ival=np.linspace(imin,imax,ni)
+    zvals=np.linspace(zmin,zmax,nz)
+
+    # generate a normalized cumulative distribution 
+    # corresponding to n(<i) from the SRD
+    # for the Monte Carlo we want the values to run from 0 to 1
+
+    n_of_i = 42.9*0.88*10**(0.359*(ival-25))
+    n_of_i = n_of_i / n_of_i[ni-1]
+ 
+    return ival, n_of_i,zvals
+
+
+def generate_zdistribution(n_mc=300000,imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=401,filename='zdist.pkl'):
+    ''' Code from Jeff Newman to generate the distributions of objects with given limiting magnitude. 
+    Jeff notes that you need > 1M MC iterations for good errorbars - 
+    but we are reducing the default value here for speed.'''
+    import pandas as pd
+    
+    ival,n_of_i,zvals = n_of_i_func(imin,imax,ni,zmin,zmax,nz,n_mc)
+    # generate random true i magnitudes up to imax following the 
+    # distribution calculated in the above cell
+    true_i = np.interp(np.random.random_sample(n_mc),n_of_i,ival)
+
+# array to contain the true redshift for each MC object
+    true_z = np.zeros_like(true_i)
+
+    #based on the drawn i magnitude for each object,
+    #   draw a random z from p(z,i)
+    # i was hoping to avoid calculating all this for every
+    # object but failed to get interpolation to work.  This 
+    # does ok but is a bit slower than i'd like
+
+    for idx,imag in enumerate(true_i):
+        z0 = 0.246 + 0.025*(imag-24.1)
+        dndi = (0.868296*10**(0.359*(imag-25))
+         *np.exp(-(zvals/z0)**0.92)*zvals**3)/( (z0**2)*(zvals/z0)**0.08) 
+        dndi += 31.2069*10**(0.359*(imag-25))*np.exp(-(zvals/z0)**0.92)*zvals**2
+        dndi[np.isfinite(dndi) == 0] = 0.
+    
+        cdndi = np.cumsum(dndi)
+        cdndi = cdndi / cdndi[nz-1]
+        true_z[idx] = np.interp(np.random.random_sample(1),
+          cdndi,zvals)
+        
+    d= {'i':true_i,'zarr':true_z}
+
+    catalog = pd.DataFrame(data=d)
+    catalog.to_pickle(filename)
+    return catalog
+    
+
+def compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',imag=25.3,catalog_mc=100000,flux_var=0.01,m5=26):
+    from photerr import LsstErrorModel
+
+    if generate_zdist:
+        catalog = generate_zdistribution(n_mc=30000,imin=17,imax=28,ni=101,
+                                          zmin=0,zmax=4,nz=401,filename='zdist.pkl')
+    else:
+       catalog = pd.read_pickle(zdistfile)
+
+    catalog_rep = catalog.copy()
+    errModel = LsstErrorModel(nYrObs=1,nVisYr={'i':1},m5={'i':float(m5)})
+
+    tmpcatalog = errModel(catalog_rep, random_state=np.random.randint(1,catalog_mc))
+    fluxes = 10**(-0.4*(tmpcatalog['i'] - 27))
+    fluxerrs = tmpcatalog['i_err']*np.log(10)/2.5*fluxes
+
+    noisy_i_flux = fluxes + fluxerrs*np.random.normal(size=tmpcatalog.count()[0])
+    # don't let fluxes go negative: limit corresponds to magnitude = 32
+    noisy_i_flux = np.maximum(noisy_i_flux, flux_var)
+    noisy_i = 27 - 2.5*np.log10(noisy_i_flux)
+
+    meanz_imag = np.mean(tmpcatalog[noisy_i < imag]['zarr'])
+    number_imag = np.sum(noisy_i < imag)
+    meanz_imag_error = np.std(tmpcatalog[noisy_i < imag]['zarr'])/np.sqrt(number_imag)
+    number_imag_error = np.sqrt(number_imag)
+
+    return meanz_imag, number_imag, meanz_imag_error, number_imag_error
+
+
+def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,flux_var=0.01, generate_zdist=False,zdistfile='zdist.pkl'):
+
+    if generate_zdist:
+        catalog = generate_zdistribution(n_mc=30000,imin=17,imax=28,ni=101,
+                                          zmin=0,zmax=4,nz=401,filename='zdist.pkl')
+    else:
+       catalog = pd.read_pickle(zdistfile)
+
+
+   
+    m5s = np.linspace(m5max,m5min,num_m5s)
+    print(m5s)
+    meanz_imag = np.zeros_like(m5s)
+    meanz_imag_error = np.zeros_like(m5s)
+
+    number_imag = np.zeros_like(m5s)
+    number_imag_error = np.zeros_like(m5s)
+
+    true_z = catalog['zarr']
+    true_i = catalog['i']
+
+    for idx,m5 in enumerate(m5s):
+        meanz_imag[idx], number_imag[idx], meanz_imag_error[idx], number_imag_error[idx] = compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',imag=imag,catalog_mc=catalog_mc,flux_var=flux_var,m5=m5)
+        
+    meanz_imag_true = np.mean(catalog[true_i < imag]['zarr'])
+    number_imag_true = np.sum(true_i < imag)
+
+    d= {'true_meanz':meanz_imag_true,'true_n':number_imag_true,'m5':m5s,'meanz':meanz_imag,
+     'number': number_imag, 'meanz_err':meanz_imag_error,'number_err':number_imag_error }
+    outputs = pd.DataFrame(data=d)
+
+    outputs.to_pickle('deltazgrid_outputs_dataframe.pkl')
+    return outputs
