@@ -329,7 +329,7 @@ def get_year_by_year_metrics_jn(year_list, name_list, sim_list, use_filter="i"):
     meanz_usecl= []
 
     for year in year_list:
-        for i in range(len(sim_list)):
+        for count,i in enumerate(range(len(sim_list))):
             bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
             overall_names.append(name_list[i]) # strategy name
             overall_years.append(year) 
@@ -340,8 +340,15 @@ def get_year_by_year_metrics_jn(year_list, name_list, sim_list, use_filter="i"):
             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
             # We send the i-band magnitude - 1 (so one mag brighter than the output of the i-band limiting magnitude)
             # replace Arun's meanz computation with Jeff's grid
-            zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag-1,catalog_mc=100000,flux_var=0.01, generate_zdist=False,zdistfile='zdist.pkl')
+            if count==0:
+                zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
+                                    n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
+                                    generate_zdist=True,zdistfile='zdist.pkl')
 
+            else:
+                zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
+                                    n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
+                                    generate_zdist=False,zdistfile='zdist.pkl')
             dz = zgrid['meanz']-zgrid['true_meanz']
             dz = dz.values
 
@@ -468,7 +475,7 @@ def n_of_i_func(imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=401,n_mc=300000):
     return ival, n_of_i,zvals
 
 
-def generate_zdistribution(n_mc=300000,imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=401,filename='zdist.pkl'):
+def generate_zdistribution(n_mc=3000000,imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=401,filename='zdist.pkl'):
     ''' Code from Jeff Newman to generate the distributions of objects with given limiting magnitude. 
     Jeff notes that you need > 1M MC iterations for good errorbars - 
     but we are reducing the default value here for speed.'''
@@ -507,12 +514,11 @@ def generate_zdistribution(n_mc=300000,imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=
     return catalog
     
 
-def compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',imag=25.3,catalog_mc=100000,flux_var=0.01,m5=26):
+def compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,imag=25.3,catalog_mc=100000,flux_var=0.01,m5=26):
     from photerr import LsstErrorModel
 
     if generate_zdist:
-        catalog = generate_zdistribution(n_mc=30000,imin=17,imax=28,ni=101,
-                                          zmin=0,zmax=4,nz=401,filename='zdist.pkl')
+        catalog = generate_zdistribution(n_mc,imin,imax,ni,zmin,zmax,nz,filename=zdistfile)
     else:
        catalog = pd.read_pickle(zdistfile)
 
@@ -536,11 +542,12 @@ def compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',imag=25.3,catalog_
     return meanz_imag, number_imag, meanz_imag_error, number_imag_error
 
 
-def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,flux_var=0.01, generate_zdist=False,zdistfile='zdist.pkl'):
+def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,flux_var=0.01, 
+                generate_zdist=False,zdistfile='zdist.pkl',
+                n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401):
 
     if generate_zdist:
-        catalog = generate_zdistribution(n_mc=30000,imin=17,imax=28,ni=101,
-                                          zmin=0,zmax=4,nz=401,filename='zdist.pkl')
+        catalog = generate_zdistribution(n_mc,imin,imax,ni,zmin,zmax,nz,filename=zdistfile)
     else:
        catalog = pd.read_pickle(zdistfile)
 
@@ -558,7 +565,10 @@ def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,f
     true_i = catalog['i']
 
     for idx,m5 in enumerate(m5s):
-        meanz_imag[idx], number_imag[idx], meanz_imag_error[idx], number_imag_error[idx] = compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',imag=imag,catalog_mc=catalog_mc,flux_var=flux_var,m5=m5)
+        meanz_imag[idx], number_imag[idx], meanz_imag_error[idx], number_imag_error[idx] = compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',
+                                                                                                          n_mc=n_mc,imin=imin,imax=imax,ni=ni,zmin=zmin,
+                                                                                                          zmax=zmax,nz=nz,imag=imag,catalog_mc=catalog_mc,
+                                                                                                          flux_var=flux_var,m5=m5)
         
     meanz_imag_true = np.mean(catalog[true_i < imag]['zarr'])
     number_imag_true = np.sum(true_i < imag)
