@@ -213,7 +213,7 @@ def plot_metric_by_year(df, stat_name, y_axis_label=None):
     plt.show()
     
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
-def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
+def plot_meanz_metrics_by_year_ak(df, years, num_bins=5,y_axis_label=None):
     year_vals = years
     strategies=list(set(df['Strategy']))
     # fig = plt.figure()
@@ -272,9 +272,10 @@ def plot_meanz_metrics_by_year(df, years, num_bins=5,y_axis_label=None):
     axs[1][0].set_ylabel('Std z', fontsize=15)
     axs[1][sy].legend(loc='upper left',fontsize=10)
     #axs[0].show()
+# A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
 
 # First define a routine to run across a list of years and produce a dataframe
-def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
+def get_year_by_year_metrics_ak(year_list, name_list, sim_list, use_filter="i"):
     overall_names = []
     overall_years = []
     overall_meds = []
@@ -311,6 +312,55 @@ def get_year_by_year_metrics(year_list, name_list, sim_list, use_filter="i"):
             
     df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
                   columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin','Clbias','Used meanz'])
+    return df
+
+def get_year_by_year_metrics_jn(year_list, name_list, sim_list, use_filter="i"):
+    overall_names = []
+    overall_years = []
+    overall_meds = []
+    overall_means = []
+    overall_std = []
+    overall_iqr = []
+    overall_meanzbins=[]
+    overall_stdzbins=[]
+    overall_clbias = []
+    meanz_usecl= []
+
+    for year in year_list:
+        for i in range(len(sim_list)):
+            bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
+            overall_names.append(name_list[i]) # strategy name
+            overall_years.append(year) 
+            imag = bd[list(bd.keys())[0]].summary_values['Mean']
+            overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median']) # median i-band mags
+            overall_means.append(imag)   # mean i-band mags        
+            overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
+            overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
+            # We send the i-band magnitude - 1 (so one mag brighter than the output of the i-band limiting magnitude)
+            # replace Arun's meanz computation with Jeff's grid
+            zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag-1,catalog_mc=100000,flux_var=0.01, generate_zdist=False,zdistfile='zdist.pkl')
+
+            dz = zgrid['meanz']-zgrid['true_meanz']
+            dz = dz.values
+
+            meanz = zgrid['meanz'].values # no longer in 5 bins
+            m5s = zgrid['m5s'].values
+            dzinterp = np.interp(imag-1, m5s, dz)
+            meanzinterp = [np.interp(imag-1, m5s, meanz)]
+
+            overall_meanzbins.append(meanzinterp) # no longer in 5 bins
+            # we then multiply the sensitivity from Jeff's code by the std of the i-band mag
+            #to get the std of the z 
+            stdz = [float(dzinterp)*float(bd[list(bd.keys())[0]].summary_values['Rms']) ]
+       
+            overall_stdzbins.append(stdz)
+            clbias, meanz_use = compute_Clbias(meanzinterp,stdz)
+            overall_clbias.append(clbias)
+            meanz_usecl.append(meanz_use)
+            
+            
+    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
+                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z', 'Std z','Clbias','Used meanz'])
     return df
 
 # Define combined plotting routine - base it on Renee's
@@ -371,15 +421,25 @@ def use_zbins(meanz_vals, figure_9_mean_z=np.array([0.2, 0.4, 0.7, 1.0]),  figur
 
 def compute_Clbias(meanz_vals,scatter_mean_z_values,figure_9_mean_z=np.array([0.2, 0.4, 0.7, 1.0]), figure_9_Clbias =np.array([1e-3, 2e-3, 5e-3, 1.1e-2]),figure_9_width=0.2,figure_9_mean_z_scatter = 0.02):
     import numpy as np
+
+
     mzvals= np.array([float(mz) for mz in meanz_vals])
     sctz = np.array([float(sz)for sz in scatter_mean_z_values])
+        
 
     fit_res = np.polyfit(figure_9_mean_z, figure_9_Clbias, 2)
     poly_fit = np.poly1d(fit_res)
     use_bins = use_zbins(meanz_vals,figure_9_mean_z, figure_9_width)
+
+    # if meanz_vals.dtype=='float64':
+    #     mean_z_values_use = mzvals
+    #     sctz_use = sctz
+    # else:
     mean_z_values_use = mzvals[use_bins]
+    sctz_use = sctz[use_bins]
+
     Clbias = poly_fit(mean_z_values_use)
-    rescale_fac = sctz[use_bins] / figure_9_mean_z_scatter
+    rescale_fac =  sctz_use / figure_9_mean_z_scatter
     Clbias *= rescale_fac
     fit_res_bias = np.polyfit(mean_z_values_use, Clbias, 1)
     poly_fit_bias = np.poly1d(fit_res_bias)
@@ -485,9 +545,9 @@ def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,f
 
    
     m5s = np.linspace(m5max,m5min,num_m5s)
-    print(m5s)
     meanz_imag = np.zeros_like(m5s)
     meanz_imag_error = np.zeros_like(m5s)
+    
 
     number_imag = np.zeros_like(m5s)
     number_imag_error = np.zeros_like(m5s)
@@ -501,7 +561,7 @@ def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,f
     meanz_imag_true = np.mean(catalog[true_i < imag]['zarr'])
     number_imag_true = np.sum(true_i < imag)
 
-    d= {'true_meanz':meanz_imag_true,'true_n':number_imag_true,'m5':m5s,'meanz':meanz_imag,
+    d= {'true_meanz':meanz_imag_true,'true_n':number_imag_true,'m5s':m5s,'meanz':meanz_imag,
      'number': number_imag, 'meanz_err':meanz_imag_error,'number_err':number_imag_error }
     outputs = pd.DataFrame(data=d)
 
