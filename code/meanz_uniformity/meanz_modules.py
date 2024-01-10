@@ -187,6 +187,7 @@ def my_total_power_metric(map, ell_max=30):
 
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
 def plot_metric_by_year(df, stat_name, y_axis_label=None):
+
     year_vals = np.array(list(set(df['Year'])))
     strategies=list(set(df['Strategy']))
     fig = plt.figure()
@@ -204,6 +205,7 @@ def plot_metric_by_year(df, stat_name, y_axis_label=None):
         
     ## put in line style stuff
     for s in strategies:
+        #yvals = np.array([float(val) for val in df[stat_name][df['Strategy']==s]])
         yvals = np.array(df[stat_name][df['Strategy']==s])
         ax.plot(year_vals+offsets[offset_index], yvals, label=s)
         offset_index += 1
