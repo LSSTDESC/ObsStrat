@@ -186,7 +186,7 @@ def my_total_power_metric(map, ell_max=30):
     return np.sum((2*ell[ell<ell_max]+1)*cl[ell<ell_max])
 
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
-def plot_metric_by_year(df, stat_name, y_axis_label=None):
+def plot_metric_by_year(df, stat_name, y_axis_label=None,ylog=False):
 
     year_vals = np.array(list(set(df['Year'])))
     strategies=list(set(df['Strategy']))
@@ -211,6 +211,7 @@ def plot_metric_by_year(df, stat_name, y_axis_label=None):
         offset_index += 1
     plt.xlabel('Year')
     plt.ylabel(y_axis_label)
+    if ylog: plt.yscale('log')
     plt.legend()
     plt.show()
     
@@ -340,20 +341,21 @@ def get_year_by_year_metrics_jn(year_list, name_list, sim_list, use_filter="i"):
             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
             # We send the i-band magnitude - 1 (so one mag brighter than the output of the i-band limiting magnitude)
             # replace Arun's meanz computation with Jeff's grid
-            if count==0:
-                zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
-                                    n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
-                                    generate_zdist=True,zdistfile='zdist.pkl')
+            #
+            # zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
+            #                         n_mc=3000000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
+            #                         generate_zdist=False,zdistfile='results_bright.pkl')
 
-            else:
-                zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
-                                    n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
-                                    generate_zdist=False,zdistfile='zdist.pkl')
+            zgrid = pd.read_pickle('results_bright.pkl')  
+            # else:
+            #     zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
+            #                         n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
+            #                         generate_zdist=False,zdistfile='zdist.pkl')
             dz = zgrid['meanz']-zgrid['true_meanz']
             dz = dz.values
 
             meanz = zgrid['meanz'].values # no longer in 5 bins
-            m5s = zgrid['m5s'].values
+            m5s = zgrid['m5'].values
             dzinterp = np.interp(imag-1, m5s, dz)
             meanzinterp = [np.interp(imag-1, m5s, meanz)]
 
@@ -543,8 +545,8 @@ def compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',n_mc=30000,imin=17
 
 
 def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,flux_var=0.01, 
-                generate_zdist=False,zdistfile='zdist.pkl',
-                n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401):
+                generate_zdist=False,zdistfile='results_bright.pkl',
+                n_mc=3000000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401):
 
     if generate_zdist:
         catalog = generate_zdistribution(n_mc,imin,imax,ni,zmin,zmax,nz,filename=zdistfile)
