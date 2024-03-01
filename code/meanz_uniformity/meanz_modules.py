@@ -324,7 +324,7 @@ def get_year_by_year_metrics_ak(year_list, name_list, sim_list, use_filter="i"):
                   columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin','Clbias','Used meanz'])
     return df
 
-def get_year_by_year_metrics_jn(year_list, name_list, sim_list, use_filter="i"):
+def get_year_by_year_metrics(year_list, name_list, sim_list):
     overall_names = []
     overall_years = []
     overall_meds = []
@@ -335,51 +335,66 @@ def get_year_by_year_metrics_jn(year_list, name_list, sim_list, use_filter="i"):
     overall_stdzbins=[]
     overall_clbias = []
     meanz_usecl= []
+    filter_list=["u","g","r","i","z","y"]
 
     for year in year_list:
         for count,i in enumerate(range(len(sim_list))):
-            bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
             overall_names.append(name_list[i]) # strategy name
-            overall_years.append(year) 
-            imag = bd[list(bd.keys())[0]].summary_values['Mean']
+            overall_years.append(year)
+            for use_filter in filter_list:
+                bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
+ 
+                mag = bd[list(bd.keys())[0]].summary_values['Mean']
             overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median']) # median i-band mags
             overall_means.append(imag)   # mean i-band mags        
             overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
-            # We send the i-band magnitude - 1 (so one mag brighter than the output of the i-band limiting magnitude)
-            # replace Arun's meanz computation with Jeff's grid
-            #
-            # zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
-            #                         n_mc=3000000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
-            #                         generate_zdist=False,zdistfile='results_bright.pkl')
-            print('results_%i.feather'%year)
-            zgrid = pd.read_feather('results_%i.feather'%year)  
-            # else:
-            #     zgrid = grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=imag,catalog_mc=10000,flux_var=0.01, 
-            #                         n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,
-            #                         generate_zdist=False,zdistfile='zdist.pkl')
-            dz = zgrid['meanz']-zgrid['true_meanz']
-            dz = dz.values
-
-            meanz = zgrid['meanz'].values # no longer in 5 bins
-            m5s = zgrid['m5'].values
-            dzinterp = np.interp(imag-1, m5s, dz)
-            meanzinterp = [np.interp(imag-1, m5s, meanz)]
-
-            overall_meanzbins.append(meanzinterp) # no longer in 5 bins
+           
+            zbins=1
+            dzdminterp, meanzinterp=compute_dzfromdm(zbins, imag,year, 'SRD')
+    
+            overall_meanzbins.append(meanzinterp[0]) # no longer in 5 bins
             # we then multiply the sensitivity from Jeff's code by the std of the i-band mag
             #to get the std of the z 
-            stdz = [float(dzinterp)*float(bd[list(bd.keys())[0]].summary_values['Rms']) ]
-       
-            overall_stdzbins.append(stdz)
+            
+            stdz = [float(dzdminterp)*float(bd[list(bd.keys())[0]].summary_values['Rms']) ] 
+            # using chain rule and squaring deriv
+ 
+            # Hard coding this to check interpolation
+            #stdz = [float(0.03) ]
+            
+            overall_stdzbins.append(stdz[0])
             clbias, meanz_use = compute_Clbias(meanzinterp,stdz)
-            overall_clbias.append(clbias)
-            meanz_usecl.append(meanz_use)
+            overall_clbias.append(clbias[0])
+            meanz_usecl.append(meanz_use[0])
             
             
     df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
                   columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z', 'Std z','Clbias','Used meanz'])
     return df
+
+def compute_dzfromdm(zbins, imag, year, dzname):
+
+
+    if dzname='SRD':
+        #dzname = Jeff's implementation
+            
+            print('results_%i.feather'%year)
+            zgrid = pd.read_feather('results_%i.feather'%year)  
+            dz = zgrid['meanz']-zgrid['true_meanz']
+            dz = dz.values
+            meanz = zgrid['meanz'].values # no longer in 5 bins
+            m5s = zgrid['m5'].values
+            # calculate the sample i magnitude limit used to generate this file
+            ilim_year = 25.3+1.25*np.log10(year/10) 
+            # calculate the derivative of mean z with respect to m5    
+            dzdm = np.gradient(meanz)/np.gradient(m5s)
+            # assuming here that imag is the actual depth of the imaging
+            #       (so it should be compared to what is tabulated in m5s)
+            dzdminterp = np.interp(imag, m5s, dzdm)
+            dzdminterp = 0.0026 # taken from Jeff's average 
+            meanzinterp = [np.interp(imag, m5s, meanz)]
+    return dzdminterp, meanzinterp
 
 # Define combined plotting routine - base it on Renee's
 def combined_metric_plots(use_run_name_vec, use_opsim_fname_vec, 
