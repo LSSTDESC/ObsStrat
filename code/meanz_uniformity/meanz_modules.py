@@ -178,10 +178,11 @@ def sensitivity(num_bins, fiducial_ilim=24.1, a=0.044444444444444446, b=-0.76444
     return [3*a*(sc.gammainc(4, t2)-sc.gammainc(4, t1))/(sc.gammainc(3, t2)-sc.gammainc(3, t1)) for t1,t2 in t_bins]
 
 def my_total_power_metric(map, ell_max=30):
+    use_map = map.copy()
     mean_val = np.mean(map[map>0])
-    map[map>0] -= mean_val
+    use_map[map>0] -= mean_val
         
-    cl = hp.anafast(map)
+    cl = hp.anafast(use_map)
     ell = np.arange(np.size(cl))
     return np.sum((2*ell[ell<ell_max]+1)*cl[ell<ell_max])
 
