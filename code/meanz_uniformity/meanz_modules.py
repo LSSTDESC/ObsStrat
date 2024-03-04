@@ -377,7 +377,7 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
 def compute_dzfromdm(zbins, imag, year, dzname):
 
 
-    if dzname='SRD':
+    if dzname=='SRD':
         #dzname = Jeff's implementation
             
             print('results_%i.feather'%year)
