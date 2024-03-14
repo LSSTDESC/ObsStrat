@@ -274,7 +274,7 @@ def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,y
         #tmp = v33_df['Mean z'][v33_df['Strategy']=='baseline_v3.3_10yrs'][v33_df['Year']==0][0][filter_use]
         #print(metricvals, 'metricvals')
         metricvals=np.array(metricvals)
-        ax.plot(year_vals+offsets[offset_index], metricvals, label=s)
+        ax.plot(year_vals+1+offsets[offset_index], metricvals, label=s)
         offset_index += 1
     plt.xlabel('Year')
     plt.ylabel(y_axis_label)
@@ -417,57 +417,27 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
                 tmpmetricDict[s]=dict(zip(filter_list, [[None]*zbins]*len(filter_list)))
 
             for filter_ind,use_filter in enumerate(filter_list):
-                #print(tmpmetricDict)
-                #print('now considering ', use_filter, 'on year ', year)
-                
+
                 tmpmetricDict['Strategy']=name_list[i] # strategy name
-                #print('simulation',tmpmetricDict['Strategy'],sim_list[i])
                 tmpmetricDict['Year']=year
                 bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
-                mag = bd[list(bd.keys())[0]].summary_values['Mean'] 
-                tmpmetricDict['Mean depth'][use_filter]=mag
-                #print(tmpmetricDict['Mean depth'][use_filter],mag, 'checking temp')
-#                print(bd[list(bd.keys())[0]].summary_values['Median'], 'what is up with median')
-                med = bd[list(bd.keys())[0]].summary_values['Median']
-                tmpmetricDict['Median depth'][use_filter]=med
-                #print(tmpmetricDict['Median depth'][use_filter],med, 'assigned right? 0 med') 
-                #print(tmpmetricDict['Mean depth'][use_filter],mag, 'checking temp 1')
-                stdepth=bd[list(bd.keys())[0]].summary_values['Rms'] # rms of the i-band mags
-                tmpmetricDict['Std depth'][use_filter]=stdepth
-                #print(stdepth,tmpmetricDict['Std depth'][use_filter], 'assigned right 1? std')
-                #print(tmpmetricDict['Median depth'][use_filter], med,'assigned right 1? med')  
+                tmpmetricDict['Mean depth'][use_filter]=bd[list(bd.keys())[0]].summary_values['Mean'] 
+                tmpmetricDict['Median depth'][use_filter]=bd[list(bd.keys())[0]].summary_values['Median']
+                tmpmetricDict['Std depth'][use_filter]=bd[list(bd.keys())[0]].summary_values['Rms'] # rms of the mags
                 tmpmetricDict['IQR depth'][use_filter]= bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile'] 
-
-                #print(tmpmetricDict['IQR depth'][use_filter], 'assigned right 1? iqr') 
                 dzdminterp, meanzinterp=compute_dzfromdm(zbins, filter_ind,year, 'JQ')
-                #print(tmpmetricDict['Median depth'][use_filter], 'assigned right 1b? med') 
-
                 tmpmetricDict['Mean z'][use_filter] = meanzinterp 
-                # print(tmpmetricDict['Mean z'][use_filter], 'meanz')
-                # print(tmpmetricDict['Median depth'][use_filter], 'assigned right 2? med') 
-                # print(tmpmetricDict['Mean z'][use_filter], 'assigned right meanz?')
-                # print(tmpmetricDict['Median depth'][use_filter], 'assigned right 3? med') 
-                
-            # we then multiply the sensitivity from Jeff's code by the std of the i-band mag
-            #to get the std of the z 
+                # we then multiply the sensitivity from Jeff's code by the std of the mag
+                # to get the std of the z 
                 stdz = [float(np.abs(dz))*float(bd[list(bd.keys())[0]].summary_values['Rms']) for dz in dzdminterp]
                 tmpmetricDict['Std z'][use_filter] = stdz 
-            # using chain rule and squaring deriv
-                #print(stdz, 'checking length of stdz')
                 clbias, meanz_use = compute_Clbias(meanzinterp,stdz)
                 tmpmetricDict['Clbias'][use_filter]=clbias
                 tmpmetricDict['Used meanz'][use_filter]=meanz_use
-                # print(tmpmetricDict['Median depth'][use_filter], use_filter, 'checking only median')
-                # print(tmpmetricDict)
-
-            #print(metricList)
+            
             metricList.append(tmpmetricDict)
 
-
-    #print(metricList)
     df = pd.DataFrame(metricList)    
-#    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
-#                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z', 'Std z','Clbias','Used meanz'])
     return df
 
 def compute_dzfromdm(zbins, band_ind, year, dzname):
