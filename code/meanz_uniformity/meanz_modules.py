@@ -90,6 +90,52 @@ def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_co
     else:
         return bgroup, bd
 
+def get_3x2pt_metric(use_run_name, use_opsim_fname, year=10, nside=64, return_map=False, my_hpid=None):
+    # use_run_name says which OpSim DB we want to use, e.g. `baseline_v2.1_10yrs` - will also be used for labels
+    # use_opsim_fname says where it lives, e.g. `/global/cfs/cdirs/lsst/groups/CO/rubin_sim/sim_baseline/baseline_v2.1_10yrs.db`
+    surveyAreas = SkyAreaGenerator(nside=nside)
+    map_footprints, map_labels = surveyAreas.return_maps()
+    days = year*365.25
+    use_filter = "i"
+    # Here the constraint on use of i-band data, exclusion of DDFs, time limitations, and avoiding twilight exposures 
+    constraint_str='filter="YY" and note not like "DD%" and night <= XX and note not like "twilight_near_sun" '
+    constraint_str = constraint_str.replace('XX','%d'%days)
+    constraint_str = constraint_str.replace('YY','%s'%use_filter)
+    
+    ThreebyTwoSummary = maf.StaticProbesFoMEmulatorMetric(nside=nside, metric_name="3x2ptFoM")
+
+    # Decide what summary statistics we want
+    my_summary_stats = [maf.MedianMetric(), maf.MeanMetric(), maf.RmsMetric(), maf.PercentileMetric(percentile=25), maf.PercentileMetric(percentile=75), ThreebyTwoSummary]
+    
+    # First, define a MetricBundle object.
+    if my_hpid is None: 
+        use_slicer = maf.HealpixSubsetSlicer(nside=nside, use_cache=False, hpid=np.where(map_labels == "lowdust")[0])
+    else:
+        use_slicer = maf.HealpixSubsetSlicer(nside=nside, use_cache=False,
+                                             hpid=np.intersect1d(np.where(map_labels == "lowdust")[0], my_hpid))
+    depth_map_bundle = maf.MetricBundle(
+        metric=maf.ExgalM5(),
+        # Exclude the galactic plane
+        slicer=use_slicer,
+        constraint=constraint_str,
+        run_name=use_run_name,
+        summary_metrics=my_summary_stats
+    )
+    
+    bd = maf.metricBundles.make_bundles_dict_from_list([depth_map_bundle])
+    bgroup = maf.MetricBundleGroup(
+        bd, use_opsim_fname
+    )
+    bgroup.run_all()
+    
+    if return_map:
+        map= depth_map_bundle.metric_values
+        output_map = np.copy(map.data)
+        output_map[map.mask] = 0
+        return bgroup, bd, output_map
+    else:
+        return bgroup, bd
+
 def coeff_solve(ilim,meanz):
 
     from scipy.optimize import curve_fit
@@ -178,13 +224,18 @@ def sensitivity(num_bins, fiducial_ilim=24.1, a=0.044444444444444446, b=-0.76444
     t_bins = zip(t_edges[:-1], t_edges[1:])
     return [3*a*(sc.gammainc(4, t2)-sc.gammainc(4, t1))/(sc.gammainc(3, t2)-sc.gammainc(3, t1)) for t1,t2 in t_bins]
 
-def my_total_power_metric(map, ell_max=30):
+def my_total_power_metric(map, ell_max=30, return_functions=False):
+    use_map = map.copy()
     mean_val = np.mean(map[map>0])
-    map[map>0] -= mean_val
+    use_map[map>0] -= mean_val
         
-    cl = hp.anafast(map)
+    cl = hp.anafast(use_map)
     ell = np.arange(np.size(cl))
-    return np.sum((2*ell[ell<ell_max]+1)*cl[ell<ell_max])
+    total_power = np.sum((2*ell[ell<ell_max]+1)*cl[ell<ell_max])
+    if return_functions:
+        return total_power, ell, cl
+    else:
+        return total_power
 
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
 def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,ylog=False):
@@ -423,15 +474,15 @@ def compute_dzfromdm(zbins, band_ind, year, dzname):
 
     if dzname=='JQ':
         #dzname = Jeff's implementation
-            deriv = pd.read_pickle('uniformity_pkl/meanzderiv.pkl')
-            zvals = pd.read_pickle('uniformity_pkl/meanzsy%i.pkl'%(year+1))
-            meanz = zvals[0:zbins,band_ind,1] # need to think through this, 
-            #currently taking an arbitrary delta index from Jeff's code
-            dz = deriv[year,band_ind,0:zbins]
-            dzdminterp = np.abs(dz)
-            meanzinterp = meanz
-            #print(meanzinterp,  'meanz, checking implementation')
-            #print(dzdminterp,'dzdm, checking implementation')
+        deriv = pd.read_pickle('uniformity_pkl/meanzderiv.pkl')
+        zvals = pd.read_pickle('uniformity_pkl/meanzsy%i.pkl'%(year+1))
+        meanz = zvals[0:zbins,band_ind,1] # need to think through this, 
+        #currently taking an arbitrary delta index from Jeff's code
+        dz = deriv[year,band_ind,0:zbins]
+        dzdminterp = np.abs(dz)
+        meanzinterp = meanz
+        #print(meanzinterp,  'meanz, checking implementation')
+        #print(dzdminterp,'dzdm, checking implementation')
     return dzdminterp, meanzinterp
 
 # Define combined plotting routine - base it on Renee's
