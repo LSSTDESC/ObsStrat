@@ -54,7 +54,8 @@ def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_co
     constraint_str='filter="YY" and note not like "DD%" and night <= XX and note not like "twilight_near_sun" '
     constraint_str = constraint_str.replace('XX','%d'%days)
     constraint_str = constraint_str.replace('YY','%s'%use_filter)
-    
+    # print(constraint_str)
+    # print('----------------')
     # Just some optional plotting stuff
     if use_color_min is not None and use_color_max is not None:
         plot_dict={"color_min": use_color_min, "color_max": use_color_max, "x_min": use_color_min, "x_max": use_color_max}
@@ -186,16 +187,16 @@ def my_total_power_metric(map, ell_max=30):
     return np.sum((2*ell[ell<ell_max]+1)*cl[ell<ell_max])
 
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
-def plot_metric_by_year(df, stat_name,years=None, y_axis_label=None,ylog=False):
+def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,ylog=False):
 
     if years!=None:
-        print(years)
         year_vals = years
-        print(year_vals)
     else:
         year_vals = np.array(list(set(df['Year'])))
-        print(year_vals)
 
+    print(year_vals, 'years')
+    filter_use=filter
+    print(filter_use, 'filter')
     strategies=list(set(df['Strategy']))
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -209,12 +210,20 @@ def plot_metric_by_year(df, stat_name,years=None, y_axis_label=None,ylog=False):
     if y_axis_label is None:
         y_axis_label = stat_name
 
-        
+    
+
     ## put in line style stuff
     for s in strategies:
+        metricvals=[]
         #yvals = np.array([float(val) for val in df[stat_name][df['Strategy']==s]])
-        yvals = np.array(df[stat_name][df['Strategy']==s])
-        ax.plot(year_vals+offsets[offset_index], yvals, label=s)
+        print(s)
+        for i,year in enumerate(year_vals):
+            tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter_use]
+            metricvals.append(tmpval)
+        #tmp = v33_df['Mean z'][v33_df['Strategy']=='baseline_v3.3_10yrs'][v33_df['Year']==0][0][filter_use]
+        #print(metricvals, 'metricvals')
+        metricvals=np.array(metricvals)
+        ax.plot(year_vals+offsets[offset_index], metricvals, label=s)
         offset_index += 1
     plt.xlabel('Year')
     plt.ylabel(y_axis_label)
@@ -223,7 +232,7 @@ def plot_metric_by_year(df, stat_name,years=None, y_axis_label=None,ylog=False):
     plt.show()
     
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
-def plot_meanz_metrics_by_year_ak(df, years, num_bins=5,y_axis_label=None):
+def plot_meanz_metrics_by_year(df, years, filter='i',num_bins=5,y_axis_label=None):
     year_vals = years
     strategies=list(set(df['Strategy']))
     # fig = plt.figure()
@@ -245,41 +254,46 @@ def plot_meanz_metrics_by_year_ak(df, years, num_bins=5,y_axis_label=None):
     cols = ['lightcoral', 'mediumpurple','deepskyblue','teal','forestgreen','r','g','k','c','m']
     offset = 0.05
     fig, axs = plt.subplots(3,len(year_vals),sharex=True, figsize=(15,12))
-  
+
     print(np.shape(axs))
     for sy,year in enumerate(year_vals):
-        axs[0][sy].set_title(f'Year {year}', fontsize=15)
+        if sy==0:
+            axs[0][sy].set_title(f'Offsets for filter {filter}: Year {year+1}', fontsize=15)
+        else:
+            axs[0][sy].set_title(f'Year {year+1}', fontsize=15)
         #axs[1][sy].set_xlabel('Tomographic Bin', fontsize=15)
         axs[2][sy].set_xlabel('Tomographic Bin', fontsize=15)
-        axs[2][sy].set_ylabel('Cl bias', fontsize=15)
-
+        bins=np.arange(num_bins)
         for scount,s in enumerate(strategies):
-            for bin in range(num_bins):      
-                meanz=df['Mean z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
-                stdz=df['Std z bin'][df['Strategy']==s][df['Year']==year].values[0][bin]
-                if (sy==len(year_vals)-1 and bin==0):
-                    axs[0][sy].plot(bin+offset*scount,meanz, marker='*',label=s,color=cols[scount])
-                    axs[1][sy].plot(bin+offset*scount,stdz, marker='*',label=s,color=cols[scount])
-                else:
-                    axs[0][sy].plot(bin+offset*scount,meanz, marker='*',color=cols[scount])
-                    axs[1][sy].plot(bin+offset*scount,stdz, marker='*',color=cols[scount])
-        
-        nbins_use = np.shape(df['Used meanz'][df['Strategy']==s][df['Year']==year].values[0])[0]
-        #print(nbins_use, 'nbins_use')
-        for binn in range(nbins_use):
-            clbias = df['Clbias'][df['Strategy']==s][df['Year']==year].values[0][binn]
-        
-            if (sy==len(year_vals)-1 and bin==0):
-                axs[2][sy].plot(binn+offset*scount,clbias, marker='*',label=s,color=cols[scount])
+            #for bin in range(num_bins):      
+#                tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter_use]
+            meanz=df['Mean z'][df['Strategy']==s][df['Year']==year].values[0][filter]
+            stdz=df['Std z'][df['Strategy']==s][df['Year']==year].values[0][filter]
+                
+            if (sy==len(year_vals)-1):
+                axs[0][sy].plot(bins+offset*scount,meanz,label=s,color=cols[scount])
+                axs[1][sy].plot(bins+offset*scount,stdz, label=s,color=cols[scount])
             else:
-                axs[2][sy].plot(binn+offset*scount,clbias, marker='*',color=cols[scount])
+                axs[0][sy].plot(bins+offset*scount,meanz, color=cols[scount])
+                axs[1][sy].plot(bins+offset*scount,stdz, color=cols[scount])
+        
+            nbins_use = np.shape(df['Used meanz'][df['Strategy']==s][df['Year']==year].values[0][filter])[0]
+        #print(nbins_use, 'nbins_use')
+            #for binn in range(nbins_use):
+            clbias = df['Clbias'][df['Strategy']==s][df['Year']==year].values[0][filter]
+            bins_use=np.arange(nbins_use)
+            if (sy==len(year_vals)-1):
+                axs[2][sy].plot(bins_use+offset*scount,clbias, label=s,color=cols[scount])
+            else:
+                axs[2][sy].plot(bins_use+offset*scount,clbias, color=cols[scount])
 
     #     
         #axs[sy].set_yscale('log')
 
-    
+
     axs[0][0].set_ylabel('Mean z', fontsize=15)
     axs[1][0].set_ylabel('Std z', fontsize=15)
+    axs[2][0].set_ylabel('Cl bias', fontsize=15)
     axs[1][sy].legend(loc='upper left',fontsize=10)
     #axs[0].show()
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
@@ -325,75 +339,99 @@ def get_year_by_year_metrics_ak(year_list, name_list, sim_list, use_filter="i"):
     return df
 
 def get_year_by_year_metrics(year_list, name_list, sim_list):
-    overall_names = []
-    overall_years = []
-    overall_meds = []
-    overall_means = []
-    overall_std = []
-    overall_iqr = []
-    overall_meanzbins=[]
-    overall_stdzbins=[]
-    overall_clbias = []
-    meanz_usecl= []
-    filter_list=["u","g","r","i","z","y"]
+
+    metricList=[]
+    filter_list=["u","g","r","i"]#,"z","y"]
+    zbins=5
+    filts = dict(zip(filter_list, [None]*len(filter_list)))
+    filtsz = dict(zip(filter_list, [[None]*zbins]*len(filter_list)))
+    keyList = ['Strategy','Year','Mean depth','Median depth','Std depth','IQR depth','Mean z','Std z','Clbias','Used meanz']
+    metricDict = {} #dict(zip(keyList, [None]*len(keyList)))
+    for s in ['Mean depth','Median depth','Std depth','IQR depth']:
+        metricDict[s] = dict(zip(filter_list, [None]*len(filter_list)))
+    for s in ['Mean z','Std z','Clbias','Used meanz']:
+        metricDict[s]=dict(zip(filter_list, [[None]*zbins]*len(filter_list)))
+
 
     for year in year_list:
-        for count,i in enumerate(range(len(sim_list))):
-            overall_names.append(name_list[i]) # strategy name
-            overall_years.append(year)
-            for use_filter in filter_list:
+        
+        for i,sim in enumerate(sim_list):
+            tmpmetricDict = {} #dict(zip(keyList, [None]*len(keyList)))
+
+
+            for s in ['Mean depth','Median depth','Std depth','IQR depth']:
+                tmpmetricDict[s] = dict(zip(filter_list, [None]*len(filter_list)))
+
+            for s in ['Mean z','Std z','Clbias','Used meanz']:
+                tmpmetricDict[s]=dict(zip(filter_list, [[None]*zbins]*len(filter_list)))
+
+            for filter_ind,use_filter in enumerate(filter_list):
+                #print(tmpmetricDict)
+                #print('now considering ', use_filter, 'on year ', year)
+                
+                tmpmetricDict['Strategy']=name_list[i] # strategy name
+                #print('simulation',tmpmetricDict['Strategy'],sim_list[i])
+                tmpmetricDict['Year']=year
                 bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
- 
-                mag = bd[list(bd.keys())[0]].summary_values['Mean']
-            overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median']) # median i-band mags
-            overall_means.append(imag)   # mean i-band mags        
-            overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
-            overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
-           
-            zbins=1
-            dzdminterp, meanzinterp=compute_dzfromdm(zbins, imag,year, 'SRD')
-    
-            overall_meanzbins.append(meanzinterp[0]) # no longer in 5 bins
+                mag = bd[list(bd.keys())[0]].summary_values['Mean'] 
+                tmpmetricDict['Mean depth'][use_filter]=mag
+                #print(tmpmetricDict['Mean depth'][use_filter],mag, 'checking temp')
+#                print(bd[list(bd.keys())[0]].summary_values['Median'], 'what is up with median')
+                med = bd[list(bd.keys())[0]].summary_values['Median']
+                tmpmetricDict['Median depth'][use_filter]=med
+                #print(tmpmetricDict['Median depth'][use_filter],med, 'assigned right? 0 med') 
+                #print(tmpmetricDict['Mean depth'][use_filter],mag, 'checking temp 1')
+                stdepth=bd[list(bd.keys())[0]].summary_values['Rms'] # rms of the i-band mags
+                tmpmetricDict['Std depth'][use_filter]=stdepth
+                #print(stdepth,tmpmetricDict['Std depth'][use_filter], 'assigned right 1? std')
+                #print(tmpmetricDict['Median depth'][use_filter], med,'assigned right 1? med')  
+                tmpmetricDict['IQR depth'][use_filter]= bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile'] 
+
+                #print(tmpmetricDict['IQR depth'][use_filter], 'assigned right 1? iqr') 
+                dzdminterp, meanzinterp=compute_dzfromdm(zbins, filter_ind,year, 'JQ')
+                #print(tmpmetricDict['Median depth'][use_filter], 'assigned right 1b? med') 
+
+                tmpmetricDict['Mean z'][use_filter] = meanzinterp 
+                # print(tmpmetricDict['Mean z'][use_filter], 'meanz')
+                # print(tmpmetricDict['Median depth'][use_filter], 'assigned right 2? med') 
+                # print(tmpmetricDict['Mean z'][use_filter], 'assigned right meanz?')
+                # print(tmpmetricDict['Median depth'][use_filter], 'assigned right 3? med') 
+                
             # we then multiply the sensitivity from Jeff's code by the std of the i-band mag
             #to get the std of the z 
-            
-            stdz = [float(dzdminterp)*float(bd[list(bd.keys())[0]].summary_values['Rms']) ] 
+                stdz = [float(np.abs(dz))*float(bd[list(bd.keys())[0]].summary_values['Rms']) for dz in dzdminterp]
+                tmpmetricDict['Std z'][use_filter] = stdz 
             # using chain rule and squaring deriv
- 
-            # Hard coding this to check interpolation
-            #stdz = [float(0.03) ]
-            
-            overall_stdzbins.append(stdz[0])
-            clbias, meanz_use = compute_Clbias(meanzinterp,stdz)
-            overall_clbias.append(clbias[0])
-            meanz_usecl.append(meanz_use[0])
-            
-            
-    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
-                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z', 'Std z','Clbias','Used meanz'])
+                #print(stdz, 'checking length of stdz')
+                clbias, meanz_use = compute_Clbias(meanzinterp,stdz)
+                tmpmetricDict['Clbias'][use_filter]=clbias
+                tmpmetricDict['Used meanz'][use_filter]=meanz_use
+                # print(tmpmetricDict['Median depth'][use_filter], use_filter, 'checking only median')
+                # print(tmpmetricDict)
+
+            #print(metricList)
+            metricList.append(tmpmetricDict)
+
+
+    #print(metricList)
+    df = pd.DataFrame(metricList)    
+#    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
+#                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z', 'Std z','Clbias','Used meanz'])
     return df
 
-def compute_dzfromdm(zbins, imag, year, dzname):
+def compute_dzfromdm(zbins, band_ind, year, dzname):
 
-
-    if dzname='SRD':
+    if dzname=='JQ':
         #dzname = Jeff's implementation
-            
-            print('results_%i.feather'%year)
-            zgrid = pd.read_feather('results_%i.feather'%year)  
-            dz = zgrid['meanz']-zgrid['true_meanz']
-            dz = dz.values
-            meanz = zgrid['meanz'].values # no longer in 5 bins
-            m5s = zgrid['m5'].values
-            # calculate the sample i magnitude limit used to generate this file
-            ilim_year = 25.3+1.25*np.log10(year/10) 
-            # calculate the derivative of mean z with respect to m5    
-            dzdm = np.gradient(meanz)/np.gradient(m5s)
-            # assuming here that imag is the actual depth of the imaging
-            #       (so it should be compared to what is tabulated in m5s)
-            dzdminterp = np.interp(imag, m5s, dzdm)
-            dzdminterp = 0.0026 # taken from Jeff's average 
-            meanzinterp = [np.interp(imag, m5s, meanz)]
+            deriv = pd.read_pickle('uniformity_pkl/meanzderiv.pkl')
+            zvals = pd.read_pickle('uniformity_pkl/meanzsy%i.pkl'%(year+1))
+            meanz = zvals[0:zbins,band_ind,1] # need to think through this, 
+            #currently taking an arbitrary delta index from Jeff's code
+            dz = deriv[year,band_ind,0:zbins]
+            dzdminterp = np.abs(dz)
+            meanzinterp = meanz
+            #print(meanzinterp,  'meanz, checking implementation')
+            #print(dzdminterp,'dzdm, checking implementation')
     return dzdminterp, meanzinterp
 
 # Define combined plotting routine - base it on Renee's
@@ -408,7 +446,8 @@ def combined_metric_plots(use_run_name_vec, use_opsim_fname_vec,
     days = year*365.3
     constraint_str='filter="i" and note not like "DD%" and night <= XX and note not like "twilight_neo" '
     constraint_str = constraint_str.replace('XX','%d'%days)
-    print(constraint_str)
+    # print(constraint_str)
+    # print('----------------')
     
     bg_list = []
     bd_list = []
@@ -457,10 +496,12 @@ def compute_Clbias(meanz_vals,scatter_mean_z_values,figure_9_mean_z=np.array([0.
     mzvals= np.array([float(mz) for mz in meanz_vals])
     sctz = np.array([float(sz)for sz in scatter_mean_z_values])
     
+    # print(mzvals, 'mzvals in computclbias')
+    # print(sctz, 'sctz in computclbias')
     fit_res = np.polyfit(figure_9_mean_z, figure_9_Clbias, 2)
     poly_fit = np.poly1d(fit_res)
     use_bins = use_zbins(meanz_vals,figure_9_mean_z, figure_9_width)
-
+    # print('use bins ', use_bins)
     mean_z_values_use = mzvals[use_bins]
     sctz_use = sctz[use_bins]
 
