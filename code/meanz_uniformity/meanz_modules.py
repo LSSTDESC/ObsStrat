@@ -245,9 +245,11 @@ def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,y
     else:
         year_vals = np.array(list(set(df['Year'])))
 
-    print(year_vals, 'years')
-    filter_use=filter
-    print(filter_use, 'filter')
+    cols = ['lightcoral', 'mediumpurple','deepskyblue','teal','forestgreen','r','g','k','c','m']
+
+    # print(year_vals, 'years')
+    # filter_use=filter
+    # print(filter_use, 'filter')
     strategies=list(set(df['Strategy']))
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -264,17 +266,17 @@ def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,y
     
 
     ## put in line style stuff
-    for s in strategies:
+    for sc,s in enumerate(strategies):
         metricvals=[]
         #yvals = np.array([float(val) for val in df[stat_name][df['Strategy']==s]])
         print(s)
         for i,year in enumerate(year_vals):
-            tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter_use]
+            tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter]
             metricvals.append(tmpval)
         #tmp = v33_df['Mean z'][v33_df['Strategy']=='baseline_v3.3_10yrs'][v33_df['Year']==0][0][filter_use]
         #print(metricvals, 'metricvals')
         metricvals=np.array(metricvals)
-        ax.plot(year_vals+1+offsets[offset_index], metricvals, label=s)
+        ax.plot(year_vals+1+offsets[offset_index], metricvals, color=cols[sc],label=s)
         offset_index += 1
     plt.xlabel('Year')
     plt.ylabel(y_axis_label)
@@ -349,45 +351,6 @@ def plot_meanz_metrics_by_year(df, years, filter='i',num_bins=5,y_axis_label=Non
     #axs[0].show()
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
 
-# First define a routine to run across a list of years and produce a dataframe
-def get_year_by_year_metrics_ak(year_list, name_list, sim_list, use_filter="i"):
-    overall_names = []
-    overall_years = []
-    overall_meds = []
-    overall_means = []
-    overall_std = []
-    overall_iqr = []
-    overall_meanzbins=[]
-    overall_stdzbins=[]
-    overall_clbias = []
-    meanz_usecl= []
-    for year in year_list:
-        for i in range(len(sim_list)):
-            bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
-            overall_names.append(name_list[i]) # strategy name
-            overall_years.append(year) 
-            overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median']) # median i-band mags
-            overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])   # mean i-band mags        
-            overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
-            overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
-            meanz = mean_z(ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)
-            overall_meanzbins.append(meanz) # mean z in each tomographic bin
-            stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
-            clbias, meanz_use = compute_Clbias(meanz,stdz)
-            overall_clbias.append(clbias)
-            meanz_usecl.append(meanz_use)
-            # We send the i-band magnitude - 1 (so one mag brighter than the output of the i-band limiting magnitude) to Arun's sensitivity code
-            # we then multiply the sensitivity from Arun's code by the std of the i-band mag to get the std of the z in each bin
-            # print(bd[list(bd.keys())[0]].summary_values['Rms'], 'rms')
-            # print([float(sens) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)])
-            # print(stdz)
-            # testing
-            #stdz = [float(sens) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
-            overall_stdzbins.append(stdz)
-            
-    df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
-                  columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin','Clbias','Used meanz'])
-    return df
 
 def get_year_by_year_metrics(year_list, name_list, sim_list):
 
@@ -660,3 +623,38 @@ def compute_Clbias(meanz_vals,scatter_mean_z_values,figure_9_mean_z=np.array([0.
 
 #     outputs.to_pickle('deltazgrid_outputs_dataframe.pkl')
 #     return outputs
+
+
+
+# # First define a routine to run across a list of years and produce a dataframe
+# def get_year_by_year_metrics_ak(year_list, name_list, sim_list, use_filter="i"):
+#     overall_names = []
+#     overall_years = []
+#     overall_meds = []
+#     overall_means = []
+#     overall_std = []
+#     overall_iqr = []
+#     overall_meanzbins=[]
+#     overall_stdzbins=[]
+#     overall_clbias = []
+#     meanz_usecl= []
+#     for year in year_list:
+#         for i in range(len(sim_list)):
+#             bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
+#             overall_names.append(name_list[i]) # strategy name
+#             overall_years.append(year) 
+#             overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median']) # median i-band mags
+#             overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])   # mean i-band mags        
+#             overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
+#             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
+#             meanz = mean_z(ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)
+#             overall_meanzbins.append(meanz) # mean z in each tomographic bin
+#             stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
+#             clbias, meanz_use = compute_Clbias(meanz,stdz)
+#             overall_clbias.append(clbias)
+#             meanz_usecl.append(meanz_use)
+#             overall_stdzbins.append(stdz)
+            
+#     df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
+#                   columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin','Clbias','Used meanz'])
+#     return df
