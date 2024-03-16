@@ -271,10 +271,15 @@ def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,y
         #yvals = np.array([float(val) for val in df[stat_name][df['Strategy']==s]])
         print(s)
         for i,year in enumerate(year_vals):
-            tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter]
-            metricvals.append(tmpval)
-        #tmp = v33_df['Mean z'][v33_df['Strategy']=='baseline_v3.3_10yrs'][v33_df['Year']==0][0][filter_use]
-        #print(metricvals, 'metricvals')
+            if filter=='combined':
+                tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0]
+                metricvals.append(tmpval)
+            else:
+                tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter]
+                metricvals.append(tmpval)
+            
+
+        
         metricvals=np.array(metricvals)
         ax.plot(year_vals+1+offsets[offset_index], metricvals, color=cols[sc],label=s)
         offset_index += 1
@@ -310,7 +315,9 @@ def plot_meanz_metrics_by_year(df, years, filter='i',num_bins=5,y_axis_label=Non
 
     print(np.shape(axs))
     for sy,year in enumerate(year_vals):
-        if sy==0:
+        if (sy==0) and (filter=='combined'):
+            axs[0][sy].set_title(f'Combined offsets: Year {year+1}', fontsize=15)
+        elif (sy==0):
             axs[0][sy].set_title(f'Offsets for filter {filter}: Year {year+1}', fontsize=15)
         else:
             axs[0][sy].set_title(f'Year {year+1}', fontsize=15)
@@ -318,10 +325,13 @@ def plot_meanz_metrics_by_year(df, years, filter='i',num_bins=5,y_axis_label=Non
         axs[2][sy].set_xlabel('Tomographic Bin', fontsize=15)
         bins=np.arange(num_bins)
         for scount,s in enumerate(strategies):
-            #for bin in range(num_bins):      
-#                tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter_use]
-            meanz=df['Mean z'][df['Strategy']==s][df['Year']==year].values[0][filter]
-            stdz=df['Std z'][df['Strategy']==s][df['Year']==year].values[0][filter]
+
+            if filter=='combined':
+                meanz=df['Average mean z'][df['Strategy']==s][df['Year']==year].values[0]
+                stdz=df['Combined std z'][df['Strategy']==s][df['Year']==year].values[0]
+            else: 
+                meanz=df['Mean z'][df['Strategy']==s][df['Year']==year].values[0][filter]
+                stdz=df['Std z'][df['Strategy']==s][df['Year']==year].values[0][filter]
                 
             if (sy==len(year_vals)-1):
                 axs[0][sy].plot(bins+offset*scount,meanz,label=s,color=cols[scount])
@@ -330,10 +340,13 @@ def plot_meanz_metrics_by_year(df, years, filter='i',num_bins=5,y_axis_label=Non
                 axs[0][sy].plot(bins+offset*scount,meanz, color=cols[scount])
                 axs[1][sy].plot(bins+offset*scount,stdz, color=cols[scount])
         
-            nbins_use = np.shape(df['Used meanz'][df['Strategy']==s][df['Year']==year].values[0][filter])[0]
-        #print(nbins_use, 'nbins_use')
-            #for binn in range(nbins_use):
-            clbias = df['Clbias'][df['Strategy']==s][df['Year']==year].values[0][filter]
+            if filter=='combined':
+                nbins_use = np.shape(df['Combined Mean z use'][df['Strategy']==s][df['Year']==year].values[0])[0]
+                clbias = df['Combined Clbias'][df['Strategy']==s][df['Year']==year].values[0]
+            else:
+                nbins_use = np.shape(df['Used meanz'][df['Strategy']==s][df['Year']==year].values[0][filter])[0]
+                clbias = df['Clbias'][df['Strategy']==s][df['Year']==year].values[0][filter]
+
             bins_use=np.arange(nbins_use)
             if (sy==len(year_vals)-1):
                 axs[2][sy].plot(bins_use+offset*scount,clbias, label=s,color=cols[scount])
@@ -372,6 +385,7 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
         for i,sim in enumerate(sim_list):
             tmpmetricDict = {} #dict(zip(keyList, [None]*len(keyList)))
 
+            
 
             for s in ['Mean depth','Median depth','Std depth','IQR depth']:
                 tmpmetricDict[s] = dict(zip(filter_list, [None]*len(filter_list)))
@@ -379,6 +393,9 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
             for s in ['Mean z','Std z','Clbias','Used meanz']:
                 tmpmetricDict[s]=dict(zip(filter_list, [[None]*zbins]*len(filter_list)))
 
+            totdz=np.zeros(zbins)
+            avmeanz=np.zeros(zbins)
+            combinedclbias=np.zeros(zbins)
             for filter_ind,use_filter in enumerate(filter_list):
 
                 tmpmetricDict['Strategy']=name_list[i] # strategy name
@@ -397,7 +414,20 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
                 clbias, meanz_use = compute_Clbias(meanzinterp,stdz)
                 tmpmetricDict['Clbias'][use_filter]=clbias
                 tmpmetricDict['Used meanz'][use_filter]=meanz_use
-            
+
+                totdz+=stdz
+                avmeanz+=meanzinterp
+           
+            #print(avmeanz)
+            tmpmetricDict['Combined std z'] = totdz
+            tmpmetricDict['Average mean z']= avmeanz/len(filter_list)
+            tmpclbias,tmpmeanz_use=compute_Clbias(avmeanz/len(filter_list),totdz)
+            tmpmetricDict['Combined Clbias']=tmpclbias
+            tmpmetricDict['Combined Mean z use']=tmpmeanz_use
+            y1rat,y10rat = compare_Clbias_DESCreg(tmpclbias)
+            tmpmetricDict['Y1 ratio']=y1rat
+            tmpmetricDict['Y10 ratio']=y10rat
+
             metricList.append(tmpmetricDict)
 
     df = pd.DataFrame(metricList)    
@@ -496,6 +526,18 @@ def compute_Clbias(meanz_vals,scatter_mean_z_values,figure_9_mean_z=np.array([0.
     poly_fit_bias = np.poly1d(fit_res_bias)
 
     return poly_fit_bias(mean_z_values_use), mean_z_values_use
+
+
+def compare_Clbias_DESCreg(clbias):
+
+    y10_req = 0.003
+    y1_goal = 0.013
+
+    clbiastot = np.max(clbias)
+    y10ratio = clbiastot/y10_req
+    y1ratio = clbiastot/y1_goal
+
+    return(y1ratio,y10ratio)
 
 
 # NOT USED BELOW, READ DIRECTLY FROM JEFF'S FILES
