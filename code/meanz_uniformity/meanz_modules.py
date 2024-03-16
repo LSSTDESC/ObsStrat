@@ -42,7 +42,6 @@ def maf_maps_to_fits(fname_in, fname_out,nside=64):
 
 
 # Here we define a function for some of the metric plots we want to show.
-# TO DO: need to rename this function since it doesn't actually always plot the metrics
 def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_color_min=None, use_color_max=None,
                 year=10,nside=64, use_filter="i", return_map=False):
     # use_run_name says which OpSim DB we want to use, e.g. `baseline_v2.1_10yrs` - will also be used for labels
@@ -54,9 +53,7 @@ def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_co
     constraint_str='filter="YY" and note not like "DD%" and night <= XX and note not like "twilight_near_sun" '
     constraint_str = constraint_str.replace('XX','%d'%days)
     constraint_str = constraint_str.replace('YY','%s'%use_filter)
-    # print(constraint_str)
-    # print('----------------')
-    # Just some optional plotting stuff
+
     if use_color_min is not None and use_color_max is not None:
         plot_dict={"color_min": use_color_min, "color_max": use_color_max, "x_min": use_color_min, "x_max": use_color_max}
     else:
@@ -425,6 +422,7 @@ def get_year_by_year_metrics(year_list, name_list, sim_list):
             tmpmetricDict['Combined Clbias']=tmpclbias
             tmpmetricDict['Combined Mean z use']=tmpmeanz_use
             y1rat,y10rat = compare_Clbias_DESCreg(tmpclbias)
+
             tmpmetricDict['Y1 ratio']=y1rat
             tmpmetricDict['Y10 ratio']=y10rat
 
@@ -439,7 +437,7 @@ def compute_dzfromdm(zbins, band_ind, year, dzname):
         #dzname = Jeff's implementation
         deriv = pd.read_pickle('uniformity_pkl/meanzderiv.pkl')
         zvals = pd.read_pickle('uniformity_pkl/meanzsy%i.pkl'%(year+1))
-        meanz = zvals[0:zbins,band_ind,1] # need to think through this, 
+        meanz = zvals[0:zbins,band_ind,5] # need to think through this, 
         #currently taking an arbitrary delta index from Jeff's code
         dz = deriv[year,band_ind,0:zbins]
         dzdminterp = np.abs(dz)
@@ -538,165 +536,3 @@ def compare_Clbias_DESCreg(clbias):
     y1ratio = clbiastot/y1_goal
 
     return(y1ratio,y10ratio)
-
-
-# NOT USED BELOW, READ DIRECTLY FROM JEFF'S FILES
-# def n_of_i_func(imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=401,n_mc=300000):
-
-#     # set up to make interpolation tables
-#     # can change the i magnitude range of objects or the z
-#     # range to consider in this cell
-#     deltai = (imax-imin)/(ni-1)
-#     deltaz = (zmax-zmin)/(nz-1)
-#     ival=np.linspace(imin,imax,ni)
-#     zvals=np.linspace(zmin,zmax,nz)
-
-#     # generate a normalized cumulative distribution 
-#     # corresponding to n(<i) from the SRD
-#     # for the Monte Carlo we want the values to run from 0 to 1
-
-#     n_of_i = 42.9*0.88*10**(0.359*(ival-25))
-#     n_of_i = n_of_i / n_of_i[ni-1]
- 
-#     return ival, n_of_i,zvals
-
-
-# def generate_zdistribution(n_mc=3000000,imin=17,imax=28,ni=101, zmin=0,zmax=4,nz=401,filename='zdist.pkl'):
-#     ''' Code from Jeff Newman to generate the distributions of objects with given limiting magnitude. 
-#     Jeff notes that you need > 1M MC iterations for good errorbars - 
-#     but we are reducing the default value here for speed.'''
-#     import pandas as pd
-    
-#     ival,n_of_i,zvals = n_of_i_func(imin,imax,ni,zmin,zmax,nz,n_mc)
-#     # generate random true i magnitudes up to imax following the 
-#     # distribution calculated in the above cell
-#     true_i = np.interp(np.random.random_sample(n_mc),n_of_i,ival)
-
-# # array to contain the true redshift for each MC object
-#     true_z = np.zeros_like(true_i)
-
-#     #based on the drawn i magnitude for each object,
-#     #   draw a random z from p(z,i)
-#     # i was hoping to avoid calculating all this for every
-#     # object but failed to get interpolation to work.  This 
-#     # does ok but is a bit slower than i'd like
-
-#     for idx,imag in enumerate(true_i):
-#         z0 = 0.246 + 0.025*(imag-24.1)
-#         dndi = (0.868296*10**(0.359*(imag-25))
-#          *np.exp(-(zvals/z0)**0.92)*zvals**3)/( (z0**2)*(zvals/z0)**0.08) 
-#         dndi += 31.2069*10**(0.359*(imag-25))*np.exp(-(zvals/z0)**0.92)*zvals**2
-#         dndi[np.isfinite(dndi) == 0] = 0.
-    
-#         cdndi = np.cumsum(dndi)
-#         cdndi = cdndi / cdndi[nz-1]
-#         true_z[idx] = np.interp(np.random.random_sample(1),
-#           cdndi,zvals)
-        
-#     d= {'i':true_i,'zarr':true_z}
-
-#     catalog = pd.DataFrame(data=d)
-#     catalog.to_pickle(filename)
-#     return catalog
-    
-
-# def compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',n_mc=30000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401,imag=25.3,catalog_mc=100000,flux_var=0.01,m5=26):
-#     from photerr import LsstErrorModel
-
-#     if generate_zdist:
-#         catalog = generate_zdistribution(n_mc,imin,imax,ni,zmin,zmax,nz,filename=zdistfile)
-#     else:
-#        catalog = pd.read_pickle(zdistfile)
-
-#     catalog_rep = catalog.copy()
-#     errModel = LsstErrorModel(nYrObs=1,nVisYr={'i':1},m5={'i':float(m5)})
-
-#     tmpcatalog = errModel(catalog_rep, random_state=np.random.randint(1,catalog_mc))
-#     fluxes = 10**(-0.4*(tmpcatalog['i'] - 27))
-#     fluxerrs = tmpcatalog['i_err']*np.log(10)/2.5*fluxes
-
-#     noisy_i_flux = fluxes + fluxerrs*np.random.normal(size=tmpcatalog.count()[0])
-#     # don't let fluxes go negative: limit corresponds to magnitude = 32
-#     noisy_i_flux = np.maximum(noisy_i_flux, flux_var)
-#     noisy_i = 27 - 2.5*np.log10(noisy_i_flux)
-
-#     meanz_imag = np.mean(tmpcatalog[noisy_i < imag]['zarr'])
-#     number_imag = np.sum(noisy_i < imag)
-#     meanz_imag_error = np.std(tmpcatalog[noisy_i < imag]['zarr'])/np.sqrt(number_imag)
-#     number_imag_error = np.sqrt(number_imag)
-
-#     return meanz_imag, number_imag, meanz_imag_error, number_imag_error
-
-
-# def grid_deltaz(num_m5s=26,m5min=28.25,m5max=25.75,imag=25.3,catalog_mc=100000,flux_var=0.01, 
-#                 generate_zdist=False,zdistfile='results_bright.pkl',
-#                 n_mc=3000000,imin=17,imax=28,ni=101,zmin=0,zmax=4,nz=401):
-
-#     if generate_zdist:
-#         catalog = generate_zdistribution(n_mc,imin,imax,ni,zmin,zmax,nz,filename=zdistfile)
-#     else:
-#        catalog = pd.read_pickle(zdistfile)
-
-
-   
-#     m5s = np.linspace(m5max,m5min,num_m5s)
-#     meanz_imag = np.zeros_like(m5s)
-#     meanz_imag_error = np.zeros_like(m5s)
-    
-
-#     number_imag = np.zeros_like(m5s)
-#     number_imag_error = np.zeros_like(m5s)
-
-#     true_z = catalog['zarr']
-#     true_i = catalog['i']
-
-#     for idx,m5 in enumerate(m5s):
-#         meanz_imag[idx], number_imag[idx], meanz_imag_error[idx], number_imag_error[idx] = compute_deltaz(generate_zdist=False,zdistfile='zdist.pkl',
-#                                                                                                           n_mc=n_mc,imin=imin,imax=imax,ni=ni,zmin=zmin,
-#                                                                                                           zmax=zmax,nz=nz,imag=imag,catalog_mc=catalog_mc,
-#                                                                                                           flux_var=flux_var,m5=m5)
-        
-#     meanz_imag_true = np.mean(catalog[true_i < imag]['zarr'])
-#     number_imag_true = np.sum(true_i < imag)
-
-#     d= {'true_meanz':meanz_imag_true,'true_n':number_imag_true,'m5s':m5s,'meanz':meanz_imag,
-#      'number': number_imag, 'meanz_err':meanz_imag_error,'number_err':number_imag_error }
-#     outputs = pd.DataFrame(data=d)
-
-#     outputs.to_pickle('deltazgrid_outputs_dataframe.pkl')
-#     return outputs
-
-
-
-# # First define a routine to run across a list of years and produce a dataframe
-# def get_year_by_year_metrics_ak(year_list, name_list, sim_list, use_filter="i"):
-#     overall_names = []
-#     overall_years = []
-#     overall_meds = []
-#     overall_means = []
-#     overall_std = []
-#     overall_iqr = []
-#     overall_meanzbins=[]
-#     overall_stdzbins=[]
-#     overall_clbias = []
-#     meanz_usecl= []
-#     for year in year_list:
-#         for i in range(len(sim_list)):
-#             bgroup, bd = metric_plots(name_list[i], sim_list[i], year=year, use_filter=use_filter)
-#             overall_names.append(name_list[i]) # strategy name
-#             overall_years.append(year) 
-#             overall_meds.append(bd[list(bd.keys())[0]].summary_values['Median']) # median i-band mags
-#             overall_means.append(bd[list(bd.keys())[0]].summary_values['Mean'])   # mean i-band mags        
-#             overall_std.append(bd[list(bd.keys())[0]].summary_values['Rms']) # rms of the i-band mags
-#             overall_iqr.append(bd[list(bd.keys())[0]].summary_values['75th%ile']-bd[list(bd.keys())[0]].summary_values['25th%ile']) 
-#             meanz = mean_z(ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)
-#             overall_meanzbins.append(meanz) # mean z in each tomographic bin
-#             stdz = [float(sens)*float(bd[list(bd.keys())[0]].summary_values['Rms']) for sens in sensitivity(fiducial_ilim=float(bd[list(bd.keys())[0]].summary_values['Mean']), num_bins=5)]
-#             clbias, meanz_use = compute_Clbias(meanz,stdz)
-#             overall_clbias.append(clbias)
-#             meanz_usecl.append(meanz_use)
-#             overall_stdzbins.append(stdz)
-            
-#     df = pd.DataFrame(list(zip(overall_names, overall_years, overall_meds, overall_means, overall_std, overall_iqr, overall_meanzbins,overall_stdzbins, overall_clbias, meanz_usecl)), 
-#                   columns=['Strategy', 'Year', 'Median i-band depth', 'Mean i-band depth', 'Std i-band depth', 'IQR i-band depth', 'Mean z bin', 'Std z bin','Clbias','Used meanz'])
-#     return df
