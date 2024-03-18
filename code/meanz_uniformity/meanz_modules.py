@@ -235,7 +235,7 @@ def my_total_power_metric(map, ell_max=30, return_functions=False):
         return total_power
 
 # A utility to plot summary stats for strategies as a function of year, given a dataframe from the above routines.
-def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,ylog=False):
+def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,ylog=False, compare_to=None):
 
     if years!=None:
         year_vals = years
@@ -265,23 +265,35 @@ def plot_metric_by_year(df, stat_name,years=None,filter='i', y_axis_label=None,y
     ## put in line style stuff
     for sc,s in enumerate(strategies):
         metricvals=[]
+        comparevals=[]
         #yvals = np.array([float(val) for val in df[stat_name][df['Strategy']==s]])
         print(s)
         for i,year in enumerate(year_vals):
             if filter=='combined':
                 tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0]
                 metricvals.append(tmpval)
+                if compare_to!=None:
+                    tmpval = df[stat_name][df['Strategy']==compare_to][df['Year']==year].values[0]
+                    comparevals.append(tmpval)
             else:
                 tmpval=df[stat_name][df['Strategy']==s][df['Year']==year].values[0][filter]
                 metricvals.append(tmpval)
+                if compare_to!=None:
+                    tmpval = df[stat_name][df['Strategy']==compare_to][df['Year']==year].values[0][filter]
+                    comparevals.append(tmpval)
             
 
         
         metricvals=np.array(metricvals)
-        ax.plot(year_vals+1+offsets[offset_index], metricvals, color=cols[sc],label=s)
+        if compare_to!=None:
+            ax.plot(year_vals+1+offsets[offset_index], (metricvals-comparevals)/comparevals, color=cols[sc],label=s) 
+            plt.ylabel(f'Fractional change in {y_axis_label}')
+        else:   
+            ax.plot(year_vals+1+offsets[offset_index], metricvals, color=cols[sc],label=s)
+            plt.ylabel(y_axis_label)
         offset_index += 1
     plt.xlabel('Year')
-    plt.ylabel(y_axis_label)
+    
     if ylog: plt.yscale('log')
     plt.legend()
     plt.show()
