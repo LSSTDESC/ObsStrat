@@ -43,16 +43,20 @@ def maf_maps_to_fits(fname_in, fname_out,nside=64):
 
 # Here we define a function for some of the metric plots we want to show.
 def metric_plots(use_run_name, use_opsim_fname, use_metric=maf.ExgalM5(), use_color_min=None, use_color_max=None,
-                year=10,nside=64, use_filter="i", return_map=False):
+                year=10,nside=64, use_filter=None, return_map=False):
     # use_run_name says which OpSim DB we want to use, e.g. `baseline_v2.1_10yrs` - will also be used for labels
     # use_opsim_fname says where it lives, e.g. `/global/cfs/cdirs/lsst/groups/CO/rubin_sim/sim_baseline/baseline_v2.1_10yrs.db`
     surveyAreas = SkyAreaGenerator(nside=nside)
     map_footprints, map_labels = surveyAreas.return_maps()
     days = year*365.25
     # Here the constraint on use of i-band data, exclusion of DDFs, time limitations, and avoiding twilight exposures 
-    constraint_str='filter="YY" and note not like "DD%" and night <= XX and note not like "twilight_near_sun" '
+    if use_filter is not None:
+        constraint_str='filter="YY" and note not like "DD%" and night <= XX and note not like "twilight_near_sun" '
+        constraint_str = constraint_str.replace('YY','%s'%use_filter)
+    else:
+        constraint_str='note not like "DD%" and night <= XX and note not like "twilight_near_sun" '
     constraint_str = constraint_str.replace('XX','%d'%days)
-    constraint_str = constraint_str.replace('YY','%s'%use_filter)
+    
 
     if use_color_min is not None and use_color_max is not None:
         plot_dict={"color_min": use_color_min, "color_max": use_color_max, "x_min": use_color_min, "x_max": use_color_max}
