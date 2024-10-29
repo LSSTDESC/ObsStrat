@@ -13,7 +13,7 @@ import pandas as pd
 import sqlite3
 import rubin_sim
 import rubin_sim.maf as maf
-from rubin_sim.scheduler.utils import SkyAreaGenerator
+from rubin_scheduler.scheduler.utils import SkyAreaGenerator
 from rubin_sim.data import get_baseline
 import scipy.special as sc
 
