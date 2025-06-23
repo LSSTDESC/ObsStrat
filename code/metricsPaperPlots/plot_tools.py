@@ -175,7 +175,7 @@ def make_bar_graph(this_df, metrics_display_name, orientation='vertical',
             this_label = this_label.replace('v1.4_10yrs.db', '')
             this_label = this_label.rstrip('_')
             if plot_type == 'paper':
-                this_label = this_label.replace('_', '\_')
+                this_label = this_label.replace('_', r'\_')
             short_name = descriptions.loc[i, 'short']
             if use_short_names:
                 this_label = short_name
@@ -284,7 +284,7 @@ def single_bar_graph(df, metrics_display_names, probes=[],
     if print_title:
         ttl = df.index[0]
         if plot_type == 'paper':
-            ttl = ttl.replace('_', '\_')
+            ttl = ttl.replace('_', r'\_')
             ttl = ttl.replace('.db', '')
         plt.title(ttl)
     plt.tight_layout()
@@ -466,7 +466,7 @@ def comparison_plot(metrics_rel, metrics_display_names, misc_metrics, x_axis,
             plt.text(anno_x[ind], anno_y[ind], (str)(counter), color='k')
             # plt.text(anno_x[ind], anno_y[ind], (str)(anno_num[ind]), color='k')
             sim_name = anno_sim[ind]
-            sim_name = sim_name.replace('_', '\_')
+            sim_name = sim_name.replace('_', r'\_')
             print_str += '%d-\\texttt{%s}, ' %(counter, sim_name)
             # print_str += '%d-\\texttt{%s}, ' %(anno_num[ind], sim_name)
             counter += 1
